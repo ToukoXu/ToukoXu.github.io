@@ -1,0 +1,736 @@
+<!DOCTYPE html><html lang="zh" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"><title>代理（Proxy） | Touko</title><meta name="keywords" content="JavaScript,ES6"><meta name="author" content="Touko"><meta name="copyright" content="Touko"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#f7f9fe"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-touch-fullscreen" content="yes"><meta name="apple-mobile-web-app-title" content="代理（Proxy）"><meta name="application-name" content="代理（Proxy）"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="#f7f9fe"><meta property="og:type" content="article"><meta property="og:title" content="代理（Proxy）"><meta property="og:url" content="http://toukoxu.github.io/2024/08/15/proxy/index.html"><meta property="og:site_name" content="Touko"><meta property="og:description" content="什么是 Proxy？Proxy 是 ES6 引入的一种元编程特性，它允许你创建一个对象的代理（proxy），从而拦截并自定义对象的基本操作。Proxy 提供了一种机制，可以在对象上”架设”一个拦截层，所有对对象的操作都会先经过这个拦截层。 核心概念1const proxy &amp;#x3D; new Proxy(t"><meta property="og:locale" content="zh"><meta property="og:image" content="http://toukoxu.github.io/img/cover/proxy.png"><meta property="article:author" content="Touko"><meta property="article:tag"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="http://toukoxu.github.io/img/cover/proxy.png"><meta name="description" content="什么是 Proxy？Proxy 是 ES6 引入的一种元编程特性，它允许你创建一个对象的代理（proxy），从而拦截并自定义对象的基本操作。Proxy 提供了一种机制，可以在对象上”架设”一个拦截层，所有对对象的操作都会先经过这个拦截层。 核心概念1const proxy &amp;#x3D; new Proxy(t"><link rel="shortcut icon" href="/favicon.ico"><link rel="canonical" href="http://toukoxu.github.io/2024/08/15/proxy/"><link rel="preconnect" href="//cdn.cbd.int"/><meta name="google-site-verification" content="xxx"/><meta name="baidu-site-verification" content="code-xxx"/><meta name="msvalidate.01" content="xxx"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/@fancyapps/ui@5.0.28/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  linkPageTop: undefined,
+  peoplecanvas: {"enable":true,"img":"https://upload-bbs.miyoushe.com/upload/2024/07/27/125766904/ba62475f396df9de3316a08ed9e65d86_5680958632268053399..png"},
+  postHeadAiDescription: undefined,
+  diytitle: {"enable":true,"leaveTitle":"w(ﾟДﾟ)w 不要走！再看看嘛！","backTitle":"♪(^∇^*)欢迎肥来！"},
+  LA51: undefined,
+  greetingBox: {"enable":true,"default":"晚上好👋","list":[{"greeting":"晚安😴","startTime":0,"endTime":5},{"greeting":"早上好鸭👋, 祝你一天好心情！","startTime":6,"endTime":9},{"greeting":"上午好👋, 状态很好，鼓励一下～","startTime":10,"endTime":10},{"greeting":"11点多啦, 在坚持一下就吃饭啦～","startTime":11,"endTime":11},{"greeting":"午安👋, 宝贝","startTime":12,"endTime":14},{"greeting":"🌈充实的一天辛苦啦！","startTime":14,"endTime":18},{"greeting":"19点喽, 奖励一顿丰盛的大餐吧🍔。","startTime":19,"endTime":19},{"greeting":"晚上好👋, 在属于自己的时间好好放松😌~","startTime":20,"endTime":24}]},
+  twikooEnvId: '',
+  commentBarrageConfig:undefined,
+  music_page_default: "nav_music",
+  root: '/',
+  preloader: {"source":3},
+  friends_vue_info: undefined,
+  navMusic: true,
+  mainTone: {"mode":null,"api":"https://img2color-go.vercel.app/api?img=","cover_change":true},
+  authorStatus: {"skills":["🤖️ 科技爱好者","🔨 开发一条龙","🌌 Hello World 宇宙","⌨️ 键盘撸猫区","🐱 万物皆可rua"]},
+  algolia: {"appId":"SVGIUL6D7W","apiKey":"aee53519dcfc6f122cfe52009938fc1c","indexName":"blog","hits":{"per_page":6},"languages":{"input_placeholder":"输入关键词后按下回车查找","hits_empty":"找不到您查询的内容：${query}","hits_stats":"找到 ${hits} 条结果，用时 ${time} 毫秒"}},
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简","rightMenuMsgToTraditionalChinese":"转为繁体","rightMenuMsgToSimplifiedChinese":"转为简体"},
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"本文最后一次更新为","messageNext":"天前，文章中的某些内容可能已过时！"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":330},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    simplehomepage: true,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"copy":true,"copyrightEbable":false,"limitCount":50,"languages":{"author":"作者: Touko","link":"链接: ","source":"来源: Touko","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。","copySuccess":"复制成功，复制和转载请标注本文地址"}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#425AEF","bgDark":"#1f1f1f","position":"top-center"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.min.js',
+      css: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  shortcutKey: undefined,
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  configTitle: 'Touko',
+  title: '代理（Proxy）',
+  postAI: '',
+  pageFillDescription: '什么是 Proxy？, 核心概念, Proxy 的核心拦截方法（13 种拦截器）, Proxy 能监听到嵌套对象的引用吗？, 解决方案：递归代理, Proxy 与 Object.defineProperty 对比, 实际应用场景, 1. 响应式数据系统（如 Vue 3）, 2. 数据验证, 3. API 请求拦截, 4. 自动持久化状态, 高级用法：处理嵌套数组, 性能优化与注意事项, 1. 避免不必要的递归代理, 2. 使用 Reflect 保证行为一致, 3. 避免过度使用 Proxy 的场景, 4. 浏览器兼容性处理, Proxy 的局限性, 总结：Proxy 的核心价值什么是是引入的一种元编程特性它允许你创建一个对象的代理从而拦截并自定义对象的基本操作提供了一种机制可以在对象上架设一个拦截层所有对对象的操作都会先经过这个拦截层核心概念被代理的目标对象包含拦截器的对象用于定义代理行为生成的代理对象的核心拦截方法种拦截器拦截器方法触发时机示例读取属性时设置属性时操作符时返回布尔值操作时返回布尔值函数调用时操作时循环返回目标对象所有自身的属性的属性名数组返回属性的描述对象返回属性的描述对象返回布尔值返回对象返回布尔值返回布尔值能监听到嵌套对象的引用吗是的但需要递归代理实现默认只能拦截对直接属性的操作要监听嵌套对象需要特殊处理解决方案递归代理如果值为对象再次返回代理输出与对比特性嵌套对象监听支持需递归不支持需递归实现数组变化监听完美支持需特殊处理新增属性监听自动支持需手动处理删除属性监听支持不支持性能稍慢但现代浏览器优化良好稍快浏览器支持部分现代浏览器全支持拦截操作种全面拦截仅实际应用场景响应式数据系统如已有代理则返回依赖追踪返回嵌套对象的代理触发更新数据验证抛出错误请求拦截调用使用输出调用自动持久化状态所有修改自动保存到高级用法处理嵌套数组可以完美监听数组变化包括等方法拦截数组方法数组操作如果是嵌套数组对象返回其代理输出数组操作输出设置属性通过嵌套代理性能优化与注意事项避免不必要的递归代理避免循环引用只代理普通对象和数组创建代理前先处理嵌套使用保证行为一致使用保持默认行为添加额外逻辑设置避免过度使用的场景场景问题解决方案性能关键代码有额外开销使用普通对象大型数据结构递归代理消耗内存浅层代理或手动优化频繁创建对象代理创建成本高对象池或复用代理需要序列化的对象代理对象不能直接序列化使用浏览器兼容性处理旧浏览器回退方案简易对象代理回退的局限性无法拦截全等操作总是返回内部属性访问无法拦截等内部方法原型链操作操作无法被拦截严格类型检查返回但可能丢失原始类型信息内存消耗深度代理大型对象可能消耗较多内存总结的核心价值强大的拦截能力种操作拦截覆盖对象所有基本操作完美的嵌套监听通过递归代理实现深度响应式非侵入式设计不修改原始对象保持目标对象纯净全面的数组支持完美监听数组所有变更方法元编程能力实现高级功能如数据验证缓存日志等最佳实践建议使用递归代理实现深度监听配合保持默认行为对性能关键路径进行优化考虑兼容性提供回退方案避免在大型数据结构和频繁创建场景中使用',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-08-15 20:46:25',
+  postMainColor: '',
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#18171d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#f7f9fe')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.3.0"></head><body data-type="anzhiyu"><div id="web_bg"></div><div id="an_music_bg"></div><div id="loading-box" onclick="document.getElementById(&quot;loading-box&quot;).classList.add(&quot;loaded&quot;)"><div class="loading-bg"><img class="loading-img nolazyload" alt="加载头像" src="/img/loading.jpg"/><div class="loading-image-dot"></div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.getElementById('loading-box').classList.add("loaded");
+  },
+  initLoading: () => {
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+window.addEventListener('load',()=> { preloader.endLoading() })
+setTimeout(function(){preloader.endLoading();},10000)
+
+if (true) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.10/progress_bar/progress_bar.css"/><script async="async" src="https://cdn.cbd.int/pace-js@1.2.4/pace.min.js" data-pace-options="{ &quot;restartOnRequestAfter&quot;:false,&quot;eventLag&quot;:false}"></script><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><div id="nav-group"><span id="blog_name"><a id="site-name" href="/" accesskey="h"><div class="title">Touko</div><i class="anzhiyufont anzhiyu-icon-house-chimney"></i></a></span><div class="mask-name-container"><div id="name-container"><a id="page-name" href="javascript:anzhiyu.scrollToDest(0, 500)">PAGE_NAME</a></div></div><div id="menus"></div><div id="nav-right"><div class="nav-button" id="randomPost_button"><a class="site-page" onclick="toRandomPost()" title="随机前往一个文章" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-dice"></i></a></div><div class="nav-button" id="search-button"><a class="site-page social-icon search" href="javascript:void(0);" title="搜索🔍" accesskey="s"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span> 搜索</span></a></div><div id="console"><div class="console-card-group-reward"><ul class="reward-all console-card"><li class="reward-item"><a href="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-weichat.png" target="_blank"><img class="post-qr-code-img" alt="微信" src="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-weichat.png"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-alipay.png" target="_blank"><img class="post-qr-code-img" alt="支付宝" src="https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-alipay.png"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div><div class="console-card-group"><div class="console-card-group-left"><div class="console-card" id="card-newest-comments"><div class="card-content"><div class="author-content-item-tips">互动</div><span class="author-content-item-title"> 最新评论</span></div><div class="aside-list"><span>正在加载中...</span></div></div></div><div class="console-card-group-right"><div class="console-card tags"><div class="card-content"><div class="author-content-item-tips">兴趣点</div><span class="author-content-item-title">寻找你感兴趣的领域</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/ES2017-ES8/" style="font-size: 1.05rem;">ES2017(ES8)<sup>1</sup></a><a href="/tags/ES6/" style="font-size: 1.05rem;">ES6<sup>4</sup></a><a href="/tags/JavaScript/" style="font-size: 1.05rem;">JavaScript<sup>7</sup></a></div></div><hr/></div></div><div class="console-card history"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-box-archiv"></i><span>文章</span></div><div class="card-archives"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/08/"><span class="card-archive-list-date">August 2024</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">2</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/07/"><span class="card-archive-list-date">July 2024</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">2</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/06/"><span class="card-archive-list-date">June 2024</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">1</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/02/"><span class="card-archive-list-date">February 2022</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">1</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2021/04/"><span class="card-archive-list-date">April 2021</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">1</span><span>篇</span></div></a></li></ul></div><hr/></div></div></div><div class="button-group"><div class="console-btn-item"><a class="darkmode_switchbutton" title="显示模式切换" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-moon"></i></a></div><div class="console-btn-item" id="consoleHideAside" onclick="anzhiyu.hideAsideBtn()" title="边栏显示控制"><a class="asideSwitch"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></a></div><div class="console-btn-item" id="consoleMusic" onclick="anzhiyu.musicToggle()" title="音乐开关"><a class="music-switch"><i class="anzhiyufont anzhiyu-icon-music"></i></a></div></div><div class="console-mask" onclick="anzhiyu.hideConsole()" href="javascript:void(0);"></div></div><div class="nav-button" id="nav-totop"><a class="totopbtn" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i><span id="percent" onclick="anzhiyu.scrollToDest(0,500)">0</span></a></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);" title="切换"><i class="anzhiyufont anzhiyu-icon-bars"></i></a></div></div></div></nav><div id="post-info"><div id="post-firstinfo"><div class="meta-firstline"><a class="post-meta-original">原创</a><span class="post-meta-categories"><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-inbox post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%89%8D%E7%AB%AF/" itemprop="url">前端</a></span><span class="article-meta tags"><a class="article-meta__tags" href="/tags/JavaScript/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>JavaScript</span></a><a class="article-meta__tags" href="/tags/ES6/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>ES6</span></a></span></div></div><h1 class="post-title" itemprop="name headline">代理（Proxy）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="anzhiyufont anzhiyu-icon-calendar-days post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" itemprop="dateCreated datePublished" datetime="2024-08-15T12:46:25.000Z" title="发表于 2024-08-15 20:46:25">2024-08-15</time><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-history post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" itemprop="dateCreated datePublished" datetime="2024-08-15T12:46:25.000Z" title="更新于 2024-08-15 20:46:25">2024-08-15</time></span></div><div class="meta-secondline"><span class="post-meta-separator"></span><span class="post-meta-wordcount"><i class="anzhiyufont anzhiyu-icon-file-word post-meta-icon" title="文章字数"></i><span class="post-meta-label" title="文章字数">字数总计:</span><span class="word-count" title="文章字数">1.9k</span><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-clock post-meta-icon" title="阅读时长"></i><span class="post-meta-label" title="阅读时长">阅读时长:</span><span>8分钟</span></span><span class="post-meta-separator">       </span><span class="post-meta-position" title="作者IP属地为上海"><i class="anzhiyufont anzhiyu-icon-location-dot"></i>上海</span></div></div></div><section class="main-hero-waves-area waves-area"><svg class="waves-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M -160 44 c 30 0 58 -18 88 -18 s 58 18 88 18 s 58 -18 88 -18 s 58 18 88 18 v 44 h -352 Z"></path></defs><g class="parallax"><use href="#gentle-wave" x="48" y="0"></use><use href="#gentle-wave" x="48" y="3"></use><use href="#gentle-wave" x="48" y="5"></use><use href="#gentle-wave" x="48" y="7"></use></g></svg></section><div id="post-top-cover"><img class="nolazyload" id="post-top-bg" src="/img/cover/proxy.png"></div></header><main id="blog-container"><div class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container" itemscope itemtype="http://toukoxu.github.io/2024/08/15/proxy/"><header><a class="post-meta-categories" href="/categories/%E5%89%8D%E7%AB%AF/" itemprop="url">前端</a><a href="/tags/JavaScript/" tabindex="-1" itemprop="url">JavaScript</a><a href="/tags/ES6/" tabindex="-1" itemprop="url">ES6</a><h1 id="CrawlerTitle" itemprop="name headline">代理（Proxy）</h1><span itemprop="author" itemscope itemtype="http://schema.org/Person">Touko</span><time itemprop="dateCreated datePublished" datetime="2024-08-15T12:46:25.000Z" title="发表于 2024-08-15 20:46:25">2024-08-15</time><time itemprop="dateCreated datePublished" datetime="2024-08-15T12:46:25.000Z" title="更新于 2024-08-15 20:46:25">2024-08-15</time></header><h2 id="什么是-Proxy？"><a href="#什么是-Proxy？" class="headerlink" title="什么是 Proxy？"></a>什么是 Proxy？</h2><p><strong>Proxy</strong> 是 ES6 引入的一种元编程特性，它允许你创建一个对象的代理（proxy），从而<strong>拦截并自定义对象的基本操作</strong>。Proxy 提供了一种机制，可以在对象上”架设”一个拦截层，所有对对象的操作都会先经过这个拦截层。</p>
+<h3 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> proxy = <span class="keyword">new</span> <span class="title class_">Proxy</span>(target, handler);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>target</strong>：被代理的目标对象</li>
+<li><strong>handler</strong>：包含拦截器（traps）的对象，用于定义代理行为</li>
+<li><strong>proxy</strong>：生成的代理对象</li>
+</ul>
+<h2 id="Proxy-的核心拦截方法（13-种拦截器）"><a href="#Proxy-的核心拦截方法（13-种拦截器）" class="headerlink" title="Proxy 的核心拦截方法（13 种拦截器）"></a>Proxy 的核心拦截方法（13 种拦截器）</h2><table>
+<thead>
+<tr>
+<th>拦截器方法</th>
+<th>触发时机</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>get(target, propKey, receiver)</code></td>
+<td>读取属性时</td>
+<td><code>proxy.name</code></td>
+</tr>
+<tr>
+<td><code>set(target, propKey, value, receiver)</code></td>
+<td>设置属性时</td>
+<td><code>proxy.name = &#39;John&#39;</code></td>
+</tr>
+<tr>
+<td><code>has(target, propKey)</code></td>
+<td><code>in</code> 操作符时<br>返回布尔值</td>
+<td><code>&#39;name&#39; in proxy</code></td>
+</tr>
+<tr>
+<td><code>deleteProperty(target, propKey)</code></td>
+<td><code>delete</code> 操作时<br>返回布尔值</td>
+<td><code>delete proxy.name</code></td>
+</tr>
+<tr>
+<td><code>apply</code></td>
+<td>函数调用时</td>
+<td><code>proxy()</code></td>
+</tr>
+<tr>
+<td><code>construct</code></td>
+<td><code>new</code> 操作时</td>
+<td><code>new proxy()</code></td>
+</tr>
+<tr>
+<td><code>ownKeys(target)</code></td>
+<td><code>Object.getOwnPropertyNames(proxy)</code><br><code>Object.getOwnPropertySymbols(proxy)</code><br><code>Object.keys(proxy)</code><br><code>for...in</code>循环<br>返回目标对象所有自身的属性的属性名（数组）</td>
+<td></td>
+</tr>
+<tr>
+<td><code>getOwnPropertyDescriptor(target, propKey)</code></td>
+<td><code>Object.getOwnPropertyDescriptor(proxy, propKey)</code><br>返回属性的描述对象</td>
+<td></td>
+</tr>
+<tr>
+<td><code>defineProperty(target, propKey, propDesc)</code></td>
+<td><code>Object.defineProperty(proxy, propKey, propDesc）</code><br><code>Object.defineProperties(proxy, propDescs)</code><br>返回属性的描述对象</td>
+<td></td>
+</tr>
+<tr>
+<td><code>preventExtensions(target)</code></td>
+<td><code>Object.preventExtensions(proxy)</code><br>返回布尔值</td>
+<td></td>
+</tr>
+<tr>
+<td><code>getPrototypeOf(target)</code></td>
+<td><code>Object.getPrototypeOf(proxy)</code><br>返回对象</td>
+<td></td>
+</tr>
+<tr>
+<td><code>isExtensible(target)</code></td>
+<td><code>Object.isExtensible(proxy)</code><br>返回布尔值</td>
+<td></td>
+</tr>
+<tr>
+<td><code>setPrototypeOf(target, proto)</code></td>
+<td><code>Object.setPrototypeOf(proxy, proto)</code><br>返回布尔值</td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id="Proxy-能监听到嵌套对象的引用吗？"><a href="#Proxy-能监听到嵌套对象的引用吗？" class="headerlink" title="Proxy 能监听到嵌套对象的引用吗？"></a>Proxy 能监听到嵌套对象的引用吗？</h2><p><strong>是的，但需要递归代理实现</strong>。Proxy 默认只能拦截对<strong>直接属性</strong>的操作，要监听嵌套对象，需要特殊处理：</p>
+<h3 id="解决方案：递归代理"><a href="#解决方案：递归代理" class="headerlink" title="解决方案：递归代理"></a>解决方案：递归代理</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> obj = &#123; <span class="attr">nestedObj</span>: &#123; <span class="attr">foo</span>: <span class="string">&#x27;bar&#x27;</span> &#125; &#125;;</span><br><span class="line"><span class="keyword">const</span> handler = &#123;</span><br><span class="line">  <span class="title function_">get</span>(<span class="params">target, prop, receiver</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> value = <span class="title class_">Reflect</span>.<span class="title function_">get</span>(target, prop, receiver);</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> value === <span class="string">&#x27;object&#x27;</span> &amp;&amp; value !== <span class="literal">null</span>) &#123;</span><br><span class="line">      <span class="comment">// 如果值为对象，再次返回代理</span></span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Proxy</span>(value, handler);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;get&#x27;</span>, prop, target[prop]);</span><br><span class="line">    <span class="keyword">return</span> value;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="title function_">set</span>(<span class="params">target, property, value</span>) &#123;</span><br><span class="line">    target[property] = value;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`setting property &#x27;<span class="subst">$&#123;property&#125;</span>&#x27; to &#x27;<span class="subst">$&#123;value&#125;</span>&#x27;`</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">const</span> proxyObj = <span class="keyword">new</span> <span class="title class_">Proxy</span>(obj, handler);</span><br><span class="line">proxyObj.<span class="property">nestedObj</span>.<span class="property">foo</span> = <span class="string">&#x27;baz&#x27;</span>; <span class="comment">// 输出: Setting property &#x27;foo&#x27; to &#x27;baz&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Proxy-与-Object-defineProperty-对比"><a href="#Proxy-与-Object-defineProperty-对比" class="headerlink" title="Proxy 与 Object.defineProperty 对比"></a>Proxy 与 Object.defineProperty 对比</h2><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>Proxy(ES6)</th>
+<th>Object.defineProperty(ES5)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>嵌套对象监听</td>
+<td>✅ 支持（需递归）</td>
+<td>❌ 不支持（需递归实现）</td>
+</tr>
+<tr>
+<td>数组变化监听</td>
+<td>✅ 完美支持</td>
+<td>❌ 需特殊处理（hack）</td>
+</tr>
+<tr>
+<td>新增属性监听</td>
+<td>✅ 自动支持</td>
+<td>❌ 需手动处理</td>
+</tr>
+<tr>
+<td>删除属性监听</td>
+<td>✅ 支持</td>
+<td>❌ 不支持</td>
+</tr>
+<tr>
+<td>性能</td>
+<td>⚠️ 稍慢（但现代浏览器优化良好）</td>
+<td>⚠️ 稍快</td>
+</tr>
+<tr>
+<td>浏览器支持</td>
+<td>IE11+（部分）、现代浏览器全支持</td>
+<td>IE9+</td>
+</tr>
+<tr>
+<td>拦截操作</td>
+<td>13种全面拦截</td>
+<td>仅 get&#x2F;set</td>
+</tr>
+</tbody></table>
+<h2 id="实际应用场景"><a href="#实际应用场景" class="headerlink" title="实际应用场景"></a>实际应用场景</h2><h3 id="1-响应式数据系统（如-Vue-3）"><a href="#1-响应式数据系统（如-Vue-3）" class="headerlink" title="1. 响应式数据系统（如 Vue 3）"></a>1. 响应式数据系统（如 Vue 3）</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> reactiveMap = <span class="keyword">new</span> <span class="title class_">WeakMap</span>();</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">reactive</span>(<span class="params">target</span>) &#123;</span><br><span class="line">  <span class="comment">// 已有代理则返回</span></span><br><span class="line">  <span class="keyword">if</span> (reactiveMap.<span class="title function_">has</span>(target)) <span class="keyword">return</span> reactiveMap.<span class="title function_">get</span>(target);</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">const</span> proxy = <span class="keyword">new</span> <span class="title class_">Proxy</span>(target, &#123;</span><br><span class="line">    <span class="title function_">get</span>(<span class="params">target, key, receiver</span>) &#123;</span><br><span class="line">      <span class="title function_">track</span>(target, key); <span class="comment">// 依赖追踪</span></span><br><span class="line">      <span class="keyword">const</span> res = <span class="title class_">Reflect</span>.<span class="title function_">get</span>(target, key, receiver);</span><br><span class="line">      <span class="comment">// 返回嵌套对象的代理</span></span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">typeof</span> res === <span class="string">&#x27;object&#x27;</span> ? <span class="title function_">reactive</span>(res) : res;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="title function_">set</span>(<span class="params">target, key, value, receiver</span>) &#123;</span><br><span class="line">      <span class="keyword">const</span> oldValue = target[key];</span><br><span class="line">      <span class="keyword">const</span> result = <span class="title class_">Reflect</span>.<span class="title function_">set</span>(target, key, value, receiver);</span><br><span class="line">      <span class="keyword">if</span> (oldValue !== value) &#123;</span><br><span class="line">        <span class="title function_">trigger</span>(target, key); <span class="comment">// 触发更新</span></span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">  </span><br><span class="line">  reactiveMap.<span class="title function_">set</span>(target, proxy);</span><br><span class="line">  <span class="keyword">return</span> proxy;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-数据验证"><a href="#2-数据验证" class="headerlink" title="2. 数据验证"></a>2. 数据验证</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> validator = &#123;</span><br><span class="line">  <span class="title function_">set</span>(<span class="params">target, prop, value</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (prop === <span class="string">&#x27;age&#x27;</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (!<span class="title class_">Number</span>.<span class="title function_">isInteger</span>(value) || value &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">TypeError</span>(<span class="string">&#x27;Age must be a positive integer&#x27;</span>);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">Reflect</span>.<span class="title function_">set</span>(target, prop, value);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> person = <span class="keyword">new</span> <span class="title class_">Proxy</span>(&#123;&#125;, validator);</span><br><span class="line">person.<span class="property">age</span> = <span class="number">30</span>; <span class="comment">// OK</span></span><br><span class="line">person.<span class="property">age</span> = <span class="string">&#x27;thirty&#x27;</span>; <span class="comment">// 抛出错误</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-API-请求拦截"><a href="#3-API-请求拦截" class="headerlink" title="3. API 请求拦截"></a>3. API 请求拦截</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> apiHandler = &#123;</span><br><span class="line">  <span class="title function_">get</span>(<span class="params">target, endpoint</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">async</span> (params) =&gt; &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`调用 API: <span class="subst">$&#123;endpoint&#125;</span>`</span>);</span><br><span class="line">      <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="title function_">fetch</span>(<span class="string">`<span class="subst">$&#123;target.baseURL&#125;</span>/<span class="subst">$&#123;endpoint&#125;</span>`</span>, &#123;</span><br><span class="line">        <span class="attr">method</span>: <span class="string">&#x27;POST&#x27;</span>,</span><br><span class="line">        <span class="attr">body</span>: <span class="title class_">JSON</span>.<span class="title function_">stringify</span>(params)</span><br><span class="line">      &#125;);</span><br><span class="line">      <span class="keyword">return</span> response.<span class="title function_">json</span>();</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> api = <span class="keyword">new</span> <span class="title class_">Proxy</span>(&#123; <span class="attr">baseURL</span>: <span class="string">&#x27;https://api.example.com&#x27;</span> &#125;, apiHandler);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用</span></span><br><span class="line"><span class="keyword">const</span> userData = <span class="keyword">await</span> api.<span class="title function_">users</span>(&#123; <span class="attr">id</span>: <span class="number">123</span> &#125;);</span><br><span class="line"><span class="comment">// 输出: 调用 API: users</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-自动持久化状态"><a href="#4-自动持久化状态" class="headerlink" title="4. 自动持久化状态"></a>4. 自动持久化状态</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">createPersistentState</span>(<span class="params">key, initialState</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> stored = <span class="variable language_">localStorage</span>.<span class="title function_">getItem</span>(key);</span><br><span class="line">  <span class="keyword">const</span> state = stored ? <span class="title class_">JSON</span>.<span class="title function_">parse</span>(stored) : initialState;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Proxy</span>(state, &#123;</span><br><span class="line">    <span class="title function_">set</span>(<span class="params">target, prop, value</span>) &#123;</span><br><span class="line">      <span class="title class_">Reflect</span>.<span class="title function_">set</span>(target, prop, value);</span><br><span class="line">      <span class="variable language_">localStorage</span>.<span class="title function_">setItem</span>(key, <span class="title class_">JSON</span>.<span class="title function_">stringify</span>(target));</span><br><span class="line">      <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> settings = <span class="title function_">createPersistentState</span>(<span class="string">&#x27;app-settings&#x27;</span>, &#123;</span><br><span class="line">  <span class="attr">theme</span>: <span class="string">&#x27;light&#x27;</span>,</span><br><span class="line">  <span class="attr">fontSize</span>: <span class="number">16</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 所有修改自动保存到 localStorage</span></span><br><span class="line">settings.<span class="property">theme</span> = <span class="string">&#x27;dark&#x27;</span>;</span><br><span class="line">settings.<span class="property">fontSize</span> = <span class="number">18</span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="高级用法：处理嵌套数组"><a href="#高级用法：处理嵌套数组" class="headerlink" title="高级用法：处理嵌套数组"></a>高级用法：处理嵌套数组</h2><p>Proxy 可以完美监听数组变化，包括 push、pop、splice 等方法：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> arrayHandler = &#123;</span><br><span class="line">  <span class="title function_">get</span>(<span class="params">target, prop</span>) &#123;</span><br><span class="line">    <span class="comment">// 拦截数组方法</span></span><br><span class="line">    <span class="keyword">if</span> ([<span class="string">&#x27;push&#x27;</span>, <span class="string">&#x27;pop&#x27;</span>, <span class="string">&#x27;shift&#x27;</span>, <span class="string">&#x27;unshift&#x27;</span>, <span class="string">&#x27;splice&#x27;</span>].<span class="title function_">includes</span>(prop)) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">function</span>(<span class="params">...args</span>) &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`数组操作: <span class="subst">$&#123;prop&#125;</span>`</span>, args);</span><br><span class="line">        <span class="keyword">return</span> <span class="title class_">Array</span>.<span class="property"><span class="keyword">prototype</span></span>[prop].<span class="title function_">apply</span>(target, args);</span><br><span class="line">      &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">Reflect</span>.<span class="title function_">get</span>(target, prop);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> deepArrayHandler = &#123;</span><br><span class="line">  <span class="title function_">get</span>(<span class="params">target, prop</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> value = <span class="title class_">Reflect</span>.<span class="title function_">get</span>(target, prop);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 如果是嵌套数组/对象，返回其代理</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="title class_">Array</span>.<span class="title function_">isArray</span>(value)) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Proxy</span>(value, arrayHandler);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> value;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> data = &#123;</span><br><span class="line">  <span class="attr">users</span>: [</span><br><span class="line">    &#123; <span class="attr">id</span>: <span class="number">1</span>, <span class="attr">name</span>: <span class="string">&#x27;Alice&#x27;</span> &#125;,</span><br><span class="line">    &#123; <span class="attr">id</span>: <span class="number">2</span>, <span class="attr">name</span>: <span class="string">&#x27;Bob&#x27;</span> &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> proxy = <span class="keyword">new</span> <span class="title class_">Proxy</span>(data, deepArrayHandler);</span><br><span class="line"></span><br><span class="line">proxy.<span class="property">users</span>.<span class="title function_">push</span>(&#123; <span class="attr">id</span>: <span class="number">3</span>, <span class="attr">name</span>: <span class="string">&#x27;Charlie&#x27;</span> &#125;);</span><br><span class="line"><span class="comment">// 输出: 数组操作: push [ &#123;id: 3, name: &quot;Charlie&quot;&#125; ]</span></span><br><span class="line"></span><br><span class="line">proxy.<span class="property">users</span>[<span class="number">0</span>].<span class="property">name</span> = <span class="string">&#x27;Alex&#x27;</span>;</span><br><span class="line"><span class="comment">// 输出: 设置属性: name = Alex (通过嵌套代理)</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="性能优化与注意事项"><a href="#性能优化与注意事项" class="headerlink" title="性能优化与注意事项"></a>性能优化与注意事项</h2><h3 id="1-避免不必要的递归代理"><a href="#1-避免不必要的递归代理" class="headerlink" title="1. 避免不必要的递归代理"></a>1. 避免不必要的递归代理</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> seen = <span class="keyword">new</span> <span class="title class_">WeakSet</span>();</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">createOptimizedProxy</span>(<span class="params">target, handler</span>) &#123;</span><br><span class="line">  <span class="comment">// 避免循环引用</span></span><br><span class="line">  <span class="keyword">if</span> (seen.<span class="title function_">has</span>(target)) <span class="keyword">return</span> target;</span><br><span class="line">  seen.<span class="title function_">add</span>(target);</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 只代理普通对象和数组</span></span><br><span class="line">  <span class="keyword">if</span> (!<span class="title function_">isPlainObject</span>(target) &amp;&amp; !<span class="title class_">Array</span>.<span class="title function_">isArray</span>(target)) &#123;</span><br><span class="line">    <span class="keyword">return</span> target;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 创建代理前先处理嵌套</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">in</span> target) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="title class_">Object</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">hasOwnProperty</span>.<span class="title function_">call</span>(target, key)) &#123;</span><br><span class="line">      target[key] = <span class="title function_">createOptimizedProxy</span>(target[key], handler);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Proxy</span>(target, handler);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-使用-Reflect-保证行为一致"><a href="#2-使用-Reflect-保证行为一致" class="headerlink" title="2. 使用 Reflect 保证行为一致"></a>2. 使用 Reflect 保证行为一致</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> handler = &#123;</span><br><span class="line">  <span class="title function_">get</span>(<span class="params">target, prop</span>) &#123;</span><br><span class="line">    <span class="comment">// 使用 Reflect 保持默认行为</span></span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">Reflect</span>.<span class="title function_">get</span>(target, prop);</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="title function_">set</span>(<span class="params">target, prop, value</span>) &#123;</span><br><span class="line">    <span class="comment">// 添加额外逻辑</span></span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`设置 <span class="subst">$&#123;prop&#125;</span> = <span class="subst">$&#123;value&#125;</span>`</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="title class_">Reflect</span>.<span class="title function_">set</span>(target, prop, value);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-避免过度使用-Proxy-的场景"><a href="#3-避免过度使用-Proxy-的场景" class="headerlink" title="3. 避免过度使用 Proxy 的场景"></a>3. 避免过度使用 Proxy 的场景</h3><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>问题</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>性能关键代码</strong></td>
+<td>Proxy 有额外开销</td>
+<td>使用普通对象</td>
+</tr>
+<tr>
+<td><strong>大型数据结构</strong></td>
+<td>递归代理消耗内存</td>
+<td>浅层代理或手动优化</td>
+</tr>
+<tr>
+<td><strong>频繁创建对象</strong></td>
+<td>代理创建成本高</td>
+<td>对象池或复用代理</td>
+</tr>
+<tr>
+<td><strong>需要序列化的对象</strong></td>
+<td>代理对象不能直接序列化</td>
+<td>使用 <code>JSON.parse(JSON.stringify())</code></td>
+</tr>
+</tbody></table>
+<h3 id="4-浏览器兼容性处理"><a href="#4-浏览器兼容性处理" class="headerlink" title="4. 浏览器兼容性处理"></a>4. 浏览器兼容性处理</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">createCompatProxy</span>(<span class="params">target, handler</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> <span class="title class_">Proxy</span> !== <span class="string">&#x27;undefined&#x27;</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Proxy</span>(target, handler);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 旧浏览器回退方案</span></span><br><span class="line">  <span class="keyword">if</span> (<span class="title class_">Array</span>.<span class="title function_">isArray</span>(target)) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">createArrayFallback</span>(target, handler);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">createObjectFallback</span>(target, handler);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 简易对象代理回退</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">createObjectFallback</span>(<span class="params">obj, handler</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> keys = <span class="title class_">Object</span>.<span class="title function_">keys</span>(obj);</span><br><span class="line">  </span><br><span class="line">  keys.<span class="title function_">forEach</span>(<span class="function"><span class="params">key</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> value = obj[key];</span><br><span class="line">    </span><br><span class="line">    <span class="title class_">Object</span>.<span class="title function_">defineProperty</span>(obj, key, &#123;</span><br><span class="line">      <span class="title function_">get</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (handler.<span class="property">get</span>) handler.<span class="title function_">get</span>(obj, key);</span><br><span class="line">        <span class="keyword">return</span> value;</span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="title function_">set</span>(<span class="params">newValue</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (handler.<span class="property">set</span>) handler.<span class="title function_">set</span>(obj, key, newValue);</span><br><span class="line">        value = newValue;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">return</span> obj;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Proxy-的局限性"><a href="#Proxy-的局限性" class="headerlink" title="Proxy 的局限性"></a>Proxy 的局限性</h2><ol>
+<li><strong>无法拦截全等操作</strong>：<code>proxy === target</code> 总是返回 false</li>
+<li><strong>内部属性访问</strong>：无法拦截 <code>Object.keys()</code> 等内部方法</li>
+<li><strong>原型链操作</strong>：<code>instanceof</code> 操作无法被拦截</li>
+<li><strong>严格类型检查</strong>：<code>typeof proxy</code> 返回 “object”，但可能丢失原始类型信息</li>
+<li><strong>内存消耗</strong>：深度代理大型对象可能消耗较多内存</li>
+</ol>
+<h2 id="总结：Proxy-的核心价值"><a href="#总结：Proxy-的核心价值" class="headerlink" title="总结：Proxy 的核心价值"></a>总结：Proxy 的核心价值</h2><ol>
+<li><strong>强大的拦截能力</strong>：13种操作拦截，覆盖对象所有基本操作</li>
+<li><strong>完美的嵌套监听</strong>：通过递归代理实现深度响应式</li>
+<li><strong>非侵入式设计</strong>：不修改原始对象，保持目标对象纯净</li>
+<li><strong>全面的数组支持</strong>：完美监听数组所有变更方法</li>
+<li><strong>元编程能力</strong>：实现高级功能如数据验证、缓存、日志等</li>
+</ol>
+<p><strong>最佳实践建议</strong>：</p>
+<ul>
+<li>使用递归代理实现深度监听</li>
+<li>配合 Reflect 保持默认行为</li>
+<li>对性能关键路径进行优化</li>
+<li>考虑兼容性提供回退方案</li>
+<li>避免在大型数据结构和频繁创建场景中使用</li>
+</ul>
+</article><div class="post-copyright"><div class="copyright-cc-box"><i class="anzhiyufont anzhiyu-icon-copyright"></i></div><div class="post-copyright__author_box"><a class="post-copyright__author_img" href="/" title="头像"><img class="post-copyright__author_img_back" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/avatar.jpg" title="头像" alt="头像"><img class="post-copyright__author_img_front" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/avatar.jpg" title="头像" alt="头像"></a><div class="post-copyright__author_name">Touko</div><div class="post-copyright__author_desc">猫爪按日出, 按出彩虹糖</div></div><div class="post-copyright__post__info"><a class="post-copyright__original" title="该文章为原创文章，注意版权协议" href="http://toukoxu.github.io/2024/08/15/proxy/">原创</a><a class="post-copyright-title"><span onclick="rm.copyPageUrl('http://toukoxu.github.io/2024/08/15/proxy/')">代理（Proxy）</span></a></div><div class="post-tools" id="post-tools"><div class="post-tools-left"><div class="rewardLeftButton"></div><div class="shareRight"><div class="share-link mobile"><div class="share-qrcode"><div class="share-button" title="使用手机访问这篇文章"><i class="anzhiyufont anzhiyu-icon-qrcode"></i></div><div class="share-main"><div class="share-main-all"><div id="qrcode" title="http://toukoxu.github.io/2024/08/15/proxy/"></div><div class="reward-dec">使用手机访问这篇文章</div></div></div></div></div><script>function copyCurrentPageUrl() {
+  var currentPageUrl = window.location.href;
+  var input = document.createElement("input");
+  input.setAttribute("value", currentPageUrl);
+  document.body.appendChild(input);
+  input.select();
+  input.setSelectionRange(0, 99999);
+  document.execCommand("copy");
+  document.body.removeChild(input);
+}</script><div class="share-link copyurl"><div class="share-button" id="post-share-url" title="复制链接" onclick="copyCurrentPageUrl()"><i class="anzhiyufont anzhiyu-icon-link"></i></div></div></div></div></div><div class="post-copyright__notice"><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://toukoxu.github.io" target="_blank">Touko</a>！</span></div></div><div class="post-tools-right"><div class="tag_share"><div class="post-meta__box"><div class="post-meta__box__category-list"><a class="post-meta__box__categoryes" href="/categories/%E5%89%8D%E7%AB%AF/"><span class="categoryes-punctuation"> <i class="anzhiyufont anzhiyu-icon-inbox"></i></span>前端<span class="categoryesPageCount">7</span></a></div><div class="post-meta__box__tag-list"><a class="post-meta__box__tags" href="/tags/JavaScript/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>JavaScript<span class="tagsPageCount">7</span></a><a class="post-meta__box__tags" href="/tags/ES6/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>ES6<span class="tagsPageCount">4</span></a></div></div></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-full"><a href="/2024/08/14/reflect/"><img class="prev-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/cover/reflect.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Reflect</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="anzhiyufont anzhiyu-icon-thumbs-up fa-fw" style="font-size: 1.5rem; margin-right: 4px"></i><span>喜欢这篇文章的人也看了</span></div><div class="relatedPosts-list"><div><a href="/2021/04/03/closure/" title="闭包（Closure）"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/cover/closure.png" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2021-04-03</div><div class="title">闭包（Closure）</div></div></a></div><div><a href="/2024/07/13/generator/" title="生成器函数与 yield"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/cover/generator.png" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2024-07-13</div><div class="title">生成器函数与 yield</div></div></a></div><div><a href="/2024/08/14/reflect/" title="Reflect"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/cover/reflect.png" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2024-08-14</div><div class="title">Reflect</div></div></a></div><div><a href="/2022/02/01/event/" title="JS 事件汇总与性能优化"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/cover/event.png" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2022-02-01</div><div class="title">JS 事件汇总与性能优化</div></div></a></div><div><a href="/2024/06/23/messageChannel/" title="MessageChannel 及其使用场景"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/cover/messageChannel.png" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2024-06-23</div><div class="title">MessageChannel 及其使用场景</div></div></a></div><div><a href="/2024/07/13/async&await/" title="async&#x2F;await 实现原理"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/cover/async.png" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2024-07-13</div><div class="title">async&#x2F;await 实现原理</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="anzhiyufont anzhiyu-icon-comments"></i><span> 评论</span></div><div class="comment-randomInfo"><a onclick="anzhiyu.addRandomCommentInfo()" href="javascript:void(0)">匿名评论</a><a href="/privacy" style="margin-left: 4px">隐私政策</a></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div><div class="comment-barrage"></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-content"><div class="author-info__sayhi" id="author-info__sayhi" onclick="anzhiyu.changeSayHelloText()"></div><div class="author-info-avatar"><img class="avatar-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-status"><img class="g-status" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/sparkles.png" alt="status"/></div></div><div class="author-info__description"><div style="line-height:1.38;margin:0.6rem 0;text-align:justify;color:rgba(255, 255, 255, 0.8);">这有关于<b style="color:#fff">产品、设计、开发</b>相关的问题和看法，还有<b style="color:#fff">文章翻译</b>和<b style="color:#fff">分享</b>。</div><div style="line-height:1.38;margin:0.6rem 0;text-align:justify;color:rgba(255, 255, 255, 0.8);">相信你可以在这里找到对你有用的<b style="color:#fff">知识</b>和<b style="color:#fff">教程</b>。</div></div><div class="author-info__bottom-group"><a class="author-info__bottom-group-left" href="/"><h1 class="author-info__name">Touko</h1><div class="author-info__desc">猫爪按日出, 按出彩虹糖</div></a><div class="card-info-social-icons is-center"><a class="social-icon faa-parent animated-hover" href="https://github.com/ToukoXu" target="_blank" title="Github"></a></div></div></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-bullhorn anzhiyu-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来看我的博客鸭~</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-bars"></i><span>文章目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-Proxy%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">什么是 Proxy？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="toc-number">1.1.</span> <span class="toc-text">核心概念</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Proxy-%E7%9A%84%E6%A0%B8%E5%BF%83%E6%8B%A6%E6%88%AA%E6%96%B9%E6%B3%95%EF%BC%8813-%E7%A7%8D%E6%8B%A6%E6%88%AA%E5%99%A8%EF%BC%89"><span class="toc-number">2.</span> <span class="toc-text">Proxy 的核心拦截方法（13 种拦截器）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Proxy-%E8%83%BD%E7%9B%91%E5%90%AC%E5%88%B0%E5%B5%8C%E5%A5%97%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%BC%95%E7%94%A8%E5%90%97%EF%BC%9F"><span class="toc-number">3.</span> <span class="toc-text">Proxy 能监听到嵌套对象的引用吗？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%EF%BC%9A%E9%80%92%E5%BD%92%E4%BB%A3%E7%90%86"><span class="toc-number">3.1.</span> <span class="toc-text">解决方案：递归代理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Proxy-%E4%B8%8E-Object-defineProperty-%E5%AF%B9%E6%AF%94"><span class="toc-number">4.</span> <span class="toc-text">Proxy 与 Object.defineProperty 对比</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">5.</span> <span class="toc-text">实际应用场景</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%93%8D%E5%BA%94%E5%BC%8F%E6%95%B0%E6%8D%AE%E7%B3%BB%E7%BB%9F%EF%BC%88%E5%A6%82-Vue-3%EF%BC%89"><span class="toc-number">5.1.</span> <span class="toc-text">1. 响应式数据系统（如 Vue 3）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%95%B0%E6%8D%AE%E9%AA%8C%E8%AF%81"><span class="toc-number">5.2.</span> <span class="toc-text">2. 数据验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-API-%E8%AF%B7%E6%B1%82%E6%8B%A6%E6%88%AA"><span class="toc-number">5.3.</span> <span class="toc-text">3. API 请求拦截</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E8%87%AA%E5%8A%A8%E6%8C%81%E4%B9%85%E5%8C%96%E7%8A%B6%E6%80%81"><span class="toc-number">5.4.</span> <span class="toc-text">4. 自动持久化状态</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95%EF%BC%9A%E5%A4%84%E7%90%86%E5%B5%8C%E5%A5%97%E6%95%B0%E7%BB%84"><span class="toc-number">6.</span> <span class="toc-text">高级用法：处理嵌套数组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E4%B8%8E%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">7.</span> <span class="toc-text">性能优化与注意事项</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E9%81%BF%E5%85%8D%E4%B8%8D%E5%BF%85%E8%A6%81%E7%9A%84%E9%80%92%E5%BD%92%E4%BB%A3%E7%90%86"><span class="toc-number">7.1.</span> <span class="toc-text">1. 避免不必要的递归代理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E4%BD%BF%E7%94%A8-Reflect-%E4%BF%9D%E8%AF%81%E8%A1%8C%E4%B8%BA%E4%B8%80%E8%87%B4"><span class="toc-number">7.2.</span> <span class="toc-text">2. 使用 Reflect 保证行为一致</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E9%81%BF%E5%85%8D%E8%BF%87%E5%BA%A6%E4%BD%BF%E7%94%A8-Proxy-%E7%9A%84%E5%9C%BA%E6%99%AF"><span class="toc-number">7.3.</span> <span class="toc-text">3. 避免过度使用 Proxy 的场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E6%B5%8F%E8%A7%88%E5%99%A8%E5%85%BC%E5%AE%B9%E6%80%A7%E5%A4%84%E7%90%86"><span class="toc-number">7.4.</span> <span class="toc-text">4. 浏览器兼容性处理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Proxy-%E7%9A%84%E5%B1%80%E9%99%90%E6%80%A7"><span class="toc-number">8.</span> <span class="toc-text">Proxy 的局限性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93%EF%BC%9AProxy-%E7%9A%84%E6%A0%B8%E5%BF%83%E4%BB%B7%E5%80%BC"><span class="toc-number">9.</span> <span class="toc-text">总结：Proxy 的核心价值</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-history"></i><span>最近发布</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/08/15/proxy/" title="代理（Proxy）"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/cover/proxy.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="代理（Proxy）"/></a><div class="content"><a class="title" href="/2024/08/15/proxy/" title="代理（Proxy）">代理（Proxy）</a><time datetime="2024-08-15T12:46:25.000Z" title="发表于 2024-08-15 20:46:25">2024-08-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/08/14/reflect/" title="Reflect"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/cover/reflect.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Reflect"/></a><div class="content"><a class="title" href="/2024/08/14/reflect/" title="Reflect">Reflect</a><time datetime="2024-08-14T12:46:25.000Z" title="发表于 2024-08-14 20:46:25">2024-08-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/07/13/generator/" title="生成器函数与 yield"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/cover/generator.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="生成器函数与 yield"/></a><div class="content"><a class="title" href="/2024/07/13/generator/" title="生成器函数与 yield">生成器函数与 yield</a><time datetime="2024-07-13T12:46:25.000Z" title="发表于 2024-07-13 20:46:25">2024-07-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/07/13/async&amp;await/" title="async/await 实现原理"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/cover/async.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="async/await 实现原理"/></a><div class="content"><a class="title" href="/2024/07/13/async&amp;await/" title="async/await 实现原理">async/await 实现原理</a><time datetime="2024-07-13T12:46:25.000Z" title="发表于 2024-07-13 20:46:25">2024-07-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/06/23/messageChannel/" title="MessageChannel 及其使用场景"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/cover/messageChannel.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="MessageChannel 及其使用场景"/></a><div class="content"><a class="title" href="/2024/06/23/messageChannel/" title="MessageChannel 及其使用场景">MessageChannel 及其使用场景</a><time datetime="2024-06-23T12:46:25.000Z" title="发表于 2024-06-23 20:46:25">2024-06-23</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"></div><div id="footer-bar"><div class="footer-bar-links"><div class="footer-bar-left"><div id="footer-bar-tips"><div class="copyright">&copy;2020 - 2025 By <a class="footer-bar-link" href="/" title="Touko" target="_blank">Touko</a></div></div><div id="footer-type-tips"></div><div class="js-pjax"><script>function subtitleType () {
+  fetch('https://v1.hitokoto.cn')
+    .then(response => response.json())
+    .then(data => {
+      if (true) {
+        const from = '出自 ' + data.from
+        const sub = ["生活明朗&#44; 万物可爱&#44; 人间值得&#44; 未来可期."]
+        sub.unshift(data.hitokoto, from)
+        window.typed = new Typed('#footer-type-tips', {
+          strings: sub,
+          startDelay: 300,
+          typeSpeed: 150,
+          loop: true,
+          backSpeed: 50,
+        })
+      } else {
+        document.getElementById('footer-type-tips').innerHTML = data.hitokoto
+      }
+    })
+}
+
+if (true) {
+  if (typeof Typed === 'function') {
+    subtitleType()
+  } else {
+    getScript('https://cdn.cbd.int/typed.js@2.1.0/dist/typed.umd.js').then(subtitleType)
+  }
+} else {
+  subtitleType()
+}
+</script></div></div><div class="footer-bar-right"></div></div></div></footer></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="sidebar-site-data site-data is-center"><a href="/archives/" title="archive"><div class="headline">文章</div><div class="length-num">7</div></a><a href="/tags/" title="tag"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/" title="category"><div class="headline">分类</div><div class="length-num">1</div></a></div><span class="sidebar-menu-item-title">功能</span><div class="sidebar-menu-item"><a class="darkmode_switchbutton menu-child" href="javascript:void(0);" title="显示模式"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span>显示模式</span></a></div><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">网页</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://blog.anheyu.com/" title="博客"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/favicon.ico" alt="博客"/><span class="back-menu-item-text">博客</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">项目</div><div class="back-menu-list"><a class="back-menu-item" target="_blank" rel="noopener" href="https://image.anheyu.com/" title="安知鱼图床"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://image.anheyu.com/favicon.ico" alt="安知鱼图床"/><span class="back-menu-item-text">安知鱼图床</span></a></div></div></div><span class="sidebar-menu-item-title">标签</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/ES2017-ES8/" style="font-size: 0.88rem;">ES2017(ES8)<sup>1</sup></a><a href="/tags/ES6/" style="font-size: 0.88rem;">ES6<sup>4</sup></a><a href="/tags/JavaScript/" style="font-size: 0.88rem; font-weight: 500; color: var(--anzhiyu-lighttext)">JavaScript<sup>7</sup></a></div></div><hr/></div></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="anzhiyufont anzhiyu-icon-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="anzhiyufont anzhiyu-icon-gear"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="anzhiyufont anzhiyu-icon-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="anzhiyufont anzhiyu-icon-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></button></div></div><div id="nav-music"><a id="nav-music-hoverTips" onclick="anzhiyu.musicToggle()" accesskey="m">播放音乐</a><div id="console-music-bg"></div><meting-js id="8152976493" server="netease" type="playlist" mutex="true" preload="none" theme="var(--anzhiyu-main)" data-lrctype="0" order="random" volume="0.7"></meting-js></div><div id="algolia-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><button class="search-close-button"><i class="anzhiyufont anzhiyu-icon-xmark"></i></button></nav><div class="search-wrap"><div id="algolia-search-input"></div><hr/><div id="algolia-search-results"><div id="algolia-hits"><a class="tag-list" href="/tags/JavaScript" title="JavaScript">JavaScript</a><a class="tag-list" href="/tags/Vue" title="Vue">Vue</a></div><div id="algolia-pagination"></div><div id="algolia-info"><div class="algolia-stats"></div><div class="algolia-poweredBy"></div></div></div></div></div><div id="search-mask"></div></div><div id="rightMenu"><div class="rightMenu-group rightMenu-small"><div class="rightMenu-item" id="menu-backward"><i class="anzhiyufont anzhiyu-icon-arrow-left"></i></div><div class="rightMenu-item" id="menu-forward"><i class="anzhiyufont anzhiyu-icon-arrow-right"></i></div><div class="rightMenu-item" id="menu-refresh"><i class="anzhiyufont anzhiyu-icon-arrow-rotate-right" style="font-size: 1rem;"></i></div><div class="rightMenu-item" id="menu-top"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></div></div><div class="rightMenu-group rightMenu-line rightMenuPlugin"><div class="rightMenu-item" id="menu-copytext"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制选中文本</span></div><div class="rightMenu-item" id="menu-pastetext"><i class="anzhiyufont anzhiyu-icon-paste"></i><span>粘贴文本</span></div><a class="rightMenu-item" id="menu-commenttext"><i class="anzhiyufont anzhiyu-icon-comment-medical"></i><span>引用到评论</span></a><div class="rightMenu-item" id="menu-newwindow"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开</span></div><div class="rightMenu-item" id="menu-copylink"><i class="anzhiyufont anzhiyu-icon-link"></i><span>复制链接地址</span></div><div class="rightMenu-item" id="menu-copyimg"><i class="anzhiyufont anzhiyu-icon-images"></i><span>复制此图片</span></div><div class="rightMenu-item" id="menu-downloadimg"><i class="anzhiyufont anzhiyu-icon-download"></i><span>下载此图片</span></div><div class="rightMenu-item" id="menu-newwindowimg"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开图片</span></div><div class="rightMenu-item" id="menu-search"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>站内搜索</span></div><div class="rightMenu-item" id="menu-searchBaidu"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>百度搜索</span></div><div class="rightMenu-item" id="menu-music-toggle"><i class="anzhiyufont anzhiyu-icon-play"></i><span>播放音乐</span></div><div class="rightMenu-item" id="menu-music-back"><i class="anzhiyufont anzhiyu-icon-backward"></i><span>切换到上一首</span></div><div class="rightMenu-item" id="menu-music-forward"><i class="anzhiyufont anzhiyu-icon-forward"></i><span>切换到下一首</span></div><div class="rightMenu-item" id="menu-music-playlist" onclick="window.open(&quot;https://y.qq.com/n/ryqq/playlist/8802438608&quot;, &quot;_blank&quot;);" style="display: none;"><i class="anzhiyufont anzhiyu-icon-radio"></i><span>查看所有歌曲</span></div><div class="rightMenu-item" id="menu-music-copyMusicName"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制歌名</span></div></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item menu-link" id="menu-randomPost"><i class="anzhiyufont anzhiyu-icon-shuffle"></i><span>随便逛逛</span></a><a class="rightMenu-item menu-link" href="/categories/"><i class="anzhiyufont anzhiyu-icon-cube"></i><span>博客分类</span></a><a class="rightMenu-item menu-link" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags"></i><span>文章标签</span></a></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item" id="menu-copy" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制地址</span></a><a class="rightMenu-item" id="menu-commentBarrage" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-message"></i><span class="menu-commentBarrage-text">关闭热评</span></a><a class="rightMenu-item" id="menu-darkmode" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span class="menu-darkmode-text">深色模式</span></a><a class="rightMenu-item" id="menu-translate" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-language"></i><span>轉為繁體</span></a></div></div><div id="rightmenu-mask"></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.2/dist/svg-pan-zoom.min.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.cbd.int/@fancyapps/ui@5.0.28/dist/fancybox/fancybox.umd.js"></script><script src="https://cdn.cbd.int/instant.page@5.2.0/instantpage.js" type="module"></script><script src="https://cdn.cbd.int/vanilla-lazyload@17.8.5/dist/lazyload.iife.min.js"></script><script src="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.cbd.int/pangu@4.0.7/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><canvas id="universe"></canvas><script async src="https://npm.elemecdn.com/anzhiyu-theme-static@1.0.0/dark/dark.js"></script><script>// 消除控制台打印
+var HoldLog = console.log;
+console.log = function () {};
+let now1 = new Date();
+queueMicrotask(() => {
+  const Log = function () {
+    HoldLog.apply(console, arguments);
+  }; //在恢复前输出日志
+  const grt = new Date("04/01/2021 00:00:00"); //此处修改你的建站时间或者网站上线时间
+  now1.setTime(now1.getTime() + 250);
+  const days = (now1 - grt) / 1000 / 60 / 60 / 24;
+  const dnum = Math.floor(days);
+  const ascll = [`叮！可爱加载中... `, `🐱`];
+  const ascll2 = [`NCC2-036`, `调用前置摄像头拍照成功，识别为【小笨蛋】.`, `Photo captured: `, `🤪`];
+
+  setTimeout(
+    Log.bind(
+      console,
+      `%c ${ascll[0]} %c${ascll[1]}`,
+      "color:white; background-color:#f0ad4e",
+      ''
+    )
+  );
+  setTimeout(
+    Log.bind(
+      console,
+      `%c ${ascll2[0]} %c ${ascll2[1]} %c \n${ascll2[2]} %c\n${ascll2[3]}\n`,
+      "color:white; background-color:#4fd953",
+      "",
+      "",
+      'background:url("https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/tinggge.gif") no-repeat;font-size:450%'
+    )
+  );
+
+  setTimeout(Log.bind(console, "%c WELCOME %c 你好，小笨蛋.", "color:white; background-color:#4f90d9", ""));
+
+  setTimeout(
+    console.warn.bind(
+      console,
+      "你正在访问 Touko 的博客.",
+      ""
+    )
+  );
+
+  setTimeout(Log.bind(console, "%c W23-12 %c 你已打开控制台.", "color:white; background-color:#4f90d9", ""));
+
+  setTimeout(
+    console.warn.bind(console, "%c S013-782 %c 你现在正处于监控中.", "color:white; background-color:#d9534f", "")
+  );
+});</script><script async src="/anzhiyu/random.js"></script><script src="https://cdn.cbd.int/algoliasearch@4.18.0/dist/algoliasearch-lite.umd.js"></script><script src="https://cdn.cbd.int/instantsearch.js@4.60.0/dist/instantsearch.production.min.js"></script><script src="/js/search/algolia.js"></script><div class="js-pjax"><script>(() => {
+  const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+  if ($mermaid.length === 0) return
+  const runMermaid = () => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    Array.from($mermaid).forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const mermaidThemeConfig = '%%{init:{ \'theme\':\'' + theme + '\'}}%%\n'
+      const mermaidID = 'mermaid-' + index
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+
+      const renderV10 = () => {
+        renderFn.then(({svg}) => {
+          mermaidSrc.insertAdjacentHTML('afterend', svg)
+          const svgElement = document.getElementById(mermaidID)
+          const viewBox = svgElement.getAttribute('viewBox')
+          const viewBoxValues = viewBox.split(/[\s,]+/)
+          window.svgPanZoom ? svgPanZoom(svgElement, { contain: true, controlIconsEnabled: true }) : ''
+          const width = Number(getComputedStyle(svgElement).getPropertyValue('width').slice(0, -2))
+          svgElement.setAttribute('height', `${viewBoxValues[3] * width / viewBoxValues[2]}px`)
+        })
+      }
+
+      const renderV9 = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      typeof renderFn === 'string' ? renderV9(renderFn) : renderV10()
+    })
+  }
+
+  const loadMermaid = () => {
+    window.loadMermaid ? runMermaid() : getScript('https://cdn.cbd.int/mermaid@10.2.4/dist/mermaid.min.js').then(runMermaid)
+  }
+
+  anzhiyu.addGlobalFn('themeChange', runMermaid, 'mermaid')
+
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script><script>(() => {
+  const initValine = () => {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'BsIRp7GQE8IZ5fkI0JRj8Vys-gzGzoHsz',
+      appKey: 'vla82YKrFnfwtuQfgoaDnzu9',
+      avatar: 'mp',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  const loadValine = async () => {
+    if (typeof Valine === 'function') initValine()
+    else {
+      await getScript('https://cdn.cbd.int/valine@1.5.1/dist/Valine.min.js')
+      initValine()
+    }
+  }
+
+  if ('Valine' === 'Valine' || !true) {
+    if (true) anzhiyu.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script><input type="hidden" name="page-type" id="page-type" value="post"></div><script src="https://cdn.cbd.int/blueimp-md5@2.19.0/js/md5.min.js"></script><script>window.addEventListener('load', () => {
+  const changeContent = (content) => {
+    if (content === '') return content
+
+    content = content.replace(/<img.*?src="(.*?)"?[^\>]+>/ig, '[图片]') // replace image link
+    content = content.replace(/<a[^>]+?href=["']?([^"']+)["']?[^>]*>([^<]+)<\/a>/gi, '[链接]') // replace url
+    content = content.replace(/<pre><code>.*?<\/pre>/gi, '[代码]') // replace code
+    content = content.replace(/<[^>]+>/g,"") // remove html tag
+
+    if (content.length > 150) {
+      content = content.substring(0,150) + '...'
+    }
+    return content
+  }
+
+  const getIcon = (icon, mail) => {
+    if (icon) return icon
+    let defaultIcon = '?d=mp'
+    let iconUrl = `https://gravatar.loli.net/avatar/${md5(mail.toLowerCase()) + defaultIcon}`
+    return iconUrl
+  }
+
+  const generateHtml = array => {
+    let result = ''
+
+    if (array.length) {
+      for (let i = 0; i < array.length; i++) {
+        result += '<div class=\'aside-list-item\'>'
+
+        if (true) {
+          const name = 'data-lazy-src'
+          result += `<a href='${array[i].url}' class='thumbnail'><img ${name}='${array[i].avatar}' alt='${array[i].nick}'></a>`
+        }
+
+        result += `<div class='content'>
+        <a class='comment' href='${array[i].url}' title='${array[i].content}'>${array[i].content}</a>
+        <div class='name'><span>${array[i].nick} / </span><time datetime="${array[i].date}">${anzhiyu.diffDate(array[i].date, true)}</time></div>
+        </div></div>`
+      }
+    } else {
+      result += '没有评论'
+    }
+
+    let $dom = document.querySelector('#card-newest-comments .aside-list')
+    $dom && ($dom.innerHTML= result)
+    window.lazyLoadInstance && window.lazyLoadInstance.update()
+    window.pjax && window.pjax.refresh($dom)
+  }
+
+  const getComment = () => {
+    const serverURL = 'https://BsIRp7GQ.api.lncldglobal.com'
+
+    var settings = {
+      "method": "GET",
+      "headers": {
+        "X-LC-Id": 'BsIRp7GQE8IZ5fkI0JRj8Vys-gzGzoHsz',
+        "X-LC-Key": 'vla82YKrFnfwtuQfgoaDnzu9',
+        "Content-Type": "application/json"
+      },
+    }
+
+    fetch(`${serverURL}/1.1/classes/Comment?limit=6&order=-createdAt`,settings)
+      .then(response => response.json())
+      .then(data => {
+        const valineArray = data.results.map(function (e) {
+          return {
+            'avatar': getIcon(e.QQAvatar, e.mail),
+            'content': changeContent(e.comment),
+            'nick': e.nick,
+            'url': e.url + '#' + e.objectId,
+            'date': e.updatedAt,
+          }
+        })
+        saveToLocal.set('valine-newest-comments', JSON.stringify(valineArray), 10/(60*24))
+        generateHtml(valineArray)
+      }).catch(e => {
+        const $dom = document.querySelector('#card-newest-comments .aside-list')
+        $dom.textContent= "无法获取评论，请确认相关配置是否正确"
+      }) 
+  }
+
+  const newestCommentInit = () => {
+    if (document.querySelector('#card-newest-comments .aside-list')) {
+      const data = saveToLocal.get('valine-newest-comments')
+      if (data) {
+        generateHtml(JSON.parse(data))
+      } else {
+        getComment()
+      }
+    }
+  }
+
+  newestCommentInit()
+  document.addEventListener('pjax:complete', newestCommentInit)
+})</script><script>var visitorMail = "visitor@touko.com";
+</script><script async data-pjax src="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/waterfall/waterfall.js"></script><script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/qrcodejs/1.0.0/qrcode.min.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.9/icon/ali_iconfont_css.css"><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.cbd.int/butterfly-extsrc@1.1.3/dist/canvas-nest.min.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/aplayer/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.cbd.int/anzhiyu-blog-static@1.0.1/js/APlayer.min.js"></script><script src="https://cdn.cbd.int/hexo-anzhiyu-music@1.0.1/assets/js/Meting2.min.js"></script><script src="https://cdn.cbd.int/pjax@0.2.8/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+  // removeEventListener scroll 
+  anzhiyu.removeGlobalFnEvent('pjax')
+  anzhiyu.removeGlobalFnEvent('themeChange')
+
+  document.getElementById('rightside').classList.remove('rightside-show')
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', e => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script charset="UTF-8" src="https://cdn.cbd.int/anzhiyu-theme-static@1.1.5/accesskey/accesskey.js"></script></div><div id="popup-window"><div class="popup-window-title">通知</div><div class="popup-window-divider"></div><div class="popup-window-content"><div class="popup-tip">你好呀</div><div class="popup-link"><i class="anzhiyufont anzhiyu-icon-arrow-circle-right"></i></div></div></div></body></html>
