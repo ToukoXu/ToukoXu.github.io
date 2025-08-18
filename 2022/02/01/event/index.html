@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="zh" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"><title>JS 事件系统完全指南与性能优化 | Touko</title><meta name="keywords" content="JavaScript,性能优化"><meta name="author" content="Touko"><meta name="copyright" content="Touko"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#f7f9fe"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-touch-fullscreen" content="yes"><meta name="apple-mobile-web-app-title" content="JS 事件系统完全指南与性能优化"><meta name="application-name" content="JS 事件系统完全指南与性能优化"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="#f7f9fe"><meta property="og:type" content="article"><meta property="og:title" content="JS 事件系统完全指南与性能优化"><meta property="og:url" content="http://toukoxu.github.io/2022/02/01/event/index.html"><meta property="og:site_name" content="Touko"><meta property="og:description" content="在 JavaScript 的世界里，事件就像神经信号，让网页与应用拥有了感知和反应能力！今天，我们将深入探索事件系统的奥秘，从基础点击到高级交互，揭开浏览器事件机制的面纱！  一、事件系统：网页的神经系统1.1 事件流三阶段：捕获与冒泡   graph LR     A[捕获阶段] --&amp;gt;"><meta property="og:locale" content="zh"><meta property="og:image" content="http://toukoxu.github.io/img/cover/event.png"><meta property="article:author" content="Touko"><meta property="article:tag"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="http://toukoxu.github.io/img/cover/event.png"><meta name="description" content="在 JavaScript 的世界里，事件就像神经信号，让网页与应用拥有了感知和反应能力！今天，我们将深入探索事件系统的奥秘，从基础点击到高级交互，揭开浏览器事件机制的面纱！  一、事件系统：网页的神经系统1.1 事件流三阶段：捕获与冒泡   graph LR     A[捕获阶段] --&amp;gt;"><link rel="shortcut icon" href="/favicon.ico"><link rel="canonical" href="http://toukoxu.github.io/2022/02/01/event/"><link rel="preconnect" href="//cdn.cbd.int"/><meta name="google-site-verification" content="xxx"/><meta name="baidu-site-verification" content="code-xxx"/><meta name="msvalidate.01" content="xxx"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/@fancyapps/ui@5.0.28/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+<!DOCTYPE html><html lang="zh" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"><title>JS 事件系统完全指南与性能优化 | Touko</title><meta name="keywords" content="JavaScript,性能优化"><meta name="author" content="Touko"><meta name="copyright" content="Touko"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#f7f9fe"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-touch-fullscreen" content="yes"><meta name="apple-mobile-web-app-title" content="JS 事件系统完全指南与性能优化"><meta name="application-name" content="JS 事件系统完全指南与性能优化"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="#f7f9fe"><meta property="og:type" content="article"><meta property="og:title" content="JS 事件系统完全指南与性能优化"><meta property="og:url" content="http://toukoxu.github.io/2022/02/01/event/index.html"><meta property="og:site_name" content="Touko"><meta property="og:description" content="在 JavaScript 的世界里，事件就像网页的“交互信号”——用户点击按钮、滚动页面、输入文字，都是通过事件让网页做出反应。今天我们从基础到进阶，把浏览器事件机制拆解开，再聊聊怎么用得更高效，避免常见的性能坑！  一、事件系统：网页的“交互逻辑骨架”1.1 事件流三阶段：从顶层到目标，再回到顶"><meta property="og:locale" content="zh"><meta property="og:image" content="http://toukoxu.github.io/img/cover/event.png"><meta property="article:author" content="Touko"><meta property="article:tag"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="http://toukoxu.github.io/img/cover/event.png"><meta name="description" content="在 JavaScript 的世界里，事件就像网页的“交互信号”——用户点击按钮、滚动页面、输入文字，都是通过事件让网页做出反应。今天我们从基础到进阶，把浏览器事件机制拆解开，再聊聊怎么用得更高效，避免常见的性能坑！  一、事件系统：网页的“交互逻辑骨架”1.1 事件流三阶段：从顶层到目标，再回到顶"><link rel="shortcut icon" href="/favicon.ico"><link rel="canonical" href="http://toukoxu.github.io/2022/02/01/event/"><link rel="preconnect" href="//cdn.cbd.int"/><meta name="google-site-verification" content="xxx"/><meta name="baidu-site-verification" content="code-xxx"/><meta name="msvalidate.01" content="xxx"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/@fancyapps/ui@5.0.28/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
   linkPageTop: undefined,
   peoplecanvas: {"enable":true,"img":"https://upload-bbs.miyoushe.com/upload/2024/07/27/125766904/ba62475f396df9de3316a08ed9e65d86_5680958632268053399..png"},
   postHeadAiDescription: undefined,
@@ -55,7 +55,7 @@
   configTitle: 'Touko',
   title: 'JS 事件系统完全指南与性能优化',
   postAI: '',
-  pageFillDescription: '一、事件系统：网页的神经系统, 1.1 事件流三阶段：捕获与冒泡, 1.2 事件监听方式大比拼, 1.3 addEventListener(), 语法, 参数, 二、事件类型大全, 类图, 1. Event（基础事件）, 2. UIEvent（用户界面事件）, 2.1 MouseEvent（鼠标事件）, 2.1.1 WheelEvent（滚轮事件）, 2.1.2 DragEvent（拖放事件）, 2.1.3 PointerEvent（指针事件）, 2.2 KeyboardEvent（键盘事件）, 2.3 FocusEvent（焦点事件）, 2.4 TouchEvent（触摸事件）, 2.5 InputEvent（输入事件）, 3. AnimationEvent（动画事件）, 4. TransitionEvent（过渡事件）, 5. ClipboardEvent（剪贴板事件）, 6. CustomEvent（自定义事件）, 三、性能优化, 3.1 高频事件的防抖（debounce）与节流（throttle）, 3.2 事件委托（减少DOM操作且支持动态内容）, 3.3 一次性事件（{ once true }）, 3.4 被动事件监听器（{ passive true }）, 3.5 事件顺序控制（{ capture true }）, 具体应用案例, 3.6 事件移除（removeEventListener）, 3.7 事件选择原则, 四、实战问题与解决方案, 4.1 scroll事件触发频繁导致卡顿, 4.2 移动端点击延迟300ms, 4.3 事件内存泄漏, 4.4 多个事件监听器执行顺序不可控, 4.5 浏览器兼容性问题, 五、现代事件处理技术, 5.1 事件总线：全局事件中心, 5.2 AbortController：事件管理新方式在的世界里事件就像神经信号让网页与应用拥有了感知和反应能力今天我们将深入探索事件系统的奥秘从基础点击到高级交互揭开浏览器事件机制的面纱一事件系统网页的神经系统事件流三阶段捕获与冒泡捕获阶段目标阶段冒泡阶段捕获阶段事件从向下传递到目标元素祖先父元素目标阶段事件到达目标元素本身冒泡阶段事件从目标元素向上冒泡回事件监听方式大比拼方式示例优点缺点属性简单直接混合属性简单易用只能绑定一个处理函数推荐支持多个监听器需要手动移除专业提示现代开发中总是使用它提供最强大的控制能力语法参数旧版本类型默认值作用沿着树向上冒泡的事件不会触发监听器和上面的在捕获功能上完全等效选项类型默认值作用决定监听器在事件流的哪个阶段被触发冒泡阶段捕获阶段最多调用一次监听器调用后自动移除监听器不会调用信号对象调用时移除监听器二事件类型大全类图基础事件所有事件的基类提供基本的事件属性和方法构造函数可选接受例属性事件类型如是否冒泡是否可以取消默认行为事件目标元素可以用来实现事件委托始终为绑定事件的元素事件当前阶段事件发生的时间戳事件是否由用户触发还是脚本创建是否已阻止默认行为事件是否可以穿过边界方法阻止默认行为可以使用来检查该事件是否支持取消阻止冒泡阻止其他监听器执行返回事件路径数组具体事件类型事件触发时机选中文本表单提交表单重置值改变并失去焦点资源加载完成离开页面解析完成窗口大小改变滚动元素哈希改变启动媒体暂停媒体用户界面事件继承自处理与浏览器相关的事件特有属性关联的窗口对象事件详情如点击次数鼠标事件继承自处理所有鼠标相关事件特有属性屏幕坐标视口坐标文档坐标屏幕坐标目标元素坐标按下的鼠标按钮左键中键右键按下的多个按钮相关元素如时的来源元素具体事件类型事件类型触发时机是否冒泡点击按下并释放双击鼠标按下鼠标释放鼠标移动鼠标进入元素鼠标离开元素鼠标进入元素或子元素鼠标离开元素或子元素右键菜单滚轮事件继承自处理滚轮触控板滚动事件特有属性水平滚动量像素垂直滚动量像素轴滚动量设备滚动单位像素行页具体事件类型事件类型触发时机滚轮滚动拖放事件继承自处理拖放事件特有属性在拖放交互期间传输的数据具体事件类型事件类型触发时机拖动元素含选择的文本下同开始拖动元素拖动操作结束释放鼠标按钮或按下退出键元素拖动到有效放置目标上每几百毫秒拖动的元素进入放置目标拖动的元素离开放置目标在放置目标上放置元素指针事件继承自统一鼠标触摸触控笔事件特有属性唯一指针接触区域尺寸压力值设备类型是否为主指针具体事件类型事件类型触发时机指针按下指针释放指针移动指针进入元素指针离开元素指针进入元素指针离开元素指针中断元素启用捕获后触发捕获被释放后触发键盘事件继承自处理键盘输入事件特有属性按键的字符串表示如物理按键代码如按键位置标准左侧右侧数字键盘是否重复按键是否在输入法编辑中修饰键状态方法检查特定修饰键状态具体事件类型事件类型触发时机是否冒泡按下任意键释放按键焦点事件继承自处理元素焦点变化特有属性相关元素如失去焦点时获得焦点的元素具体事件类型事件类型触发时机是否冒泡替代方案元素获得焦点元素失去焦点元素获得焦点元素失去焦点触摸事件继承自处理触摸屏设备交互特有属性当前所有触摸点当前元素上的触摸点本次事件相关的触摸点具体事件类型事件类型触发时机触摸开始触摸移动触摸结束触摸中断输入事件继承自处理用户输入事件特有属性插入的字符拖放或插入删除的数据更改的类型或具体事件类型事件类型触发时机用户输入动画事件继承自处理动画相关事件特有属性动画名称动画已运行时间秒关联的伪元素如具体事件类型事件类型触发时机动画开始动画结束动画重复播放动画被取消过渡事件继承自处理过渡效果相关事件特有属性发生过渡的属性过渡已运行时间秒关联的伪元素具体事件类型事件类型触发时机过渡创建时过渡实际开始时过渡完成时过渡被取消时剪贴板事件继承自用于处理剪切板相关信息的事件特有属性受剪贴板操作影响的数据具体事件类型事件类型触发时机复制元素的内容剪切元素的内容将内容粘贴到元素中自定义事件继承自用于创建自定义事件特有属性自定义数据方法初始化自定义事件创建自定义事件自定义数据触发事件监听事件自定义数据三性能优化高频事件的防抖与节流防抖最后的胜利者连续触发只执行最后一次窗口大小稳定了节流匀速的节拍器固定间隔执行一次滚动中事件委托减少操作且支持动态内容传统方式每个按钮单独绑定事件委托单个监听器处理所有减少事件监听器数量使用事件委托处理动态元素性能秘诀对动态内容总是使用事件委托这是高性能应用的关键一次性事件可以使用匿名函数自动在调用后删除被动事件监听器提升滚动性能的默认值为所以浏览器会在滚动页面时阻塞浏览器主线程告诉浏览器不会调用事件顺序控制精确控制事件触发顺序捕获阶段冒泡阶段具体应用案例全局快捷键在捕获阶段捕获键盘事件使用捕获确保优先处理关闭下拉菜单弹窗点击页面任意位置关闭菜单捕获阶段优先处理表单自动保存在输入失去焦点前保存捕获阶段使用捕获确保在可能的验证前执行事件拦截如禁用页面某些区域的点击事件移除错误方式匿名函数无法移除正确方式使用具名函数引用需要时移除添加时指定移除时也必须指定相同的值错误无法移除事件选择原则优先使用不会冒泡的事件如替代移动端优先指针事件替代焦点事件使用冒泡版本替代优先使用进行事件委托在需要精确控制单个元素时才使用四实战问题与解决方案事件触发频繁导致卡顿方式一使用防抖或节流方式二使用元素进入视口移动端点击延迟方式一在标签中禁用缩放方式二使用库事件内存泄漏单页应用中的组件清理必须移除监听器多个事件监听器执行顺序不可控方式一使用捕获阶段确保执行顺序捕获阶段冒泡阶段方式二使用标志管理优先级浏览器兼容性问题方式一使用方式二使用五现代事件处理技术事件总线全局事件中心使用事件管理新方式添加事件监听调用会自动移除所有相关监听器最后的小测验当用户点击一个按钮时以下哪个阶段最先触发目标阶段冒泡阶段捕获阶段答案捕获阶段事件从向下传递掌握事件系统你就能创建出流畅响应式的用户体验现在就去实践这些技巧让你的网页真正活起来吧',
+  pageFillDescription: '一、事件系统：网页的交互逻辑骨架, 1.1 事件流三阶段：从顶层到目标再回到顶层, 1.2 三种事件监听方式：哪种最实用？, 1.3 addEventListener详解：参数怎么用？, 基本语法, 关键参数说明, 二、常用事件类型：按场景分类整理, 先看事件的继承关系, 1. Event（基础事件）, 常用属性, 常用方法, 高频基础事件, 2. UIEvent（用户界面事件）, 2.1 MouseEvent（鼠标事件）, 2.1.1 WheelEvent（滚轮事件）, 2.1.2 DragEvent（拖放事件）, 2.1.3 PointerEvent（指针事件）, 2.2 KeyboardEvent（键盘事件）, 2.3 FocusEvent（焦点事件）, 2.4 TouchEvent（触摸事件）, 2.5 InputEvent（输入事件）, 3. AnimationEvent（动画事件）, 4. TransitionEvent（过渡事件）, 5. ClipboardEvent（剪贴板事件）, 6. CustomEvent（自定义事件）, 用法示例, 三、事件性能优化：避免卡顿、减少浪费, 3.1 高频事件：用防抖（debounce）和节流（throttle）控频率, 防抖（debounce）：连续触发只执行最后一次, 节流（throttle）：固定间隔执行一次, 3.2 多元素事件：用事件委托减少监听器, 反面示例：逐个绑定（低效）, 正面示例：事件委托（高效）, 额外优势：支持动态元素, 3.3 一次性事件：用 once true 自动解绑, 3.4 滚动x2F触摸事件：用 passive true 提升流畅度, 3.5 事件顺序控制：用 capture true 精确控制事件触发顺序（不是常规性能优化的手段）, 3.6 不再需要的事件：用 removeEventListener 及时解绑避免内存泄漏, 正确示例：组件销毁时解绑, 注意点, 3.7 事件选择原则, 四、实战问题：常见坑与解决方案, 4.1 滚动事件触发太频繁页面卡顿, 4.2 移动端点击有 300ms 延迟, 4.3 事件冒泡导致父元素事件误触发, 4.4 单页应用切换组件事件监听器没解绑, 五、现代事件处理技巧：更高效的玩法, 5.1 事件总线（Event Bus）：非关联组件通信, 简单实现事件总线, 5.2 AbortController：现代事件管理, 用 AbortController 取消 fetch 请求, 最后小测验在的世界里事件就像网页的交互信号用户点击按钮滚动页面输入文字都是通过事件让网页做出反应今天我们从基础到进阶把浏览器事件机制拆解开再聊聊怎么用得更高效避免常见的性能坑一事件系统网页的交互逻辑骨架事件流三阶段从顶层到目标再回到顶层事件触发后不是直接定位到目标元素而是会经历捕获目标冒泡三个阶段就像水流先向下流到目标再向上回流捕获阶段目标阶段冒泡阶段捕获阶段事件从开始顺着树向下传递直到目标元素的父级比如点击按钮时先经过再到按钮的父元素目标阶段事件终于到达触发的目标元素比如刚才的按钮冒泡阶段事件从目标元素开始顺着树向上回流回到按钮父三种事件监听方式哪种最实用日常开发中绑定事件主要有三种方式各有优劣我整理成了表格方式示例优点缺点属性绑定写起来快适合简单和混在一起代码难维护无法绑定多个处理函数属性绑定比属性清晰不用混写一个事件只能绑一个函数后面的会覆盖前面的推荐支持绑多个函数能控制事件阶段可手动移除需要手动解绑否则可能内存泄漏实际开发里我几乎只用它的灵活性和控制力是另外两种方式比不了的尤其是复杂项目里多监听器阶段控制这些功能很关键详解参数怎么用基本语法它有三种调用形式核心是控制事件的触发规则基础版事件类型处理函数旧版阶段控制加个布尔值控制捕获冒泡新版选项控制更灵活的配置推荐关键参数说明布尔值旧版控制事件在哪个阶段触发是捕获阶段默认是冒泡阶段和新版功能完全一样对象新版能精细控制事件行为常用选项如下选项类型默认值作用决定事件在哪个阶段触发冒泡阶段捕获阶段时函数只执行一次执行完自动解绑比如点击后失效的按钮时告诉浏览器这个函数不会调用能提升滚动触摸等高频事件的性能配合使用调用就能批量解绑事件二常用事件类型按场景分类整理浏览器事件类型非常多我附上关键属性和用法不用死记需要时查就行先看事件的继承关系所有事件都基于这个基类再衍生出不同场景的事件比如鼠标事件键盘事件等关系如下基础事件所有事件的祖宗提供最基础的属性和方法比如判断事件是否冒泡阻止默认行为等常用属性事件类型如实际触发事件的元素比如点击按钮就是按钮始终为绑定事件的元素比如给父容器绑事件点击子元素时是父容器布尔值判断事件是否会冒泡布尔值判断事件能否用阻止默认行为事件当前阶段事件发生的时间戳事件是否由用户触发还是脚本创建是否已阻止默认行为常用方法阻止默认行为比如阻止表单提交链接跳转可以使用来检查该事件是否支持取消阻止事件继续冒泡或捕获比如点击子元素后父元素的事件不触发阻止其他监听器执行高频基础事件事件触发时机常用场景解析完成不用等图片加载页面初始化逻辑比如绑定事件渲染列表整个页面图片等加载完成处理图片相关逻辑比如获取图片尺寸元素或页面滚动时滚动加载导航栏吸顶窗口或元素大小改变时响应式布局调整比如窗口缩小后重排内容表单点击提交按钮或按回车时表单验证阻止默认提交后用提交用户界面事件继承自处理与浏览器相关的事件特有属性关联的窗口对象事件详情如点击次数鼠标事件继承自处理所有鼠标相关事件比如点击移动滚轮操作都属于这类特有属性屏幕坐标视口坐标文档坐标屏幕坐标目标元素坐标按下的鼠标按钮左键中键右键按下的多个按钮相关元素如时的来源元素具体事件类型事件类型触发时机是否冒泡注意点鼠标按下并释放通常是左键双击会触发两次双击鼠标响应速度比慢慎用鼠标按下释放区分按下和释放的状态比如拖拽开始结束鼠标移动触发频率高需要节流优化鼠标进入离开元素不冒泡子元素不会触发比如鼠标从父元素进子元素不会触发父元素的鼠标进入离开元素或子元素冒泡子元素会触发比如鼠标从父元素进子元素父元素会触发右键菜单滚轮事件继承自处理滚轮触控板滚动事件特有属性水平滚动量像素垂直滚动量像素轴滚动量设备滚动单位像素行页具体事件类型事件类型触发时机注意点滚轮滚动控制滚动方向和速度替代旧的事件拖放事件继承自处理拖放事件特有属性在拖放交互期间传输的数据具体事件类型事件类型触发时机拖动元素含选择的文本下同开始拖动元素拖动操作结束释放鼠标按钮或按下退出键元素拖动到有效放置目标上每几百毫秒拖动的元素进入放置目标拖动的元素离开放置目标在放置目标上放置元素指针事件继承自统一鼠标触摸触控笔事件特有属性唯一指针接触区域尺寸压力值设备类型是否为主指针具体事件类型事件类型触发时机指针按下指针释放指针移动指针进入元素指针离开元素指针进入元素指针离开元素指针中断元素启用捕获后触发捕获被释放后触发键盘事件继承自处理键盘输入事件比如快捷键输入验证等特有属性按键的实际内容比如按是或按回车是按键的物理位置比如按是不管是否按位置不变按键位置标准左侧右侧数字键盘布尔值判断是否是长按重复触发布尔值判断是否在输入法输入中比如中文输入时避免误触发修饰键状态方法检查特定修饰键状态具体事件类型事件触发时机是否冒泡常用场景按下任意键包括功能键监听快捷键比如保存释放按键时取消快捷键状态比如松开后停止批量操作注意事件已过时尽量用替代它支持所有按键类型焦点事件继承自处理元素焦点变化比如表单输入时的交互特有属性相关元素如失去焦点时获得焦点的元素具体事件类型事件类型触发时机是否冒泡注意点元素获得失去焦点不冒泡无法用事件委托元素获得失去焦点冒泡推荐用它做事件委托比如表单所有输入框的焦点处理触摸事件继承自处理触摸屏设备交互特有属性当前所有触摸点当前元素上的触摸点本次事件相关的触摸点具体事件类型事件类型触发时机触摸开始触摸移动触摸结束触摸中断输入事件继承自处理用户输入事件比如实时监听输入框文本域的内容变化比事件更灵敏需要失去焦点才触发特有属性插入的字符拖放或插入删除的数据更改的类型或具体事件类型事件类型触发时机常用场景用户输入实时搜索提示输入字数统计动画事件继承自处理动画相关事件特有属性动画名称动画已运行时间秒关联的伪元素如具体事件类型事件类型触发时机动画开始动画结束动画重复播放动画被取消过渡事件继承自处理过渡效果相关事件特有属性发生过渡的属性过渡已运行时间秒关联的伪元素具体事件类型事件类型触发时机过渡创建时过渡实际开始时过渡完成时过渡被取消时剪贴板事件继承自用于处理剪切板相关信息的事件特有属性受剪贴板操作影响的数据具体事件类型事件类型触发时机复制元素的内容剪切元素的内容将内容粘贴到元素中自定义事件继承自用于创建自定义事件特有属性自定义数据方法初始化自定义事件用法示例创建自定义事件事件名配置可传自定义数据自定义数据通过访问是否冒泡是否可阻止默认行为绑定事件监听收到数据输出触发事件三事件性能优化避免卡顿减少浪费事件处理很容易出性能问题比如滚动拖拽这类高频事件处理不好会让页面卡顿分享几个我实战中验证过的优化技巧高频事件用防抖和节流控频率像这类事件触发频率非常高比如滚动时每秒触发几十次直接执行处理函数会占用大量主线程导致页面卡顿这时候需要用防抖或节流控制执行次数防抖连续触发只执行最后一次比如窗口时用户拖动窗口的过程中不执行等用户停手后再执行一次避免频繁计算防抖最后的胜利者连续触发只执行最后一次用闭包保存定时器每次触发都清空之前的定时器重新计时等毫秒后执行用法窗口时等稳定后再执行窗口大小稳定了执行调整逻辑节流固定间隔执行一次比如滚动加载时不管滚动多快每隔只执行一次避免请求发送太频繁上次执行时间距离上次执行超过才执行更新上次执行时间用法滚动时每隔执行一次滚动中按固定间隔执行多元素事件用事件委托减少监听器如果有很多相同元素需要绑定事件比如列表里的删除按钮一个个绑定会创建大量监听器浪费内存这时候用事件委托把监听器绑在父元素上通过判断是否点击目标元素反面示例逐个绑定低效给每个绑事件元素多的时候很卡正面示例事件委托高效只给父容器绑一个事件不管有多少子元素都能处理判断点击的是不是额外优势支持动态元素如果列表是动态生成的比如加载后新增的项逐个绑定的事件会失效但事件委托能自动处理因为监听器在父容器上新元素只要符合选择器点击就能触发性能秘诀对动态内容使用事件委托是高性能应用的关键一次性事件用自动解绑有些事件只需要执行一次比如点击后弹出提示之后再点无效不用手动解绑加个选项执行完会自动移除监听器可以使用匿名函数自动在调用后删除再点不会触发这是只弹一次的提示滚动触摸事件用提升流畅度浏览器在处理这类事件时会先检查函数是否调用如果有会阻塞滚动导致卡顿如果你的函数不会阻止默认行为加告诉浏览器不用等检查了直接执行能显著提升滚动流畅度滚动事件加提升流畅度滚动中不阻止默认行为注意如果加了再调用会报错因为浏览器已经认定你不会阻止默认行为了事件顺序控制用精确控制事件触发顺序不是常规性能优化的手段在某些特定场景下捕获阶段可能更早地处理事件从而能够阻止事件进一步传播阻止所有后续监听器在捕获阶段早期检查不再需要的事件用及时解绑避免内存泄漏如果元素被删除比如单页应用切换组件但事件监听器没解绑浏览器会一直持有这个函数和元素的引用导致内存泄漏一定要在合适的时机解绑正确示例组件销毁时解绑绑定避免函数内指向错误处理点击逻辑组件销毁时调用解绑事件切换组件时销毁旧组件解绑事件避免内存泄漏注意点匿名函数无法移除要使用具名函数解绑时要和绑定的函数参数完全一致比如绑定的时候用了解绑时也要加否则解不掉绑定加了解绑必须也加否则无效事件选择原则优先使用不会冒泡的事件如替代这样可以减少事件处理函数被意外触发的可能性同时也能减少事件传播带来的性能开销尽管在现代浏览器中这种开销通常很小但要注意它们不能用于事件委托因为不冒泡所以使用场景是直接绑定到目标元素移动端优先指针事件替代使用等事件可以同时支持多种输入方式避免为鼠标和触摸分别写两套事件逻辑这有助于代码维护和减少重复焦点事件使用冒泡版本替代因为和事件不冒泡所以当我们需要在祖先元素上监听焦点变化例如做表单验证时使用冒泡版本的和可以方便地实现事件委托仅需将事件绑定在表单上而不必在每个可聚焦元素上单独绑定事件四实战问题常见坑与解决方案滚动事件触发太频繁页面卡顿问题事件每秒触发几十次处理函数里有操作比如修改样式计算位置导致主线程忙不过来页面卡解决方案用节流控制执行频率比如每隔执行一次复杂计算用包裹让浏览器在重绘时执行避免掉帧能用替代的场景尽量不用滚动事件比如元素进入视口时加载优化后的滚动事件处理用确保在重绘时执行处理操作不使用滚动事件而是使用元素进入视口移动端点击有延迟问题早期移动端浏览器为了判断用户是否双击缩放会在点击后延迟再触发事件导致按钮点击反应慢解决方案加标签禁用缩放推荐简单有效用替代需要处理触摸穿透问题旧项目可用库现在大部分现代浏览器已优化但兼容旧设备时可能需要事件冒泡导致父元素事件误触发问题点击子元素时父元素的同类型事件也会触发比如子按钮和父容器都绑了事件解决方案在子元素的事件处理函数里调用阻止事件继续冒泡子元素事件阻止冒泡父元素事件不触发阻止事件冒泡到父元素子元素被点击父元素事件子元素点击时不会触发父元素被点击单页应用切换组件事件监听器没解绑问题单页应用切换组件时旧组件的事件监听器没解绑导致内存泄漏甚至出现幽灵点击切换后旧组件的事件还在触发解决方案组件销毁时手动解绑事件如前面的示例用批量解绑现代浏览器推荐方案用批量解绑绑定多个事件都用同一个组件销毁时调用批量解绑所有事件五现代事件处理技巧更高效的玩法事件总线非关联组件通信如果两个组件没有直接关系比如兄弟组件跨层级组件可以用事件总线传递消息不用一层层传或用全局状态简单实现事件总线存储事件是事件名是回调函数数组触发事件传事件名和数据执行所有绑定的回调绑定事件传事件名和回调解绑事件可选组件触发事件组件监听事件用户登录了现代事件管理前面提到过能批量解绑事件它还能配合定时器等使用是现代浏览器推荐的资源管理方案用取消请求发起请求传请求被取消了秒后取消请求比如用户点击取消按钮最后小测验当用户点击一个按钮时事件流的哪个阶段最先触发目标阶段冒泡阶段捕获阶段答案捕获阶段事件从向下传递到目标元素先经过捕获阶段再到目标阶段最后是冒泡阶段事件系统是前端交互的核心掌握它不仅能写出流畅的交互还能避免很多隐藏的性能问题建议大家在实际项目中多尝试优化技巧比如用事件委托替代多监听器用提升滚动流畅度这些小改动能让页面体验提升一大截',
   isPost: true,
   isHome: false,
   isHighlightShrink: false,
@@ -203,23 +203,25 @@ setTimeout(function(){preloader.endLoading();},10000)
 if (true) {
   document.addEventListener('pjax:send', () => { preloader.initLoading() })
   document.addEventListener('pjax:complete', () => { preloader.endLoading() })
-}</script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.10/progress_bar/progress_bar.css"/><script async="async" src="https://cdn.cbd.int/pace-js@1.2.4/pace.min.js" data-pace-options="{ &quot;restartOnRequestAfter&quot;:false,&quot;eventLag&quot;:false}"></script><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><div id="nav-group"><span id="blog_name"><a id="site-name" href="/" accesskey="h"><div class="title">Touko</div><i class="anzhiyufont anzhiyu-icon-house-chimney"></i></a></span><div class="mask-name-container"><div id="name-container"><a id="page-name" href="javascript:anzhiyu.scrollToDest(0, 500)">PAGE_NAME</a></div></div><div id="menus"></div><div id="nav-right"><div class="nav-button" id="randomPost_button"><a class="site-page" onclick="toRandomPost()" title="随机前往一个文章" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-dice"></i></a></div><div class="nav-button" id="search-button"><a class="site-page social-icon search" href="javascript:void(0);" title="搜索🔍" accesskey="s"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span> 搜索</span></a></div><div id="console"><div class="console-card-group-reward"><ul class="reward-all console-card"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" alt="微信" src="/img/wechat.jpg"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" alt="支付宝" src="/img/alipay.jpg"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div><div class="console-card-group"><div class="console-card-group-left"><div class="console-card" id="card-newest-comments"><div class="card-content"><div class="author-content-item-tips">互动</div><span class="author-content-item-title"> 最新评论</span></div><div class="aside-list"><span>正在加载中...</span></div></div></div><div class="console-card-group-right"><div class="console-card tags"><div class="card-content"><div class="author-content-item-tips">兴趣点</div><span class="author-content-item-title">寻找你感兴趣的领域</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/ES2017-ES8/" style="font-size: 1.05rem;">ES2017(ES8)<sup>1</sup></a><a href="/tags/ES6/" style="font-size: 1.05rem;">ES6<sup>6</sup></a><a href="/tags/JavaScript/" style="font-size: 1.05rem;">JavaScript<sup>10</sup></a><a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 1.05rem;">性能优化<sup>6</sup></a></div></div><hr/></div></div><div class="console-card history"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-box-archiv"></i><span>文章</span></div><div class="card-archives"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/08/"><span class="card-archive-list-date">August 2024</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">2</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/07/"><span class="card-archive-list-date">July 2024</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">2</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/06/"><span class="card-archive-list-date">June 2024</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">2</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/02/"><span class="card-archive-list-date">February 2022</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">1</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2021/05/"><span class="card-archive-list-date">May 2021</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">1</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2021/04/"><span class="card-archive-list-date">April 2021</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">1</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2021/03/"><span class="card-archive-list-date">March 2021</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">1</span><span>篇</span></div></a></li></ul></div><hr/></div></div></div><div class="button-group"><div class="console-btn-item"><a class="darkmode_switchbutton" title="显示模式切换" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-moon"></i></a></div><div class="console-btn-item" id="consoleHideAside" onclick="anzhiyu.hideAsideBtn()" title="边栏显示控制"><a class="asideSwitch"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></a></div><div class="console-btn-item" id="consoleMusic" onclick="anzhiyu.musicToggle()" title="音乐开关"><a class="music-switch"><i class="anzhiyufont anzhiyu-icon-music"></i></a></div></div><div class="console-mask" onclick="anzhiyu.hideConsole()" href="javascript:void(0);"></div></div><div class="nav-button" id="nav-totop"><a class="totopbtn" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i><span id="percent" onclick="anzhiyu.scrollToDest(0,500)">0</span></a></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);" title="切换"><i class="anzhiyufont anzhiyu-icon-bars"></i></a></div></div></div></nav><div id="post-info"><div id="post-firstinfo"><div class="meta-firstline"><a class="post-meta-original">原创</a><span class="post-meta-categories"><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-inbox post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%89%8D%E7%AB%AF/" itemprop="url">前端</a><i class="anzhiyufont anzhiyu-icon-angle-right post-meta-separator"></i><i class="anzhiyufont anzhiyu-icon-inbox post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%89%8D%E7%AB%AF/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url">学习笔记</a></span><span class="article-meta tags"><a class="article-meta__tags" href="/tags/JavaScript/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>JavaScript</span></a><a class="article-meta__tags" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>性能优化</span></a></span></div></div><h1 class="post-title" itemprop="name headline">JS 事件系统完全指南与性能优化</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="anzhiyufont anzhiyu-icon-calendar-days post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" itemprop="dateCreated datePublished" datetime="2022-02-01T12:46:25.000Z" title="发表于 2022-02-01 20:46:25">2022-02-01</time><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-history post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" itemprop="dateCreated datePublished" datetime="2022-02-01T12:46:25.000Z" title="更新于 2022-02-01 20:46:25">2022-02-01</time></span></div><div class="meta-secondline"><span class="post-meta-separator"></span><span class="post-meta-wordcount"><i class="anzhiyufont anzhiyu-icon-file-word post-meta-icon" title="文章字数"></i><span class="post-meta-label" title="文章字数">字数总计:</span><span class="word-count" title="文章字数">3.9k</span><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-clock post-meta-icon" title="阅读时长"></i><span class="post-meta-label" title="阅读时长">阅读时长:</span><span>15分钟</span></span><span class="post-meta-separator">       </span><span class="post-meta-position" title="作者IP属地为上海"><i class="anzhiyufont anzhiyu-icon-location-dot"></i>上海</span></div></div></div><section class="main-hero-waves-area waves-area"><svg class="waves-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M -160 44 c 30 0 58 -18 88 -18 s 58 18 88 18 s 58 -18 88 -18 s 58 18 88 18 v 44 h -352 Z"></path></defs><g class="parallax"><use href="#gentle-wave" x="48" y="0"></use><use href="#gentle-wave" x="48" y="3"></use><use href="#gentle-wave" x="48" y="5"></use><use href="#gentle-wave" x="48" y="7"></use></g></svg></section><div id="post-top-cover"><img class="nolazyload" id="post-top-bg" src="/img/cover/event.png"></div></header><main id="blog-container"><div class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container" itemscope itemtype="http://toukoxu.github.io/2022/02/01/event/"><header><a class="post-meta-categories" href="/categories/%E5%89%8D%E7%AB%AF/" itemprop="url">前端</a><a class="post-meta-categories" href="/categories/%E5%89%8D%E7%AB%AF/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url">学习笔记</a><a href="/tags/JavaScript/" tabindex="-1" itemprop="url">JavaScript</a><a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" tabindex="-1" itemprop="url">性能优化</a><h1 id="CrawlerTitle" itemprop="name headline">JS 事件系统完全指南与性能优化</h1><span itemprop="author" itemscope itemtype="http://schema.org/Person">Touko</span><time itemprop="dateCreated datePublished" datetime="2022-02-01T12:46:25.000Z" title="发表于 2022-02-01 20:46:25">2022-02-01</time><time itemprop="dateCreated datePublished" datetime="2022-02-01T12:46:25.000Z" title="更新于 2022-02-01 20:46:25">2022-02-01</time></header><blockquote>
-<p>在 JavaScript 的世界里，事件就像<strong>神经信号</strong>，让网页与应用拥有了感知和反应能力！今天，我们将深入探索事件系统的奥秘，从基础点击到高级交互，揭开浏览器事件机制的面纱！</p>
+}</script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.10/progress_bar/progress_bar.css"/><script async="async" src="https://cdn.cbd.int/pace-js@1.2.4/pace.min.js" data-pace-options="{ &quot;restartOnRequestAfter&quot;:false,&quot;eventLag&quot;:false}"></script><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><div id="nav-group"><span id="blog_name"><a id="site-name" href="/" accesskey="h"><div class="title">Touko</div><i class="anzhiyufont anzhiyu-icon-house-chimney"></i></a></span><div class="mask-name-container"><div id="name-container"><a id="page-name" href="javascript:anzhiyu.scrollToDest(0, 500)">PAGE_NAME</a></div></div><div id="menus"></div><div id="nav-right"><div class="nav-button" id="randomPost_button"><a class="site-page" onclick="toRandomPost()" title="随机前往一个文章" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-dice"></i></a></div><div class="nav-button" id="search-button"><a class="site-page social-icon search" href="javascript:void(0);" title="搜索🔍" accesskey="s"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span> 搜索</span></a></div><div id="console"><div class="console-card-group-reward"><ul class="reward-all console-card"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" alt="微信" src="/img/wechat.jpg"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" alt="支付宝" src="/img/alipay.jpg"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div><div class="console-card-group"><div class="console-card-group-left"><div class="console-card" id="card-newest-comments"><div class="card-content"><div class="author-content-item-tips">互动</div><span class="author-content-item-title"> 最新评论</span></div><div class="aside-list"><span>正在加载中...</span></div></div></div><div class="console-card-group-right"><div class="console-card tags"><div class="card-content"><div class="author-content-item-tips">兴趣点</div><span class="author-content-item-title">寻找你感兴趣的领域</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/ES2017-ES8/" style="font-size: 1.05rem;">ES2017(ES8)<sup>1</sup></a><a href="/tags/ES6/" style="font-size: 1.05rem;">ES6<sup>6</sup></a><a href="/tags/JavaScript/" style="font-size: 1.05rem;">JavaScript<sup>10</sup></a><a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 1.05rem;">性能优化<sup>6</sup></a></div></div><hr/></div></div><div class="console-card history"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-box-archiv"></i><span>文章</span></div><div class="card-archives"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/08/"><span class="card-archive-list-date">August 2024</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">2</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/07/"><span class="card-archive-list-date">July 2024</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">2</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/06/"><span class="card-archive-list-date">June 2024</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">2</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/02/"><span class="card-archive-list-date">February 2022</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">1</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2021/05/"><span class="card-archive-list-date">May 2021</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">1</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2021/04/"><span class="card-archive-list-date">April 2021</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">1</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2021/03/"><span class="card-archive-list-date">March 2021</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">1</span><span>篇</span></div></a></li></ul></div><hr/></div></div></div><div class="button-group"><div class="console-btn-item"><a class="darkmode_switchbutton" title="显示模式切换" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-moon"></i></a></div><div class="console-btn-item" id="consoleHideAside" onclick="anzhiyu.hideAsideBtn()" title="边栏显示控制"><a class="asideSwitch"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></a></div><div class="console-btn-item" id="consoleMusic" onclick="anzhiyu.musicToggle()" title="音乐开关"><a class="music-switch"><i class="anzhiyufont anzhiyu-icon-music"></i></a></div></div><div class="console-mask" onclick="anzhiyu.hideConsole()" href="javascript:void(0);"></div></div><div class="nav-button" id="nav-totop"><a class="totopbtn" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i><span id="percent" onclick="anzhiyu.scrollToDest(0,500)">0</span></a></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);" title="切换"><i class="anzhiyufont anzhiyu-icon-bars"></i></a></div></div></div></nav><div id="post-info"><div id="post-firstinfo"><div class="meta-firstline"><a class="post-meta-original">原创</a><span class="post-meta-categories"><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-inbox post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%89%8D%E7%AB%AF/" itemprop="url">前端</a><i class="anzhiyufont anzhiyu-icon-angle-right post-meta-separator"></i><i class="anzhiyufont anzhiyu-icon-inbox post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%89%8D%E7%AB%AF/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url">学习笔记</a></span><span class="article-meta tags"><a class="article-meta__tags" href="/tags/JavaScript/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>JavaScript</span></a><a class="article-meta__tags" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>性能优化</span></a></span></div></div><h1 class="post-title" itemprop="name headline">JS 事件系统完全指南与性能优化</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="anzhiyufont anzhiyu-icon-calendar-days post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" itemprop="dateCreated datePublished" datetime="2022-02-01T12:46:25.000Z" title="发表于 2022-02-01 20:46:25">2022-02-01</time><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-history post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" itemprop="dateCreated datePublished" datetime="2022-02-01T12:46:25.000Z" title="更新于 2022-02-01 20:46:25">2022-02-01</time></span></div><div class="meta-secondline"><span class="post-meta-separator"></span><span class="post-meta-wordcount"><i class="anzhiyufont anzhiyu-icon-file-word post-meta-icon" title="文章字数"></i><span class="post-meta-label" title="文章字数">字数总计:</span><span class="word-count" title="文章字数">6.4k</span><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-clock post-meta-icon" title="阅读时长"></i><span class="post-meta-label" title="阅读时长">阅读时长:</span><span>23分钟</span></span><span class="post-meta-separator">       </span><span class="post-meta-position" title="作者IP属地为上海"><i class="anzhiyufont anzhiyu-icon-location-dot"></i>上海</span></div></div></div><section class="main-hero-waves-area waves-area"><svg class="waves-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M -160 44 c 30 0 58 -18 88 -18 s 58 18 88 18 s 58 -18 88 -18 s 58 18 88 18 v 44 h -352 Z"></path></defs><g class="parallax"><use href="#gentle-wave" x="48" y="0"></use><use href="#gentle-wave" x="48" y="3"></use><use href="#gentle-wave" x="48" y="5"></use><use href="#gentle-wave" x="48" y="7"></use></g></svg></section><div id="post-top-cover"><img class="nolazyload" id="post-top-bg" src="/img/cover/event.png"></div></header><main id="blog-container"><div class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container" itemscope itemtype="http://toukoxu.github.io/2022/02/01/event/"><header><a class="post-meta-categories" href="/categories/%E5%89%8D%E7%AB%AF/" itemprop="url">前端</a><a class="post-meta-categories" href="/categories/%E5%89%8D%E7%AB%AF/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url">学习笔记</a><a href="/tags/JavaScript/" tabindex="-1" itemprop="url">JavaScript</a><a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" tabindex="-1" itemprop="url">性能优化</a><h1 id="CrawlerTitle" itemprop="name headline">JS 事件系统完全指南与性能优化</h1><span itemprop="author" itemscope itemtype="http://schema.org/Person">Touko</span><time itemprop="dateCreated datePublished" datetime="2022-02-01T12:46:25.000Z" title="发表于 2022-02-01 20:46:25">2022-02-01</time><time itemprop="dateCreated datePublished" datetime="2022-02-01T12:46:25.000Z" title="更新于 2022-02-01 20:46:25">2022-02-01</time></header><blockquote>
+<p>在 JavaScript 的世界里，事件就像网页的“交互信号”——用户点击按钮、滚动页面、输入文字，都是通过事件让网页做出反应。今天我们从基础到进阶，把浏览器事件机制拆解开，再聊聊怎么用得更高效，避免常见的性能坑！</p>
 </blockquote>
-<h2 id="一、事件系统：网页的神经系统"><a href="#一、事件系统：网页的神经系统" class="headerlink" title="一、事件系统：网页的神经系统"></a>一、事件系统：网页的神经系统</h2><h3 id="1-1-事件流三阶段：捕获与冒泡"><a href="#1-1-事件流三阶段：捕获与冒泡" class="headerlink" title="1.1 事件流三阶段：捕获与冒泡"></a>1.1 事件流三阶段：捕获与冒泡</h3><div class="mermaid-wrap"><pre class="mermaid-src" hidden>
+<h2 id="一、事件系统：网页的“交互逻辑骨架”"><a href="#一、事件系统：网页的“交互逻辑骨架”" class="headerlink" title="一、事件系统：网页的“交互逻辑骨架”"></a>一、事件系统：网页的“交互逻辑骨架”</h2><h3 id="1-1-事件流三阶段：从顶层到目标，再回到顶层"><a href="#1-1-事件流三阶段：从顶层到目标，再回到顶层" class="headerlink" title="1.1 事件流三阶段：从顶层到目标，再回到顶层"></a>1.1 事件流三阶段：从顶层到目标，再回到顶层</h3><p>事件触发后，不是直接定位到目标元素，而是会经历“捕获 → 目标 → 冒泡”三个阶段，就像水流先向下流到目标，再向上回流：</p>
+<div class="mermaid-wrap"><pre class="mermaid-src" hidden>
   graph LR
-    A[捕获阶段] --&gt; B[目标阶段] --&gt; C[冒泡阶段]
-    style A fill:#4CAF50,stroke:#388E3C
-    style B fill:#2196F3,stroke:#1976D2
-    style C fill:#FF9800,stroke:#F57C00
+A[捕获阶段] --&gt; B[目标阶段] --&gt; C[冒泡阶段]
+style A fill:#4CAF50,stroke:#388E3C
+style B fill:#2196F3,stroke:#1976D2
+style C fill:#FF9800,stroke:#F57C00
   </pre></div>
 
 <ul>
-<li><strong>捕获阶段 (Capture Phase)</strong>：事件从 <code>window</code> 向下传递到目标元素（祖先 → 父元素）</li>
-<li><strong>目标阶段 (Target Phase)</strong>：事件到达目标元素本身</li>
-<li><strong>冒泡阶段 (Bubble Phase)</strong>：事件从目标元素向上冒泡回 <code>window</code></li>
+<li><strong>捕获阶段 (Capture Phase)</strong>：事件从 <code>window</code> 开始，顺着 DOM 树向下传递，直到目标元素的父级（比如点击按钮时，先经过 <code>body</code>、<code>div</code>，再到按钮的父元素）</li>
+<li><strong>目标阶段 (Target Phase)</strong>：事件终于到达触发的目标元素（比如刚才的按钮）</li>
+<li><strong>冒泡阶段 (Bubble Phase)</strong>：事件从目标元素开始，顺着 DOM 树向上“回流”，回到 <code>window</code>（按钮 → 父 <code>div</code>→<code>body</code>→<code>window</code>）</li>
 </ul>
-<h3 id="1-2-事件监听方式大比拼"><a href="#1-2-事件监听方式大比拼" class="headerlink" title="1.2 事件监听方式大比拼"></a>1.2 事件监听方式大比拼</h3><table>
+<h3 id="1-2-三种事件监听方式：哪种最实用？"><a href="#1-2-三种事件监听方式：哪种最实用？" class="headerlink" title="1.2 三种事件监听方式：哪种最实用？"></a>1.2 三种事件监听方式：哪种最实用？</h3><p>日常开发中，绑定事件主要有三种方式，各有优劣，我整理成了表格：</p>
+<table>
 <thead>
 <tr>
 <th>方式</th>
@@ -229,46 +231,34 @@ if (true) {
 </tr>
 </thead>
 <tbody><tr>
-<td><strong>HTML属性</strong></td>
-<td><code>&lt;button onclick=&quot;handle()&quot;&gt;</code></td>
-<td>简单直接</td>
-<td>混合HTML&#x2F;JS</td>
+<td><strong>HTML 属性绑定</strong></td>
+<td><code>&lt;button onclick=&quot;handleClick()&quot;&gt;</code></td>
+<td>写起来快，适合简单 demo</td>
+<td>HTML 和 JS 混在一起，代码难维护；无法绑定多个处理函数</td>
 </tr>
 <tr>
-<td><strong>DOM属性</strong></td>
-<td><code>btn.onclick = handle</code></td>
-<td>简单易用</td>
-<td>只能绑定一个处理函数</td>
+<td><strong>DOM 属性绑定</strong></td>
+<td><code>btn.onclick = handleClick</code></td>
+<td>比 HTML 属性清晰，不用混写</td>
+<td>一个事件只能绑一个函数，后面的会覆盖前面的</td>
 </tr>
 <tr>
 <td><strong><code>addEventListener</code></strong></td>
-<td><code>btn.addEventListener(&#39;click&#39;, handle)</code></td>
-<td>🏆 推荐！支持多个监听器</td>
-<td>需要手动移除</td>
+<td><code>btn.addEventListener(&#39;click&#39;, handleClick)</code></td>
+<td>🏆 推荐！支持绑多个函数；能控制事件阶段；可手动移除</td>
+<td>需要手动解绑，否则可能内存泄漏</td>
 </tr>
 </tbody></table>
-<div class="note info flat"><p><strong>专业提示：</strong> 现代开发中<mark>总是使用 addEventListener</mark>，它提供最强大的控制能力！</p></div>
+<blockquote>
+<p>实际开发里，我几乎只用 <code>addEventListener</code>——它的灵活性和控制力是另外两种方式比不了的，尤其是复杂项目里，多监听器、阶段控制这些功能很关键。</p>
+</blockquote>
+<h3 id="1-3-addEventListener详解：参数怎么用？"><a href="#1-3-addEventListener详解：参数怎么用？" class="headerlink" title="1.3 addEventListener详解：参数怎么用？"></a>1.3 <code>addEventListener</code>详解：参数怎么用？</h3><h4 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h4><p>它有三种调用形式，核心是控制事件的触发规则：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 基础版：事件类型 + 处理函数</span></span><br><span class="line"><span class="title function_">addEventListener</span>(type, listener);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 旧版阶段控制：加个布尔值控制捕获/冒泡</span></span><br><span class="line"><span class="title function_">addEventListener</span>(type, listener, useCapture);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 新版选项控制：更灵活的配置（推荐）</span></span><br><span class="line"><span class="title function_">addEventListener</span>(type, listener, options);</span><br></pre></td></tr></table></figure>
 
-<h3 id="1-3-addEventListener"><a href="#1-3-addEventListener" class="headerlink" title="1.3 addEventListener()"></a>1.3 addEventListener()</h3><h4 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">addEventListener</span>(type, listener);</span><br><span class="line"><span class="title function_">addEventListener</span>(type, listener, useCapture);</span><br><span class="line"><span class="title function_">addEventListener</span>(type, listener, options);</span><br></pre></td></tr></table></figure>
-
-<h4 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h4><ul>
-<li><p><code>useCapture</code>（旧版本）</p>
-<table>
-<thead>
-<tr>
-<th>类型</th>
-<th>默认值</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Boolean</td>
-<td><code>false</code></td>
-<td><code>true</code>：沿着 DOM 树向上冒泡的事件不会触发监听器<br>和上面的<code>&#123; capture: true / false &#125;</code>在捕获功能上完全等效</td>
-</tr>
-</tbody></table>
+<h4 id="关键参数说明"><a href="#关键参数说明" class="headerlink" title="关键参数说明"></a>关键参数说明</h4><ul>
+<li><p><strong><code>useCapture</code>（布尔值，旧版）</strong>：<br>控制事件在哪个阶段触发。<code>true</code> 是捕获阶段，<code>false</code>（默认）是冒泡阶段，和新版 <code>options.capture</code> 功能完全一样。</p>
 </li>
-<li><p><code>options</code> （Object）</p>
+<li><p><strong><code>options</code>（对象，新版）</strong>：<br>能精细控制事件行为，常用选项如下：</p>
 <table>
 <thead>
 <tr>
@@ -282,285 +272,257 @@ if (true) {
 <td><code>capture</code></td>
 <td>Boolean</td>
 <td><code>false</code></td>
-<td>决定监听器在事件流的哪个阶段被触发<br><code>false</code>：冒泡阶段，<code>true</code>：捕获阶段</td>
+<td>决定事件在哪个阶段触发：<code>false</code>（冒泡阶段）、<code>true</code>（捕获阶段）</td>
 </tr>
 <tr>
 <td><code>once</code></td>
 <td>Boolean</td>
 <td><code>false</code></td>
-<td><code>true</code>：最多调用一次监听器，调用后自动移除</td>
+<td><code>true</code> 时，函数只执行一次，执行完自动解绑（比如“点击后失效”的按钮）</td>
 </tr>
 <tr>
 <td><code>passive</code></td>
 <td>Boolean</td>
 <td><code>false</code></td>
-<td><code>true</code>：监听器不会调用<code>preventDefault()</code></td>
+<td><code>true</code> 时，告诉浏览器“这个函数不会调用 <code>preventDefault()</code>”，能提升滚动、触摸等高频事件的性能</td>
 </tr>
 <tr>
 <td><code>signal</code></td>
-<td>AbortSignal（信号对象）</td>
-<td></td>
-<td>调用<code>abort()</code>时，移除监听器</td>
+<td>AbortSignal</td>
+<td>-</td>
+<td>配合 <code>AbortController</code> 使用，调用 <code>abort()</code> 就能批量解绑事件</td>
 </tr>
 </tbody></table>
 </li>
 </ul>
-<h2 id="二、事件类型大全"><a href="#二、事件类型大全" class="headerlink" title="二、事件类型大全"></a>二、事件类型大全</h2><h3 id="类图"><a href="#类图" class="headerlink" title="类图"></a>类图</h3><div class="mermaid-wrap"><pre class="mermaid-src" hidden>
+<h2 id="二、常用事件类型：按场景分类整理"><a href="#二、常用事件类型：按场景分类整理" class="headerlink" title="二、常用事件类型：按场景分类整理"></a>二、常用事件类型：按场景分类整理</h2><p>浏览器事件类型非常多，我附上关键属性和用法，不用死记，需要时查就行。</p>
+<h3 id="先看事件的继承关系"><a href="#先看事件的继承关系" class="headerlink" title="先看事件的继承关系"></a>先看事件的继承关系</h3><p>所有事件都基于 <code>Event</code> 这个“基类”，再衍生出不同场景的事件，比如鼠标事件、键盘事件等，关系如下：</p>
+<div class="mermaid-wrap"><pre class="mermaid-src" hidden>
   classDiagram
-  class Event {
-    &lt;&lt;interface&gt;&gt;
-    +type: string
-    +bubbles: boolean
-    +cancelable: boolean
-    +target: EventTarget
-    +currentTarget: EventTarget
-    +eventPhase: number
-    +timeStamp: DOMHighResTimeStamp
-    +isTrusted: boolean
-    +defaultPrevented: boolean
-    +composed: boolean
-    +preventDefault() void
-    +stopPropagation() void
-    +stopImmediatePropagation() void
-    +composedPath() EventTarget[]
-  }
-  
-  Event &lt;|-- UIEvent
-  Event &lt;|-- AnimationEvent
-  Event &lt;|-- TransitionEvent
-  Event &lt;|-- ClipboardEvent
-  Event &lt;|-- CustomEvent
-  Event &lt;|-- ProgressEvent
-  Event &lt;|-- StorageEvent
-  Event &lt;|-- MessageEvent
-  Event &lt;|-- ToggleEvent
-  Event &lt;|-- SubmitEvent
-  
-  class UIEvent {
-    +view: WindowProxy
-    +detail: number
-    +sourceCapabilities: InputDeviceCapabilities
-  }
-  
-  UIEvent &lt;|-- MouseEvent
-  UIEvent &lt;|-- KeyboardEvent
-  UIEvent &lt;|-- FocusEvent
-  UIEvent &lt;|-- TouchEvent
-  UIEvent &lt;|-- InputEvent
-  
-  class MouseEvent {
-    +screenX: number
-    +screenY: number
-    +clientX: number
-    +clientY: number
-    +pageX: number
-    +pageY: number
-    +offsetX: number
-    +offsetY: number
-    +button: number
-    +buttons: number
-    +relatedTarget: EventTarget
-    +altKey: boolean
-    +ctrlKey: boolean
-    +shiftKey: boolean
-    +metaKey: boolean
-    +getModifierState(key: string) boolean
-  }
-  
-  MouseEvent &lt;|-- PointerEvent
-  MouseEvent &lt;|-- DragEvent
-  MouseEvent &lt;|-- WheelEvent
-  
-  class PointerEvent {
-    +pointerId: number
-    +width: number
-    +height: number
-    +pressure: number
-    +tangentialPressure: number
-    +tiltX: number
-    +tiltY: number
-    +twist: number
-    +pointerType: string
-    +isPrimary: boolean
-  }
-  
-  class WheelEvent {
-    +deltaX: number
-    +deltaY: number
-    +deltaZ: number
-    +deltaMode: number
-  }
-  
-  class KeyboardEvent {
-    +key: string
-    +code: string
-    +location: number
-    +repeat: boolean
-    +isComposing: boolean
-    +getModifierState(key: string) boolean
-  }
-  
-  class FocusEvent {
-    +relatedTarget: EventTarget
-  }
-  
-  class TouchEvent {
-    +touches: TouchList
-    +targetTouches: TouchList
-    +changedTouches: TouchList
-    +altKey: boolean
-    +ctrlKey: boolean
-    +shiftKey: boolean
-    +metaKey: boolean
-  }
-  
-  class AnimationEvent {
-    +animationName: string
-    +elapsedTime: number
-    +pseudoElement: string
-  }
-  
-  class TransitionEvent {
-    +propertyName: string
-    +elapsedTime: number
-    +pseudoElement: string
-  }
-  
-  class CustomEvent {
-    +detail: any
-    +initCustomEvent() void
-  }
-  
-  class InputEvent {
-    +data: string
-    +isComposing: boolean
-    +inputType: string
-  }
-  
-  class ClipboardEvent {
-    +clipboardData: DataTransfer
-  }
-  
-  class ProgressEvent {
-    +lengthComputable: boolean
-    +loaded: number
-    +total: number
-  }
-  
-  class StorageEvent {
-    +key: string
-    +oldValue: any
-    +newValue: any
-    +url: string
-    +storageArea: Storage
-  }
-  
-  class MessageEvent {
-    +data: any
-    +origin: string
-    +lastEventId: string
-    +source: WindowProxy
-    +ports: MessagePort[]
-  }
+class Event {
+&lt;&lt;interface&gt;&gt;
++type: string
++bubbles: boolean
++cancelable: boolean
++target: EventTarget
++currentTarget: EventTarget
++eventPhase: number
++timeStamp: DOMHighResTimeStamp
++isTrusted: boolean
++defaultPrevented: boolean
++composed: boolean
++preventDefault() void
++stopPropagation() void
++stopImmediatePropagation() void
++composedPath() EventTarget[]
+}
 
-  class ToggleEvent {
-    +newState: string
-    +oldState: string
-  }
-  
-  class DragEvent {
-    +dataTransfer: DataTransfer
-  }
+Event &lt;|-- UIEvent
+Event &lt;|-- AnimationEvent
+Event &lt;|-- TransitionEvent
+Event &lt;|-- ClipboardEvent
+Event &lt;|-- CustomEvent
+Event &lt;|-- ProgressEvent
+Event &lt;|-- StorageEvent
+Event &lt;|-- MessageEvent
+Event &lt;|-- ToggleEvent
+Event &lt;|-- SubmitEvent
+
+class UIEvent {
++view: WindowProxy
++detail: number
++sourceCapabilities: InputDeviceCapabilities
+}
+
+UIEvent &lt;|-- MouseEvent
+UIEvent &lt;|-- KeyboardEvent
+UIEvent &lt;|-- FocusEvent
+UIEvent &lt;|-- TouchEvent
+UIEvent &lt;|-- InputEvent
+
+class MouseEvent {
++screenX: number
++screenY: number
++clientX: number
++clientY: number
++pageX: number
++pageY: number
++offsetX: number
++offsetY: number
++button: number
++buttons: number
++relatedTarget: EventTarget
++altKey: boolean
++ctrlKey: boolean
++shiftKey: boolean
++metaKey: boolean
++getModifierState(key: string) boolean
+}
+
+MouseEvent &lt;|-- PointerEvent
+MouseEvent &lt;|-- DragEvent
+MouseEvent &lt;|-- WheelEvent
+
+class PointerEvent {
++pointerId: number
++width: number
++height: number
++pressure: number
++tangentialPressure: number
++tiltX: number
++tiltY: number
++twist: number
++pointerType: string
++isPrimary: boolean
+}
+
+class WheelEvent {
++deltaX: number
++deltaY: number
++deltaZ: number
++deltaMode: number
+}
+
+class KeyboardEvent {
++key: string
++code: string
++location: number
++repeat: boolean
++isComposing: boolean
++getModifierState(key: string) boolean
+}
+
+class FocusEvent {
++relatedTarget: EventTarget
+}
+
+class TouchEvent {
++touches: TouchList
++targetTouches: TouchList
++changedTouches: TouchList
++altKey: boolean
++ctrlKey: boolean
++shiftKey: boolean
++metaKey: boolean
+}
+
+class AnimationEvent {
++animationName: string
++elapsedTime: number
++pseudoElement: string
+}
+
+class TransitionEvent {
++propertyName: string
++elapsedTime: number
++pseudoElement: string
+}
+
+class CustomEvent {
++detail: any
++initCustomEvent() void
+}
+
+class InputEvent {
++data: string
++isComposing: boolean
++inputType: string
+}
+
+class ClipboardEvent {
++clipboardData: DataTransfer
+}
+
+class ProgressEvent {
++lengthComputable: boolean
++loaded: number
++total: number
+}
+
+class StorageEvent {
++key: string
++oldValue: any
++newValue: any
++url: string
++storageArea: Storage
+}
+
+class MessageEvent {
++data: any
++origin: string
++lastEventId: string
++source: WindowProxy
++ports: MessagePort[]
+}
+
+class ToggleEvent {
++newState: string
++oldState: string
+}
+
+class DragEvent {
++dataTransfer: DataTransfer
+}
   </pre></div>
 
-<h3 id="1-Event（基础事件）"><a href="#1-Event（基础事件）" class="headerlink" title="1. Event（基础事件）"></a>1. Event（基础事件）</h3><p><strong>所有事件的基类</strong>，提供基本的事件属性和方法</p>
-<p><strong>构造函数</strong></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="title class_">Event</span>(type, options)</span><br><span class="line"><span class="comment">// options：可选，接受：bubbles、cancelable、composed</span></span><br><span class="line"><span class="comment">// 例：new Event(&quot;look&quot;, &#123; bubbles: true, cancelable: false &#125;)</span></span><br></pre></td></tr></table></figure>
-
-<p>属性：</p>
-<ul>
+<h3 id="1-Event（基础事件）"><a href="#1-Event（基础事件）" class="headerlink" title="1. Event（基础事件）"></a>1. Event（基础事件）</h3><p>所有事件的“祖宗”，提供最基础的属性和方法，比如判断事件是否冒泡、阻止默认行为等。</p>
+<h4 id="常用属性"><a href="#常用属性" class="headerlink" title="常用属性"></a>常用属性</h4><ul>
 <li><code>type</code>：事件类型（如 “click”）</li>
-<li><code>bubbles</code>：是否冒泡</li>
-<li><code>cancelable</code>：是否可以取消默认行为</li>
-<li><code>target</code>：事件目标元素，可以用来实现事件委托</li>
-<li><code>currentTarget</code>：始终为绑定事件的元素</li>
+<li><code>target</code>：实际触发事件的元素（比如点击按钮，<code>target</code> 就是按钮）</li>
+<li><code>currentTarget</code>：始终为绑定事件的元素（比如给父容器绑事件，点击子元素时，<code>currentTarget</code> 是父容器）</li>
+<li><code>bubbles</code>：布尔值，判断事件是否会冒泡</li>
+<li><code>cancelable</code>：布尔值，判断事件能否用 <code>preventDefault()</code> 阻止默认行为</li>
 <li><code>eventPhase</code>：事件当前阶段（0&#x3D;NONE, 1&#x3D;CAPTURING, 2&#x3D;AT_TARGET, 3&#x3D;BUBBLING）</li>
 <li><code>timeStamp</code>：事件发生的时间戳</li>
 <li><code>isTrusted</code>：事件是否由用户触发（true）还是脚本创建（false）</li>
 <li><code>defaultPrevented</code>：是否已阻止默认行为</li>
-<li><code>composed</code>：事件是否可以穿过 Shadow DOM 边界</li>
 </ul>
-<p>方法：</p>
-<ul>
-<li><code>preventDefault()</code>：阻止默认行为，可以使用<code>Event.cancelable</code>来检查该事件是否支持取消</li>
-<li><code>stopPropagation()</code>：阻止冒泡</li>
+<h4 id="常用方法"><a href="#常用方法" class="headerlink" title="常用方法"></a>常用方法</h4><ul>
+<li><code>preventDefault()</code>：阻止默认行为（比如阻止表单提交、链接跳转），可以使用<code>Event.cancelable</code>来检查该事件是否支持取消</li>
+<li><code>stopPropagation()</code>：阻止事件继续冒泡或捕获（比如点击子元素后，父元素的事件不触发）</li>
 <li><code>stopImmediatePropagation()</code>：阻止其他监听器执行</li>
-<li><code>composedPath()</code>：返回事件路径数组</li>
 </ul>
-<p>具体事件类型：</p>
-<table>
+<h4 id="高频基础事件"><a href="#高频基础事件" class="headerlink" title="高频基础事件"></a>高频基础事件</h4><table>
 <thead>
 <tr>
 <th>事件</th>
 <th>触发时机</th>
+<th>常用场景</th>
 </tr>
 </thead>
 <tbody><tr>
-<td><code>select</code></td>
-<td>选中文本</td>
-</tr>
-<tr>
-<td><code>submit</code></td>
-<td>表单提交</td>
-</tr>
-<tr>
-<td><code>reset</code></td>
-<td>表单重置</td>
-</tr>
-<tr>
-<td><code>change</code></td>
-<td>值改变并失去焦点</td>
+<td><code>DOMContentLoaded</code></td>
+<td>DOM 解析完成（不用等图片、CSS 加载）</td>
+<td>页面初始化逻辑（比如绑定事件、渲染列表）</td>
 </tr>
 <tr>
 <td><code>load</code></td>
-<td>资源加载完成</td>
-</tr>
-<tr>
-<td><code>unload</code></td>
-<td>离开页面</td>
-</tr>
-<tr>
-<td><code>DOMContentLoaded</code></td>
-<td>DOM 解析完成</td>
-</tr>
-<tr>
-<td><code>resize</code></td>
-<td>窗口大小改变</td>
+<td>整个页面（图片、CSS 等）加载完成</td>
+<td>处理图片相关逻辑（比如获取图片尺寸）</td>
 </tr>
 <tr>
 <td><code>scroll</code></td>
-<td>滚动元素</td>
+<td>元素或页面滚动时</td>
+<td>滚动加载、导航栏吸顶</td>
 </tr>
 <tr>
-<td><code>hashchange</code></td>
-<td>URL 哈希改变</td>
+<td><code>resize</code></td>
+<td>窗口或元素大小改变时</td>
+<td>响应式布局调整（比如窗口缩小后重排内容）</td>
 </tr>
 <tr>
-<td><code>play</code></td>
-<td>启动媒体</td>
-</tr>
-<tr>
-<td><code>pause</code></td>
-<td>暂停媒体</td>
+<td><code>submit</code></td>
+<td>表单点击提交按钮或按回车时</td>
+<td>表单验证、阻止默认提交后用 AJAX 提交</td>
 </tr>
 </tbody></table>
-<h3 id="2-UIEvent（用户界面事件）"><a href="#2-UIEvent（用户界面事件）" class="headerlink" title="2. UIEvent（用户界面事件）"></a>2. UIEvent（用户界面事件）</h3><p>继承自<strong>Event</strong>，处理与浏览器UI相关的事件</p>
+<h3 id="2-UIEvent（用户界面事件）"><a href="#2-UIEvent（用户界面事件）" class="headerlink" title="2. UIEvent（用户界面事件）"></a>2. UIEvent（用户界面事件）</h3><p>继承自<strong>Event</strong>，处理与浏览器 UI 相关的事件。</p>
 <p>特有属性：</p>
 <ul>
 <li><code>view</code>：关联的窗口对象</li>
 <li><code>detail</code>：事件详情（如点击次数）</li>
 </ul>
-<h4 id="2-1-MouseEvent（鼠标事件）"><a href="#2-1-MouseEvent（鼠标事件）" class="headerlink" title="2.1 MouseEvent（鼠标事件）"></a>2.1 MouseEvent（鼠标事件）</h4><p>继承自<strong>UIEvent</strong>，处理所有鼠标相关事件</p>
+<h4 id="2-1-MouseEvent（鼠标事件）"><a href="#2-1-MouseEvent（鼠标事件）" class="headerlink" title="2.1 MouseEvent（鼠标事件）"></a>2.1 MouseEvent（鼠标事件）</h4><p>继承自<strong>UIEvent</strong>，处理所有鼠标相关事件，比如点击、移动、滚轮操作都属于这类。</p>
 <p>特有属性：</p>
 <ul>
 <li><code>screenX</code>, <code>screenY</code>：屏幕坐标</li>
@@ -579,45 +541,58 @@ if (true) {
 <th>事件类型</th>
 <th>触发时机</th>
 <th>是否冒泡</th>
+<th>注意点</th>
 </tr>
 </thead>
 <tbody><tr>
-<td><code>click</code>, <code>dblclick</code></td>
-<td>点击（按下并释放）, 双击</td>
+<td><code>click</code></td>
+<td>鼠标按下并释放（通常是左键）</td>
 <td>✅</td>
+<td>双击会触发两次 <code>click</code></td>
 </tr>
 <tr>
-<td><code>mousedown</code>, <code>mouseup</code></td>
-<td>鼠标按下, 鼠标释放</td>
+<td><code>dblclick</code></td>
+<td>双击鼠标</td>
 <td>✅</td>
+<td>响应速度比 <code>click</code> 慢，慎用</td>
+</tr>
+<tr>
+<td><code>mousedown</code>&#x2F;<code>mouseup</code></td>
+<td>鼠标按下&#x2F;释放</td>
+<td>✅</td>
+<td>区分按下和释放的状态（比如拖拽开始&#x2F;结束）</td>
 </tr>
 <tr>
 <td><code>mousemove</code></td>
 <td>鼠标移动</td>
 <td>✅</td>
+<td>触发频率高，需要节流优化</td>
 </tr>
 <tr>
-<td><code>mouseenter</code>, <code>mouseleave</code></td>
-<td>鼠标进入元素, 鼠标离开元素</td>
+<td><code>mouseenter</code>&#x2F;<code>mouseleave</code></td>
+<td>鼠标进入&#x2F;离开元素</td>
 <td>❌</td>
+<td>不冒泡，子元素不会触发（比如鼠标从父元素进子元素，不会触发父元素的 <code>mouseleave</code>）</td>
 </tr>
 <tr>
-<td><code>mouseover</code>, <code>mouseout</code></td>
-<td>鼠标进入元素或子元素, 鼠标离开元素或子元素</td>
+<td><code>mouseover</code>&#x2F;<code>mouseout</code></td>
+<td>鼠标进入&#x2F;离开元素或子元素</td>
 <td>✅</td>
+<td>冒泡，子元素会触发（比如鼠标从父元素进子元素，父元素会触发 <code>mouseout</code>）</td>
 </tr>
 <tr>
 <td><code>contextmenu</code></td>
 <td>右键菜单</td>
 <td>✅</td>
+<td></td>
 </tr>
 </tbody></table>
-<h5 id="2-1-1-WheelEvent（滚轮事件）"><a href="#2-1-1-WheelEvent（滚轮事件）" class="headerlink" title="2.1.1 WheelEvent（滚轮事件）"></a>2.1.1 WheelEvent（滚轮事件）</h5><p>继承自<strong>MouseEvent</strong>，处理滚轮&#x2F;触控板滚动事件</p>
+<h5 id="2-1-1-WheelEvent（滚轮事件）"><a href="#2-1-1-WheelEvent（滚轮事件）" class="headerlink" title="2.1.1 WheelEvent（滚轮事件）"></a>2.1.1 WheelEvent（滚轮事件）</h5><p>继承自<strong>MouseEvent</strong>，处理滚轮&#x2F;触控板滚动事件。</p>
 <p>特有属性：</p>
 <ul>
 <li><code>deltaX</code>：水平滚动量（像素）</li>
 <li><code>deltaY</code>：垂直滚动量（像素）</li>
-<li><code>deltaZ</code>：Z轴滚动量（3D设备）</li>
+<li><code>deltaZ</code>：Z 轴滚动量（3D 设备）</li>
 <li><code>deltaMode</code>：滚动单位（0&#x3D;像素, 1&#x3D;行, 2&#x3D;页）</li>
 </ul>
 <p>具体事件类型：</p>
@@ -626,14 +601,16 @@ if (true) {
 <tr>
 <th>事件类型</th>
 <th>触发时机</th>
+<th>注意点</th>
 </tr>
 </thead>
 <tbody><tr>
 <td><code>wheel</code></td>
 <td>滚轮滚动</td>
+<td>控制滚动方向和速度（替代旧的 <code>mousewheel</code> 事件）</td>
 </tr>
 </tbody></table>
-<h5 id="2-1-2-DragEvent（拖放事件）"><a href="#2-1-2-DragEvent（拖放事件）" class="headerlink" title="2.1.2 DragEvent（拖放事件）"></a>2.1.2 DragEvent（拖放事件）</h5><p>继承自<strong>MouseEvent</strong>，处理拖放事件</p>
+<h5 id="2-1-2-DragEvent（拖放事件）"><a href="#2-1-2-DragEvent（拖放事件）" class="headerlink" title="2.1.2 DragEvent（拖放事件）"></a>2.1.2 DragEvent（拖放事件）</h5><p>继承自<strong>MouseEvent</strong>，处理拖放事件。</p>
 <p>特有属性：</p>
 <ul>
 <li><code>dataTransfer</code>：在拖放交互期间传输的数据</li>
@@ -667,10 +644,10 @@ if (true) {
 <td>在放置目标上放置元素</td>
 </tr>
 </tbody></table>
-<h5 id="2-1-3-PointerEvent（指针事件）"><a href="#2-1-3-PointerEvent（指针事件）" class="headerlink" title="2.1.3 PointerEvent（指针事件）"></a>2.1.3 PointerEvent（指针事件）</h5><p>继承自<strong>MouseEvent</strong>，统一鼠标、触摸、触控笔事件</p>
+<h5 id="2-1-3-PointerEvent（指针事件）"><a href="#2-1-3-PointerEvent（指针事件）" class="headerlink" title="2.1.3 PointerEvent（指针事件）"></a>2.1.3 PointerEvent（指针事件）</h5><p>继承自<strong>MouseEvent</strong>，统一鼠标、触摸、触控笔事件。</p>
 <p>特有属性：</p>
 <ul>
-<li><code>pointerId</code>：唯一指针ID</li>
+<li><code>pointerId</code>：唯一指针 ID</li>
 <li><code>width</code>, <code>height</code>：接触区域尺寸</li>
 <li><code>pressure</code>：压力值（0-1）</li>
 <li><code>pointerType</code>：设备类型（”mouse”, “pen”, “touch”）</li>
@@ -709,14 +686,14 @@ if (true) {
 <td>元素启用捕获后触发, 捕获被释放后触发</td>
 </tr>
 </tbody></table>
-<h4 id="2-2-KeyboardEvent（键盘事件）"><a href="#2-2-KeyboardEvent（键盘事件）" class="headerlink" title="2.2 KeyboardEvent（键盘事件）"></a>2.2 KeyboardEvent（键盘事件）</h4><p>继承自<strong>UIEvent</strong>，处理键盘输入事件</p>
+<h4 id="2-2-KeyboardEvent（键盘事件）"><a href="#2-2-KeyboardEvent（键盘事件）" class="headerlink" title="2.2 KeyboardEvent（键盘事件）"></a>2.2 KeyboardEvent（键盘事件）</h4><p>继承自<strong>UIEvent</strong>，处理键盘输入事件，比如快捷键、输入验证等。</p>
 <p>特有属性：</p>
 <ul>
-<li><code>key</code>：按键的字符串表示（如 “Enter”）</li>
-<li><code>code</code>：物理按键代码（如 “KeyA”）</li>
+<li><code>key</code>：按键的实际内容（比如按“A”是 <code>&quot;a&quot;</code> 或 <code>&quot;A&quot;</code>，按回车是 <code>&quot;Enter&quot;</code>）</li>
+<li><code>code</code>：按键的物理位置（比如按“A”是 <code>&quot;KeyA&quot;</code>，不管是否按 Shift，位置不变）</li>
 <li><code>location</code>：按键位置（0&#x3D;标准, 1&#x3D;左侧, 2&#x3D;右侧, 3&#x3D;数字键盘）</li>
-<li><code>repeat</code>：是否重复按键</li>
-<li><code>isComposing</code>：是否在输入法编辑中</li>
+<li><code>repeat</code>：布尔值，判断是否是长按重复触发</li>
+<li><code>isComposing</code>：布尔值，判断是否在输入法输入中（比如中文输入时避免误触发）</li>
 <li>修饰键状态：<code>altKey</code>, <code>ctrlKey</code>, <code>shiftKey</code>, <code>metaKey</code></li>
 </ul>
 <p>方法：</p>
@@ -727,18 +704,29 @@ if (true) {
 <table>
 <thead>
 <tr>
-<th>事件类型</th>
+<th>事件</th>
 <th>触发时机</th>
 <th>是否冒泡</th>
+<th>常用场景</th>
 </tr>
 </thead>
 <tbody><tr>
-<td><code>keydown</code>, <code>keyup</code></td>
-<td>按下任意键, 释放按键</td>
+<td><code>keydown</code></td>
+<td>按下任意键（包括功能键）</td>
 <td>✅</td>
+<td>监听快捷键（比如 Ctrl+S 保存）</td>
+</tr>
+<tr>
+<td><code>keyup</code></td>
+<td>释放按键时</td>
+<td>✅</td>
+<td>取消快捷键状态（比如松开 Ctrl 后停止批量操作）</td>
 </tr>
 </tbody></table>
-<h4 id="2-3-FocusEvent（焦点事件）"><a href="#2-3-FocusEvent（焦点事件）" class="headerlink" title="2.3 FocusEvent（焦点事件）"></a>2.3 FocusEvent（焦点事件）</h4><p>继承自<strong>UIEvent</strong>，处理元素焦点变化</p>
+<blockquote>
+<p>注意：<code>keypress</code> 事件已过时，尽量用 <code>keydown</code> 替代，它支持所有按键类型。</p>
+</blockquote>
+<h4 id="2-3-FocusEvent（焦点事件）"><a href="#2-3-FocusEvent（焦点事件）" class="headerlink" title="2.3 FocusEvent（焦点事件）"></a>2.3 FocusEvent（焦点事件）</h4><p>继承自<strong>UIEvent</strong>，处理元素焦点变化，比如表单输入时的交互。</p>
 <p>特有属性：</p>
 <ul>
 <li><code>relatedTarget</code>：相关元素（如失去焦点时获得焦点的元素）</li>
@@ -750,23 +738,23 @@ if (true) {
 <th>事件类型</th>
 <th>触发时机</th>
 <th>是否冒泡</th>
-<th>替代方案</th>
+<th>注意点</th>
 </tr>
 </thead>
 <tbody><tr>
-<td><code>focus</code>, <code>blur</code></td>
-<td>元素获得焦点, 元素失去焦点</td>
+<td><code>focus</code>&#x2F;<code>blur</code></td>
+<td>元素获得&#x2F;失去焦点</td>
 <td>❌</td>
-<td><code>focusin</code>, <code>focusout</code></td>
+<td>不冒泡，无法用事件委托</td>
 </tr>
 <tr>
-<td><code>focusin</code>, <code>focusout</code></td>
-<td>元素获得焦点, 元素失去焦点</td>
+<td><code>focusin</code>&#x2F;<code>focusout</code></td>
+<td>元素获得&#x2F;失去焦点</td>
 <td>✅</td>
-<td>-</td>
+<td>冒泡，推荐用它做事件委托（比如表单所有输入框的焦点处理）</td>
 </tr>
 </tbody></table>
-<h4 id="2-4-TouchEvent（触摸事件）"><a href="#2-4-TouchEvent（触摸事件）" class="headerlink" title="2.4 TouchEvent（触摸事件）"></a>2.4 TouchEvent（触摸事件）</h4><p>继承自<strong>UIEvent</strong>，处理触摸屏设备交互</p>
+<h4 id="2-4-TouchEvent（触摸事件）"><a href="#2-4-TouchEvent（触摸事件）" class="headerlink" title="2.4 TouchEvent（触摸事件）"></a>2.4 TouchEvent（触摸事件）</h4><p>继承自<strong>UIEvent</strong>，处理触摸屏设备交互。</p>
 <p>特有属性：</p>
 <ul>
 <li><code>touches</code>：当前所有触摸点</li>
@@ -798,7 +786,7 @@ if (true) {
 <td>触摸中断</td>
 </tr>
 </tbody></table>
-<h4 id="2-5-InputEvent（输入事件）"><a href="#2-5-InputEvent（输入事件）" class="headerlink" title="2.5 InputEvent（输入事件）"></a>2.5 InputEvent（输入事件）</h4><p>继承自<strong>UIEvent</strong>，处理用户输入事件</p>
+<h4 id="2-5-InputEvent（输入事件）"><a href="#2-5-InputEvent（输入事件）" class="headerlink" title="2.5 InputEvent（输入事件）"></a>2.5 InputEvent（输入事件）</h4><p>继承自<strong>UIEvent</strong>，处理用户输入事件，比如实时监听输入框、文本域的内容变化，比 <code>change</code> 事件更灵敏（<code>change</code> 需要失去焦点才触发）。</p>
 <p>特有属性：</p>
 <ul>
 <li><code>data</code>：插入的字符</li>
@@ -811,14 +799,16 @@ if (true) {
 <tr>
 <th>事件类型</th>
 <th>触发时机</th>
+<th>常用场景</th>
 </tr>
 </thead>
 <tbody><tr>
 <td><code>input</code></td>
 <td>用户输入</td>
+<td>实时搜索提示、输入字数统计</td>
 </tr>
 </tbody></table>
-<h3 id="3-AnimationEvent（动画事件）"><a href="#3-AnimationEvent（动画事件）" class="headerlink" title="3. AnimationEvent（动画事件）"></a>3. AnimationEvent（动画事件）</h3><p>继承自<strong>Event</strong>，处理CSS动画相关事件</p>
+<h3 id="3-AnimationEvent（动画事件）"><a href="#3-AnimationEvent（动画事件）" class="headerlink" title="3. AnimationEvent（动画事件）"></a>3. AnimationEvent（动画事件）</h3><p>继承自<strong>Event</strong>，处理 CSS 动画相关事件。</p>
 <p>特有属性：</p>
 <ul>
 <li><code>animationName</code>：动画名称</li>
@@ -846,10 +836,10 @@ if (true) {
 <td>动画被取消</td>
 </tr>
 </tbody></table>
-<h3 id="4-TransitionEvent（过渡事件）"><a href="#4-TransitionEvent（过渡事件）" class="headerlink" title="4. TransitionEvent（过渡事件）"></a>4. TransitionEvent（过渡事件）</h3><p>继承自<strong>Event</strong>，处理CSS过渡效果相关事件</p>
+<h3 id="4-TransitionEvent（过渡事件）"><a href="#4-TransitionEvent（过渡事件）" class="headerlink" title="4. TransitionEvent（过渡事件）"></a>4. TransitionEvent（过渡事件）</h3><p>继承自<strong>Event</strong>，处理 CSS 过渡效果相关事件。</p>
 <p>特有属性：</p>
 <ul>
-<li><code>propertyName</code>：发生过渡的CSS属性</li>
+<li><code>propertyName</code>：发生过渡的 CSS 属性</li>
 <li><code>elapsedTime</code>：过渡已运行时间（秒）</li>
 <li><code>pseudoElement</code>：关联的伪元素</li>
 </ul>
@@ -878,7 +868,7 @@ if (true) {
 <td>过渡被取消时</td>
 </tr>
 </tbody></table>
-<h3 id="5-ClipboardEvent（剪贴板事件）"><a href="#5-ClipboardEvent（剪贴板事件）" class="headerlink" title="5. ClipboardEvent（剪贴板事件）"></a>5. ClipboardEvent（剪贴板事件）</h3><p>继承自<strong>Event</strong>，用于处理剪切板相关信息的事件</p>
+<h3 id="5-ClipboardEvent（剪贴板事件）"><a href="#5-ClipboardEvent（剪贴板事件）" class="headerlink" title="5. ClipboardEvent（剪贴板事件）"></a>5. ClipboardEvent（剪贴板事件）</h3><p>继承自<strong>Event</strong>，用于处理剪切板相关信息的事件。</p>
 <p>特有属性：</p>
 <ul>
 <li><code>clipboardData</code>：受剪贴板操作影响的数据</li>
@@ -904,7 +894,7 @@ if (true) {
 <td>将内容粘贴到元素中</td>
 </tr>
 </tbody></table>
-<h3 id="6-CustomEvent（自定义事件）"><a href="#6-CustomEvent（自定义事件）" class="headerlink" title="6. CustomEvent（自定义事件）"></a>6. CustomEvent（自定义事件）</h3><p>继承自<strong>Event</strong>，用于创建自定义事件</p>
+<h3 id="6-CustomEvent（自定义事件）"><a href="#6-CustomEvent（自定义事件）" class="headerlink" title="6. CustomEvent（自定义事件）"></a>6. CustomEvent（自定义事件）</h3><p>继承自<strong>Event</strong>，用于创建自定义事件。</p>
 <p>特有属性：</p>
 <ul>
 <li><code>detail</code>：自定义数据</li>
@@ -913,51 +903,100 @@ if (true) {
 <ul>
 <li><code>initCustomEvent()</code>：初始化自定义事件</li>
 </ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建自定义事件</span></span><br><span class="line"><span class="keyword">const</span> myEvent = <span class="keyword">new</span> <span class="title class_">CustomEvent</span>(<span class="string">&#x27;myEvent&#x27;</span>, &#123;</span><br><span class="line">  <span class="attr">detail</span>: &#123; <span class="attr">message</span>: <span class="string">&#x27;自定义数据&#x27;</span> &#125;,</span><br><span class="line">  <span class="attr">bubbles</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">cancelable</span>: <span class="literal">true</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 触发事件</span></span><br><span class="line">element.<span class="title function_">dispatchEvent</span>(myEvent);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 监听事件</span></span><br><span class="line">element.<span class="title function_">addEventListener</span>(<span class="string">&#x27;myEvent&#x27;</span>, <span class="function"><span class="params">event</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(event.<span class="property">detail</span>.<span class="property">message</span>); <span class="comment">// &#x27;自定义数据&#x27;</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h4 id="用法示例"><a href="#用法示例" class="headerlink" title="用法示例"></a>用法示例</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 创建自定义事件：事件名 + 配置（可传自定义数据）</span></span><br><span class="line"><span class="keyword">const</span> dataLoadedEvent = <span class="keyword">new</span> <span class="title class_">CustomEvent</span>(<span class="string">&#x27;data-loaded&#x27;</span>, &#123;</span><br><span class="line">  <span class="attr">detail</span>: &#123; <span class="attr">list</span>: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>] &#125;, <span class="comment">// 自定义数据，通过 event.detail 访问</span></span><br><span class="line">  <span class="attr">bubbles</span>: <span class="literal">true</span>, <span class="comment">// 是否冒泡</span></span><br><span class="line">  <span class="attr">cancelable</span>: <span class="literal">true</span>, <span class="comment">// 是否可阻止默认行为</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 绑定事件监听</span></span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;data-loaded&#x27;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;收到数据：&#x27;</span>, event.<span class="property">detail</span>.<span class="property">list</span>); <span class="comment">// 输出 [1,2,3]</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 触发事件</span></span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">dispatchEvent</span>(dataLoadedEvent);</span><br></pre></td></tr></table></figure>
 
-<h2 id="三、性能优化"><a href="#三、性能优化" class="headerlink" title="三、性能优化"></a>三、性能优化</h2><h3 id="3-1-高频事件的防抖（debounce）与节流（throttle）"><a href="#3-1-高频事件的防抖（debounce）与节流（throttle）" class="headerlink" title="3.1 高频事件的防抖（debounce）与节流（throttle）"></a>3.1 高频事件的防抖（debounce）与节流（throttle）</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 防抖：最后的胜利者（连续触发只执行最后一次）</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">debounce</span>(<span class="params">fn, delay</span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> timer;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="built_in">clearTimeout</span>(timer);</span><br><span class="line">    timer = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> fn.<span class="title function_">apply</span>(<span class="variable language_">this</span>, <span class="variable language_">arguments</span>), delay);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;resize&#x27;</span>, <span class="title function_">debounce</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;窗口大小稳定了！&#x27;</span>);</span><br><span class="line">&#125;, <span class="number">200</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 节流：匀速的节拍器（固定间隔执行一次）</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">throttle</span>(<span class="params">fn, interval</span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> lastTime = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> now = <span class="title class_">Date</span>.<span class="title function_">now</span>();</span><br><span class="line">    <span class="keyword">if</span> (now - lastTime &gt;= interval) &#123;</span><br><span class="line">      fn.<span class="title function_">apply</span>(<span class="variable language_">this</span>, <span class="variable language_">arguments</span>);</span><br><span class="line">      lastTime = now;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;scroll&#x27;</span>, <span class="title function_">throttle</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;滚动中...&#x27;</span>);</span><br><span class="line">&#125;, <span class="number">100</span>));</span><br></pre></td></tr></table></figure>
+<h2 id="三、事件性能优化：避免卡顿、减少浪费"><a href="#三、事件性能优化：避免卡顿、减少浪费" class="headerlink" title="三、事件性能优化：避免卡顿、减少浪费"></a>三、事件性能优化：避免卡顿、减少浪费</h2><p>事件处理很容易出性能问题，比如滚动、拖拽这类高频事件，处理不好会让页面卡顿。分享几个我实战中验证过的优化技巧：</p>
+<h3 id="3-1-高频事件：用防抖（debounce）和节流（throttle）控频率"><a href="#3-1-高频事件：用防抖（debounce）和节流（throttle）控频率" class="headerlink" title="3.1 高频事件：用防抖（debounce）和节流（throttle）控频率"></a>3.1 高频事件：用防抖（debounce）和节流（throttle）控频率</h3><p>像 <code>scroll</code>、<code>mousemove</code>、<code>resize</code> 这类事件，触发频率非常高（比如滚动时每秒触发几十次），直接执行处理函数会占用大量主线程，导致页面卡顿。这时候需要用“防抖”或“节流”控制执行次数。</p>
+<h4 id="防抖（debounce）：连续触发只执行最后一次"><a href="#防抖（debounce）：连续触发只执行最后一次" class="headerlink" title="防抖（debounce）：连续触发只执行最后一次"></a>防抖（debounce）：连续触发只执行最后一次</h4><p>比如窗口 resize 时，用户拖动窗口的过程中不执行，等用户停手后再执行一次，避免频繁计算。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 防抖：最后的胜利者（连续触发只执行最后一次）</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">debounce</span>(<span class="params">fn, delay</span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> timer; <span class="comment">// 用闭包保存定时器</span></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params">...args</span>) &#123;</span><br><span class="line">    <span class="built_in">clearTimeout</span>(timer); <span class="comment">// 每次触发都清空之前的定时器</span></span><br><span class="line">    <span class="comment">// 重新计时，等 delay 毫秒后执行</span></span><br><span class="line">    timer = <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> fn.<span class="title function_">apply</span>(<span class="variable language_">this</span>, args), delay);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 用法：窗口 resize 时，等 200ms 稳定后再执行</span></span><br><span class="line"><span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(</span><br><span class="line">  <span class="string">&#x27;resize&#x27;</span>,</span><br><span class="line">  <span class="title function_">debounce</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;窗口大小稳定了，执行调整逻辑&#x27;</span>);</span><br><span class="line">  &#125;, <span class="number">200</span>)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
 
-<h3 id="3-2-事件委托（减少DOM操作，且支持动态内容）"><a href="#3-2-事件委托（减少DOM操作，且支持动态内容）" class="headerlink" title="3.2 事件委托（减少DOM操作，且支持动态内容）"></a>3.2 事件委托（减少DOM操作，且支持动态内容）</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ❌ 传统方式：每个按钮单独绑定</span></span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">querySelectorAll</span>(<span class="string">&#x27;.btn&#x27;</span>).<span class="title function_">forEach</span>(<span class="function"><span class="params">btn</span> =&gt;</span> &#123;</span><br><span class="line">  btn.<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, handleClick);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// ✅ 事件委托：单个监听器处理所有，减少事件监听器数量</span></span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;container&#x27;</span>).<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, <span class="function"><span class="params">event</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (event.<span class="property">target</span>.<span class="title function_">matches</span>(<span class="string">&#x27;.btn&#x27;</span>)) &#123;</span><br><span class="line">    <span class="title function_">handleClick</span>(event);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 💡 使用事件委托处理动态元素</span></span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&#x27;#dynamic-list&#x27;</span>).<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, <span class="function"><span class="params">event</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (event.<span class="property">target</span>.<span class="property">classList</span>.<span class="title function_">contains</span>(<span class="string">&#x27;remove-btn&#x27;</span>)) &#123;</span><br><span class="line">    event.<span class="property">target</span>.<span class="property">parentElement</span>.<span class="title function_">remove</span>();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h4 id="节流（throttle）：固定间隔执行一次"><a href="#节流（throttle）：固定间隔执行一次" class="headerlink" title="节流（throttle）：固定间隔执行一次"></a>节流（throttle）：固定间隔执行一次</h4><p>比如滚动加载时，不管滚动多快，每隔 100ms 只执行一次，避免请求发送太频繁。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">throttle</span>(<span class="params">fn, interval</span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> lastTime = <span class="number">0</span>; <span class="comment">// 上次执行时间</span></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">function</span> (<span class="params">...args</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> now = <span class="title class_">Date</span>.<span class="title function_">now</span>();</span><br><span class="line">    <span class="comment">// 距离上次执行超过 interval 才执行</span></span><br><span class="line">    <span class="keyword">if</span> (now - lastTime &gt;= interval) &#123;</span><br><span class="line">      fn.<span class="title function_">apply</span>(<span class="variable language_">this</span>, args);</span><br><span class="line">      lastTime = now; <span class="comment">// 更新上次执行时间</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 用法：滚动时每隔 100ms 执行一次</span></span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(</span><br><span class="line">  <span class="string">&#x27;scroll&#x27;</span>,</span><br><span class="line">  <span class="title function_">throttle</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;滚动中，按固定间隔执行&#x27;</span>);</span><br><span class="line">  &#125;, <span class="number">100</span>)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
 
-<div class="note success flat"><p><strong>性能秘诀：</strong> 对动态内容<mark>总是使用事件委托</mark>，这是高性能Web应用的关键！</p></div>
+<h3 id="3-2-多元素事件：用事件委托减少监听器"><a href="#3-2-多元素事件：用事件委托减少监听器" class="headerlink" title="3.2 多元素事件：用事件委托减少监听器"></a>3.2 多元素事件：用事件委托减少监听器</h3><p>如果有很多相同元素需要绑定事件（比如列表里的删除按钮），一个个绑定会创建大量监听器，浪费内存。这时候用“事件委托”，把监听器绑在父元素上，通过 <code>event.target</code> 判断是否点击目标元素。</p>
+<h4 id="反面示例：逐个绑定（低效）"><a href="#反面示例：逐个绑定（低效）" class="headerlink" title="反面示例：逐个绑定（低效）"></a>反面示例：逐个绑定（低效）</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 给每个 .remove-btn 绑事件，元素多的时候很卡</span></span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">querySelectorAll</span>(<span class="string">&#x27;.remove-btn&#x27;</span>).<span class="title function_">forEach</span>(<span class="function">(<span class="params">btn</span>) =&gt;</span> &#123;</span><br><span class="line">  btn.<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    btn.<span class="property">parentElement</span>.<span class="title function_">remove</span>();</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 
-<h3 id="3-3-一次性事件（-once-true-）"><a href="#3-3-一次性事件（-once-true-）" class="headerlink" title="3.3 一次性事件（{ once: true }）"></a>3.3 一次性事件（{ once: true }）</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 可以使用匿名函数，自动在调用后删除</span></span><br><span class="line">element.<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;clicked!&#x27;</span>);</span><br><span class="line">&#125;, &#123; <span class="attr">once</span>: <span class="literal">true</span> &#125;);</span><br></pre></td></tr></table></figure>
+<h4 id="正面示例：事件委托（高效）"><a href="#正面示例：事件委托（高效）" class="headerlink" title="正面示例：事件委托（高效）"></a>正面示例：事件委托（高效）</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 只给父容器绑一个事件，不管有多少子元素都能处理</span></span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;list-container&#x27;</span>).<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 判断点击的是不是 .remove-btn</span></span><br><span class="line">  <span class="keyword">if</span> (event.<span class="property">target</span>.<span class="title function_">matches</span>(<span class="string">&#x27;.remove-btn&#x27;</span>)) &#123;</span><br><span class="line">    event.<span class="property">target</span>.<span class="property">parentElement</span>.<span class="title function_">remove</span>();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 
-<h3 id="3-4-被动事件监听器（-passive-true-）"><a href="#3-4-被动事件监听器（-passive-true-）" class="headerlink" title="3.4 被动事件监听器（{ passive: true }）"></a>3.4 被动事件监听器（{ passive: true }）</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 提升滚动性能</span></span><br><span class="line"><span class="comment">// passive的默认值为false，所以浏览器会在滚动页面时阻塞浏览器主线程</span></span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;scroll&#x27;</span>, handleScroll, &#123; </span><br><span class="line">  <span class="attr">passive</span>: <span class="literal">true</span> <span class="comment">// 告诉浏览器不会调用 preventDefault()</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h4 id="额外优势：支持动态元素"><a href="#额外优势：支持动态元素" class="headerlink" title="额外优势：支持动态元素"></a>额外优势：支持动态元素</h4><p>如果列表是动态生成的（比如 AJAX 加载后新增的项），逐个绑定的事件会失效，但事件委托能自动处理——因为监听器在父容器上，新元素只要符合选择器，点击就能触发。</p>
+<div class="note success flat"><p><strong>性能秘诀：</strong> 对<mark>动态内容</mark>使用<mark>事件委托</mark>是高性能Web应用的关键！</p></div>
 
-<h3 id="3-5-事件顺序控制（-capture-true-）"><a href="#3-5-事件顺序控制（-capture-true-）" class="headerlink" title="3.5 事件顺序控制（{ capture: true }）"></a>3.5 事件顺序控制（{ capture: true }）</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 精确控制事件触发顺序</span></span><br><span class="line">parent.<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, handleParentClick, <span class="literal">true</span>); <span class="comment">// 捕获阶段</span></span><br><span class="line">child.<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, handleChildClick); <span class="comment">// 冒泡阶段</span></span><br></pre></td></tr></table></figure>
-<h4 id="具体应用案例"><a href="#具体应用案例" class="headerlink" title="具体应用案例"></a>具体应用案例</h4><ul>
-<li>全局快捷键  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在捕获阶段捕获键盘事件</span></span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;keydown&#x27;</span>, <span class="function"><span class="params">e</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (e.<span class="property">ctrlKey</span> &amp;&amp; e.<span class="property">key</span> === <span class="string">&#x27;s&#x27;</span>) &#123;</span><br><span class="line">      e.<span class="title function_">preventDefault</span>();</span><br><span class="line">      <span class="title function_">saveDocument</span>();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;, <span class="literal">true</span>); <span class="comment">// 使用捕获确保优先处理</span></span><br></pre></td></tr></table></figure></li>
-<li>关闭下拉菜单&#x2F;弹窗  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 点击页面任意位置关闭菜单（捕获阶段）</span></span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, <span class="function"><span class="params">e</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (!e.<span class="property">target</span>.<span class="title function_">closest</span>(<span class="string">&#x27;.dropdown&#x27;</span>)) &#123;</span><br><span class="line">    <span class="title function_">closeAllDropdowns</span>();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;, <span class="literal">true</span>); <span class="comment">// 优先处理</span></span><br></pre></td></tr></table></figure></li>
-<li>表单自动保存  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在输入失去焦点前保存（捕获阶段）</span></span><br><span class="line">form.<span class="title function_">addEventListener</span>(<span class="string">&#x27;focusout&#x27;</span>, <span class="function"><span class="params">e</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (e.<span class="property">target</span>.<span class="title function_">matches</span>(<span class="string">&#x27;input, textarea&#x27;</span>)) &#123;</span><br><span class="line">    <span class="title function_">autoSaveField</span>(e.<span class="property">target</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;, <span class="literal">true</span>); <span class="comment">// 使用捕获确保在可能的验证前执行</span></span><br></pre></td></tr></table></figure></li>
-<li>事件拦截，如：禁用页面某些区域的点击</li>
-</ul>
-<h3 id="3-6-事件移除（removeEventListener）"><a href="#3-6-事件移除（removeEventListener）" class="headerlink" title="3.6 事件移除（removeEventListener）"></a>3.6 事件移除（removeEventListener）</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 错误方式：匿名函数无法移除</span></span><br><span class="line">element.<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, <span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;clicked&#x27;</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 正确方式：使用具名函数引用</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">handleClick</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;clicked&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">element.<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, handleClick);</span><br><span class="line"><span class="comment">// 需要时移除</span></span><br><span class="line">element.<span class="title function_">removeEventListener</span>(<span class="string">&#x27;click&#x27;</span>, handleClick);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 添加时指定 capture</span></span><br><span class="line">element.<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, handleClick, <span class="literal">true</span>);</span><br><span class="line"><span class="comment">// 移除时也必须指定相同的 capture 值</span></span><br><span class="line"><span class="comment">// 错误：element.removeEventListener(&#x27;click&#x27;, handleClick) 无法移除</span></span><br><span class="line">element.<span class="title function_">removeEventListener</span>(<span class="string">&#x27;click&#x27;</span>, handleClick, <span class="literal">true</span>); </span><br></pre></td></tr></table></figure>
+<h3 id="3-3-一次性事件：用-once-true-自动解绑"><a href="#3-3-一次性事件：用-once-true-自动解绑" class="headerlink" title="3.3 一次性事件：用 once: true 自动解绑"></a>3.3 一次性事件：用 <code>once: true</code> 自动解绑</h3><p>有些事件只需要执行一次（比如“点击后弹出提示，之后再点无效”），不用手动解绑，加个 <code>once: true</code> 选项，执行完会自动移除监听器。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 可以使用匿名函数，自动在调用后删除，再点不会触发</span></span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&#x27;.tips-btn&#x27;</span>).<span class="title function_">addEventListener</span>(</span><br><span class="line">  <span class="string">&#x27;click&#x27;</span>,</span><br><span class="line">  <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="title function_">alert</span>(<span class="string">&#x27;这是只弹一次的提示&#x27;</span>);</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123; <span class="attr">once</span>: <span class="literal">true</span> &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
 
-<h3 id="3-7-事件选择原则"><a href="#3-7-事件选择原则" class="headerlink" title="3.7 事件选择原则"></a>3.7 事件选择原则</h3><ul>
-<li><strong>优先使用不会冒泡的事件</strong>：如 <code>mouseenter/mouseleave</code> 替代 <code>mouseover/mouseout</code></li>
-<li><strong>移动端优先指针事件</strong>：<code>pointerdown</code> 替代 <code>mousedown/touchstart</code></li>
-<li><strong>焦点事件使用冒泡版本</strong>：<code>focusin/focusout</code> 替代 <code>focus/blur</code>  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 优先使用 focusin/focusout 进行事件委托</span></span><br><span class="line">form.<span class="title function_">addEventListener</span>(<span class="string">&#x27;focusin&#x27;</span>, handleFocusEvent);</span><br><span class="line">form.<span class="title function_">addEventListener</span>(<span class="string">&#x27;focusout&#x27;</span>, handleBlurEvent);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在需要精确控制单个元素时才使用 focus/blur</span></span><br><span class="line">input.<span class="title function_">addEventListener</span>(<span class="string">&#x27;focus&#x27;</span>, handleExactFocus);</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="四、实战问题与解决方案"><a href="#四、实战问题与解决方案" class="headerlink" title="四、实战问题与解决方案"></a>四、实战问题与解决方案</h2><h3 id="4-1-scroll事件触发频繁导致卡顿"><a href="#4-1-scroll事件触发频繁导致卡顿" class="headerlink" title="4.1 scroll事件触发频繁导致卡顿"></a>4.1 <code>scroll</code>事件触发频繁导致卡顿</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 方式一：使用防抖或节流</span></span><br><span class="line"><span class="keyword">const</span> throttledScroll = <span class="title function_">throttle</span>(handleScroll, <span class="number">100</span>);</span><br><span class="line"><span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;scroll&#x27;</span>, throttledScroll);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 方式二：使用 IntersectionObserver</span></span><br><span class="line"><span class="keyword">const</span> observer = <span class="keyword">new</span> <span class="title class_">IntersectionObserver</span>(<span class="function"><span class="params">entries</span> =&gt;</span> &#123;</span><br><span class="line">  entries.<span class="title function_">forEach</span>(<span class="function"><span class="params">entry</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (entry.<span class="property">isIntersecting</span>) &#123;</span><br><span class="line">      <span class="comment">// 元素进入视口</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br><span class="line">observer.<span class="title function_">observe</span>(element);</span><br></pre></td></tr></table></figure>
-
-<h3 id="4-2-移动端点击延迟300ms"><a href="#4-2-移动端点击延迟300ms" class="headerlink" title="4.2 移动端点击延迟300ms"></a>4.2 移动端点击延迟300ms</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 方式一：在 viewport meta 标签中禁用缩放 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span> <span class="attr">content</span>=<span class="string">&quot;user-scalable=no&quot;</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 方式二：使用 FastClick 库 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">if</span> (<span class="string">&#x27;addEventListener&#x27;</span> <span class="keyword">in</span> <span class="variable language_">document</span>) &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;DOMContentLoaded&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-javascript">      <span class="title class_">FastClick</span>.<span class="title function_">attach</span>(<span class="variable language_">document</span>.<span class="property">body</span>);</span></span><br><span class="line"><span class="language-javascript">    &#125;, <span class="literal">false</span>);</span></span><br><span class="line"><span class="language-javascript">  &#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="4-3-事件内存泄漏"><a href="#4-3-事件内存泄漏" class="headerlink" title="4.3 事件内存泄漏"></a>4.3 事件内存泄漏</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 单页应用中的组件清理</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MyComponent</span> &#123;</span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">handleClick</span> = <span class="variable language_">this</span>.<span class="property">handleClick</span>.<span class="title function_">bind</span>(<span class="variable language_">this</span>);</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">element</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, <span class="variable language_">this</span>.<span class="property">handleClick</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="title function_">handleClick</span>(<span class="params"></span>) &#123; <span class="comment">/* ... */</span> &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 必须移除监听器</span></span><br><span class="line">  <span class="title function_">destroy</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">element</span>.<span class="title function_">removeEventListener</span>(<span class="string">&#x27;click&#x27;</span>, <span class="variable language_">this</span>.<span class="property">handleClick</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="4-4-多个事件监听器执行顺序不可控"><a href="#4-4-多个事件监听器执行顺序不可控" class="headerlink" title="4.4 多个事件监听器执行顺序不可控"></a>4.4 多个事件监听器执行顺序不可控</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 方式一：使用捕获阶段确保执行顺序</span></span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, handler1, <span class="literal">true</span>); <span class="comment">// 捕获阶段</span></span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, handler2);      <span class="comment">// 冒泡阶段</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 方式二：使用标志管理优先级</span></span><br><span class="line"><span class="keyword">const</span> events = [</span><br><span class="line">  &#123; <span class="attr">handler</span>: highPriorityHandler, <span class="attr">priority</span>: <span class="number">1</span> &#125;,</span><br><span class="line">  &#123; <span class="attr">handler</span>: lowPriorityHandler, <span class="attr">priority</span>: <span class="number">2</span> &#125;</span><br><span class="line">];</span><br><span class="line"></span><br><span class="line">events.<span class="title function_">sort</span>(<span class="function">(<span class="params">a, b</span>) =&gt;</span> a.<span class="property">priority</span> - b.<span class="property">priority</span>)</span><br><span class="line">      .<span class="title function_">forEach</span>(<span class="function"><span class="params">event</span> =&gt;</span> &#123;</span><br><span class="line">        element.<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, event.<span class="property">handler</span>);</span><br><span class="line">      &#125;);</span><br></pre></td></tr></table></figure>
-
-<h3 id="4-5-浏览器兼容性问题"><a href="#4-5-浏览器兼容性问题" class="headerlink" title="4.5 浏览器兼容性问题"></a>4.5 浏览器兼容性问题</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 方式一：使用 polyfill --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 方式二：使用 Modernizr --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="五、现代事件处理技术"><a href="#五、现代事件处理技术" class="headerlink" title="五、现代事件处理技术"></a>五、现代事件处理技术</h2><h3 id="5-1-事件总线：全局事件中心"><a href="#5-1-事件总线：全局事件中心" class="headerlink" title="5.1 事件总线：全局事件中心"></a>5.1 事件总线：全局事件中心</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title class_">EventBus</span> = &#123;</span><br><span class="line">  <span class="attr">events</span>: &#123;&#125;,</span><br><span class="line">  <span class="title function_">emit</span>(<span class="params">event, data</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">events</span>[event]) &#123;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">events</span>[event].<span class="title function_">forEach</span>(<span class="function"><span class="params">cb</span> =&gt;</span> <span class="title function_">cb</span>(data));</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="title function_">on</span>(<span class="params">event, callback</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">events</span>[event]) <span class="variable language_">this</span>.<span class="property">events</span>[event] = [];</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">events</span>[event].<span class="title function_">push</span>(callback);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用</span></span><br><span class="line"><span class="title class_">EventBus</span>.<span class="title function_">on</span>(<span class="string">&#x27;data-loaded&#x27;</span>, handleData);</span><br><span class="line"><span class="title class_">EventBus</span>.<span class="title function_">emit</span>(<span class="string">&#x27;data-loaded&#x27;</span>, &#123; <span class="attr">result</span>: [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>] &#125;);</span><br></pre></td></tr></table></figure>
-
-<h3 id="5-2-AbortController：事件管理新方式"><a href="#5-2-AbortController：事件管理新方式" class="headerlink" title="5.2 AbortController：事件管理新方式"></a>5.2 AbortController：事件管理新方式</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> controller = <span class="keyword">new</span> <span class="title class_">AbortController</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 添加事件监听</span></span><br><span class="line">element.<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, handleClick, &#123; </span><br><span class="line">  <span class="attr">signal</span>: controller.<span class="property">signal</span> </span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 调用 abort() 会自动移除所有相关监听器</span></span><br><span class="line">controller.<span class="title function_">abort</span>();</span><br></pre></td></tr></table></figure>
+<h3 id="3-4-滚动-触摸事件：用-passive-true-提升流畅度"><a href="#3-4-滚动-触摸事件：用-passive-true-提升流畅度" class="headerlink" title="3.4 滚动&#x2F;触摸事件：用 passive: true 提升流畅度"></a>3.4 滚动&#x2F;触摸事件：用 <code>passive: true</code> 提升流畅度</h3><p>浏览器在处理 <code>scroll</code>、<code>touchmove</code> 这类事件时，会先检查函数是否调用 <code>preventDefault()</code>，如果有，会阻塞滚动，导致卡顿。如果你的函数不会阻止默认行为，加 <code>passive: true</code> 告诉浏览器“不用等检查了，直接执行”，能显著提升滚动流畅度。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 滚动事件加 passive: true，提升流畅度</span></span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(</span><br><span class="line">  <span class="string">&#x27;scroll&#x27;</span>,</span><br><span class="line">  <span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;滚动中，不阻止默认行为&#x27;</span>);</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123; <span class="attr">passive</span>: <span class="literal">true</span> &#125;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
 
 <blockquote>
-<p><strong>最后的小测验</strong>：当用户点击一个按钮时，以下哪个阶段最先触发？<br>A) 目标阶段<br>B) 冒泡阶段<br>C) 捕获阶段  </p>
-<p><strong>答案</strong>：C) 捕获阶段（事件从window向下传递）</p>
+<p>注意：如果加了 <code>passive: true</code>，再调用 <code>preventDefault()</code> 会报错，因为浏览器已经认定你不会阻止默认行为了。</p>
 </blockquote>
-<p>掌握 JavaScript 事件系统，你就能创建出流畅、响应式的用户体验！现在就去实践这些技巧，让你的网页真正”活”起来吧！ 🚀</p>
+<h3 id="3-5-事件顺序控制：用-capture-true-精确控制事件触发顺序（不是常规性能优化的手段）"><a href="#3-5-事件顺序控制：用-capture-true-精确控制事件触发顺序（不是常规性能优化的手段）" class="headerlink" title="3.5 事件顺序控制：用 capture: true 精确控制事件触发顺序（不是常规性能优化的手段）"></a>3.5 事件顺序控制：用 <code>capture: true</code> 精确控制事件触发顺序（不是常规性能优化的手段）</h3><p>在某些特定场景下，捕获阶段可能更早地处理事件，从而能够阻止事件进一步传播。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(</span><br><span class="line">  <span class="string">&#x27;click&#x27;</span>,</span><br><span class="line">  <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (e.<span class="property">target</span>.<span class="title function_">matches</span>(<span class="string">&#x27;.should-block&#x27;</span>)) &#123;</span><br><span class="line">      e.<span class="title function_">stopPropagation</span>(); <span class="comment">// 阻止所有后续监听器</span></span><br><span class="line">      e.<span class="title function_">preventDefault</span>();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123; <span class="attr">capture</span>: <span class="literal">true</span> &#125; <span class="comment">// 在捕获阶段早期检查</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-6-不再需要的事件：用-removeEventListener-及时解绑避免内存泄漏"><a href="#3-6-不再需要的事件：用-removeEventListener-及时解绑避免内存泄漏" class="headerlink" title="3.6 不再需要的事件：用 removeEventListener 及时解绑避免内存泄漏"></a>3.6 不再需要的事件：用 <code>removeEventListener</code> 及时解绑避免内存泄漏</h3><p>如果元素被删除（比如单页应用切换组件），但事件监听器没解绑，浏览器会一直持有这个函数和元素的引用，导致内存泄漏。一定要在合适的时机解绑。</p>
+<h4 id="正确示例：组件销毁时解绑"><a href="#正确示例：组件销毁时解绑" class="headerlink" title="正确示例：组件销毁时解绑"></a>正确示例：组件销毁时解绑</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">ListComponent</span> &#123;</span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="comment">// 绑定this，避免函数内this指向错误</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">handleClick</span> = <span class="variable language_">this</span>.<span class="property">handleClick</span>.<span class="title function_">bind</span>(<span class="variable language_">this</span>);</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">container</span> = <span class="variable language_">document</span>.<span class="title function_">getElementById</span>(<span class="string">&#x27;list-container&#x27;</span>);</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">container</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, <span class="variable language_">this</span>.<span class="property">handleClick</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="title function_">handleClick</span>(<span class="params">event</span>) &#123;</span><br><span class="line">    <span class="comment">// 处理点击逻辑</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 组件销毁时调用，解绑事件</span></span><br><span class="line">  <span class="title function_">destroy</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">container</span>.<span class="title function_">removeEventListener</span>(<span class="string">&#x27;click&#x27;</span>, <span class="variable language_">this</span>.<span class="property">handleClick</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 切换组件时，销毁旧组件</span></span><br><span class="line"><span class="keyword">const</span> oldList = <span class="keyword">new</span> <span class="title class_">ListComponent</span>();</span><br><span class="line">oldList.<span class="title function_">destroy</span>(); <span class="comment">// 解绑事件，避免内存泄漏</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h4><ol>
+<li><p>匿名函数无法移除，要使用具名函数</p>
+</li>
+<li><p>解绑时要和绑定的函数、参数完全一致<br>比如绑定的时候用了 <code>capture: true</code>，解绑时也要加，否则解不掉：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 绑定：加了 capture: true</span></span><br><span class="line">element.<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, handleClick, <span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 解绑：必须也加 capture: true，否则无效</span></span><br><span class="line">element.<span class="title function_">removeEventListener</span>(<span class="string">&#x27;click&#x27;</span>, handleClick, <span class="literal">true</span>);</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="3-7-事件选择原则"><a href="#3-7-事件选择原则" class="headerlink" title="3.7 事件选择原则"></a>3.7 事件选择原则</h3><ul>
+<li><strong>优先使用不会冒泡的事件</strong>：如 <code>mouseenter/mouseleave</code> 替代 <code>mouseover/mouseout</code><blockquote>
+<p>这样可以减少事件处理函数被意外触发的可能性，同时也能减少事件传播带来的性能开销（尽管在现代浏览器中这种开销通常很小）。但要注意，它们不能用于事件委托（因为不冒泡），所以使用场景是直接绑定到目标元素。</p>
+</blockquote>
+</li>
+<li><strong>移动端优先指针事件</strong>：<code>pointerdown</code> 替代 <code>mousedown/touchstart</code><blockquote>
+<p>使用<code>pointerdown</code>等事件可以同时支持多种输入方式，避免为鼠标和触摸分别写两套事件逻辑。这有助于代码维护和减少重复。</p>
+</blockquote>
+</li>
+<li><strong>焦点事件使用冒泡版本</strong>：<code>focusin/focusout</code> 替代 <code>focus/blur</code><blockquote>
+<p>因为<code>focus</code>和<code>blur</code>事件不冒泡，所以当我们需要在祖先元素上监听焦点变化（例如做表单验证）时，使用冒泡版本的<code>focusin</code>和<code>focusout</code>可以方便地实现事件委托（仅需将事件绑定在表单上），而不必在每个可聚焦元素上单独绑定事件。</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="四、实战问题：常见坑与解决方案"><a href="#四、实战问题：常见坑与解决方案" class="headerlink" title="四、实战问题：常见坑与解决方案"></a>四、实战问题：常见坑与解决方案</h2><h3 id="4-1-滚动事件触发太频繁，页面卡顿"><a href="#4-1-滚动事件触发太频繁，页面卡顿" class="headerlink" title="4.1 滚动事件触发太频繁，页面卡顿"></a>4.1 滚动事件触发太频繁，页面卡顿</h3><p><strong>问题</strong>：<code>scroll</code> 事件每秒触发几十次，处理函数里有 DOM 操作（比如修改样式、计算位置），导致主线程忙不过来，页面卡。<br><strong>解决方案</strong>：</p>
+<ol>
+<li>用节流控制执行频率（比如每隔 100ms 执行一次）；</li>
+<li>复杂计算用 <code>requestAnimationFrame</code> 包裹，让浏览器在重绘时执行，避免掉帧；</li>
+<li>能用 <code>IntersectionObserver</code> 替代的场景，尽量不用滚动事件（比如“元素进入视口时加载”）。</li>
+</ol>
+<p>优化后的滚动事件处理：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> throttledScroll = <span class="title function_">throttle</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 用 requestAnimationFrame 确保在重绘时执行</span></span><br><span class="line">  <span class="title function_">requestAnimationFrame</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 处理DOM操作</span></span><br><span class="line">    <span class="title function_">updateNavPosition</span>();</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;, <span class="number">100</span>);</span><br><span class="line"></span><br><span class="line"><span class="variable language_">window</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;scroll&#x27;</span>, throttledScroll, &#123; <span class="attr">passive</span>: <span class="literal">true</span> &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>不使用滚动事件，而是使用<code>IntersectionObserver</code>：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> observer = <span class="keyword">new</span> <span class="title class_">IntersectionObserver</span>(<span class="function">(<span class="params">entries</span>) =&gt;</span> &#123;</span><br><span class="line">  entries.<span class="title function_">forEach</span>(<span class="function">(<span class="params">entry</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (entry.<span class="property">isIntersecting</span>) &#123;</span><br><span class="line">      <span class="comment">// 元素进入视口</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br><span class="line">observer.<span class="title function_">observe</span>(element);</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-2-移动端点击有-300ms-延迟"><a href="#4-2-移动端点击有-300ms-延迟" class="headerlink" title="4.2 移动端点击有 300ms 延迟"></a>4.2 移动端点击有 300ms 延迟</h3><p><strong>问题</strong>：早期移动端浏览器为了判断用户是否双击缩放，会在点击后延迟 300ms 再触发 <code>click</code> 事件，导致按钮点击反应慢。</p>
+<p><strong>解决方案</strong>：</p>
+<ol>
+<li>加 viewport meta 标签，禁用缩放（推荐，简单有效）；<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">meta</span></span></span><br><span class="line"><span class="tag">  <span class="attr">name</span>=<span class="string">&quot;viewport&quot;</span></span></span><br><span class="line"><span class="tag">  <span class="attr">content</span>=<span class="string">&quot;width=device-width, initial-scale=1.0, user-scalable=no&quot;</span></span></span><br><span class="line"><span class="tag">/&gt;</span></span><br></pre></td></tr></table></figure></li>
+<li>用 <code>touchstart</code>&#x2F;<code>touchend</code> 替代 <code>click</code>（需要处理触摸穿透问题）；</li>
+<li>旧项目可用 FastClick 库（现在大部分现代浏览器已优化，但兼容旧设备时可能需要）。<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">  <span class="keyword">if</span> (<span class="string">&#x27;addEventListener&#x27;</span> <span class="keyword">in</span> <span class="variable language_">document</span>) &#123;</span></span><br><span class="line"><span class="language-javascript">    <span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(</span></span><br><span class="line"><span class="language-javascript">      <span class="string">&#x27;DOMContentLoaded&#x27;</span>,</span></span><br><span class="line"><span class="language-javascript">      <span class="function">() =&gt;</span> &#123;</span></span><br><span class="line"><span class="language-javascript">        <span class="title class_">FastClick</span>.<span class="title function_">attach</span>(<span class="variable language_">document</span>.<span class="property">body</span>);</span></span><br><span class="line"><span class="language-javascript">      &#125;,</span></span><br><span class="line"><span class="language-javascript">      <span class="literal">false</span></span></span><br><span class="line"><span class="language-javascript">    );</span></span><br><span class="line"><span class="language-javascript">  &#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="4-3-事件冒泡导致父元素事件误触发"><a href="#4-3-事件冒泡导致父元素事件误触发" class="headerlink" title="4.3 事件冒泡导致父元素事件误触发"></a>4.3 事件冒泡导致父元素事件误触发</h3><p><strong>问题</strong>：点击子元素时，父元素的同类型事件也会触发（比如子按钮和父容器都绑了 <code>click</code> 事件）。</p>
+<p><strong>解决方案</strong>：在子元素的事件处理函数里调用 <code>stopPropagation()</code>，阻止事件继续冒泡。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 子元素事件：阻止冒泡，父元素事件不触发</span></span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&#x27;.child-btn&#x27;</span>).<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, <span class="function">(<span class="params">event</span>) =&gt;</span> &#123;</span><br><span class="line">  event.<span class="title function_">stopPropagation</span>(); <span class="comment">// 阻止事件冒泡到父元素</span></span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;子元素被点击&#x27;</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 父元素事件：子元素点击时不会触发</span></span><br><span class="line"><span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&#x27;.parent-container&#x27;</span>).<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;父元素被点击&#x27;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-4-单页应用切换组件，事件监听器没解绑"><a href="#4-4-单页应用切换组件，事件监听器没解绑" class="headerlink" title="4.4 单页应用切换组件，事件监听器没解绑"></a>4.4 单页应用切换组件，事件监听器没解绑</h3><p><strong>问题</strong>：单页应用（SPA）切换组件时，旧组件的事件监听器没解绑，导致内存泄漏，甚至出现“幽灵点击”（切换后旧组件的事件还在触发）。</p>
+<p><strong>解决方案</strong>：</p>
+<ol>
+<li><p>组件销毁时手动解绑事件（如前面 3.6 的示例）；</p>
+</li>
+<li><p>用 <code>AbortController</code> 批量解绑（现代浏览器推荐）。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 方案2：用 AbortController 批量解绑</span></span><br><span class="line"><span class="keyword">const</span> controller = <span class="keyword">new</span> <span class="title class_">AbortController</span>();</span><br><span class="line"><span class="keyword">const</span> signal = controller.<span class="property">signal</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 绑定多个事件，都用同一个 signal</span></span><br><span class="line">element1.<span class="title function_">addEventListener</span>(<span class="string">&#x27;click&#x27;</span>, handleClick1, &#123; signal &#125;);</span><br><span class="line">element2.<span class="title function_">addEventListener</span>(<span class="string">&#x27;scroll&#x27;</span>, handleScroll2, &#123; signal &#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 组件销毁时，调用 abort() 批量解绑所有事件</span></span><br><span class="line">controller.<span class="title function_">abort</span>();</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="五、现代事件处理技巧：更高效的玩法"><a href="#五、现代事件处理技巧：更高效的玩法" class="headerlink" title="五、现代事件处理技巧：更高效的玩法"></a>五、现代事件处理技巧：更高效的玩法</h2><h3 id="5-1-事件总线（Event-Bus）：非关联组件通信"><a href="#5-1-事件总线（Event-Bus）：非关联组件通信" class="headerlink" title="5.1 事件总线（Event Bus）：非关联组件通信"></a>5.1 事件总线（Event Bus）：非关联组件通信</h3><p>如果两个组件没有直接关系（比如兄弟组件、跨层级组件），可以用“事件总线”传递消息，不用一层层传 props 或用全局状态。</p>
+<h4 id="简单实现事件总线"><a href="#简单实现事件总线" class="headerlink" title="简单实现事件总线"></a>简单实现事件总线</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title class_">EventBus</span> = &#123;</span><br><span class="line">  <span class="comment">// 存储事件：key是事件名，value是回调函数数组</span></span><br><span class="line">  <span class="attr">events</span>: &#123;&#125;,</span><br><span class="line">  <span class="comment">// 触发事件：传事件名和数据</span></span><br><span class="line">  <span class="title function_">emit</span>(<span class="params">eventName, data</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">events</span>[eventName]) &#123;</span><br><span class="line">      <span class="comment">// 执行所有绑定的回调</span></span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">events</span>[eventName].<span class="title function_">forEach</span>(<span class="function">(<span class="params">cb</span>) =&gt;</span> <span class="title function_">cb</span>(data));</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 绑定事件：传事件名和回调</span></span><br><span class="line">  <span class="title function_">on</span>(<span class="params">eventName, callback</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">events</span>[eventName]) &#123;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">events</span>[eventName] = [];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">events</span>[eventName].<span class="title function_">push</span>(callback);</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 解绑事件（可选）</span></span><br><span class="line">  <span class="title function_">off</span>(<span class="params">eventName, callback</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">events</span>[eventName]) &#123;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="property">events</span>[eventName] = <span class="variable language_">this</span>.<span class="property">events</span>[eventName].<span class="title function_">filter</span>(</span><br><span class="line">        <span class="function">(<span class="params">cb</span>) =&gt;</span> cb !== callback</span><br><span class="line">      );</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 组件A：触发事件</span></span><br><span class="line"><span class="title class_">EventBus</span>.<span class="title function_">emit</span>(<span class="string">&#x27;user-login&#x27;</span>, &#123; <span class="attr">username</span>: <span class="string">&#x27;test&#x27;</span> &#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 组件B：监听事件</span></span><br><span class="line"><span class="title class_">EventBus</span>.<span class="title function_">on</span>(<span class="string">&#x27;user-login&#x27;</span>, <span class="function">(<span class="params">userInfo</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`用户<span class="subst">$&#123;userInfo.username&#125;</span>登录了。`</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-2-AbortController：现代事件管理"><a href="#5-2-AbortController：现代事件管理" class="headerlink" title="5.2 AbortController：现代事件管理"></a>5.2 AbortController：现代事件管理</h3><p>前面提到过 <code>AbortController</code> 能批量解绑事件，它还能配合 fetch、定时器等使用，是现代浏览器推荐的“资源管理”方案。</p>
+<h4 id="用-AbortController-取消-fetch-请求"><a href="#用-AbortController-取消-fetch-请求" class="headerlink" title="用 AbortController 取消 fetch 请求"></a>用 AbortController 取消 fetch 请求</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> controller = <span class="keyword">new</span> <span class="title class_">AbortController</span>();</span><br><span class="line"><span class="keyword">const</span> signal = controller.<span class="property">signal</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 发起fetch请求，传signal</span></span><br><span class="line"><span class="title function_">fetch</span>(<span class="string">&#x27;/api/data&#x27;</span>, &#123; signal &#125;)</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function">(<span class="params">res</span>) =&gt;</span> res.<span class="title function_">json</span>())</span><br><span class="line">  .<span class="title function_">catch</span>(<span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (err.<span class="property">name</span> === <span class="string">&#x27;AbortError&#x27;</span>) &#123;</span><br><span class="line">      <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;请求被取消了&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3秒后取消请求（比如用户点击“取消”按钮）</span></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> controller.<span class="title function_">abort</span>(), <span class="number">3000</span>);</span><br></pre></td></tr></table></figure>
+
+<h2 id="最后小测验"><a href="#最后小测验" class="headerlink" title="最后小测验"></a>最后小测验</h2><p>当用户点击一个按钮时，事件流的哪个阶段最先触发？<br>A) 目标阶段<br>B) 冒泡阶段<br>C) 捕获阶段</p>
+<p><strong>答案</strong>：C) 捕获阶段（事件从 <code>window</code> 向下传递到目标元素，先经过捕获阶段，再到目标阶段，最后是冒泡阶段）</p>
+<hr>
+<p>事件系统是前端交互的核心，掌握它不仅能写出流畅的交互，还能避免很多隐藏的性能问题。建议大家在实际项目中多尝试优化技巧，比如用事件委托替代多监听器、用 <code>passive</code> 提升滚动流畅度——这些小改动能让页面体验提升一大截！</p>
 </article><div class="post-copyright"><div class="copyright-cc-box"><i class="anzhiyufont anzhiyu-icon-copyright"></i></div><div class="post-copyright__author_box"><a class="post-copyright__author_img" href="/" title="头像"><img class="post-copyright__author_img_back" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/avatar.jpg" title="头像" alt="头像"><img class="post-copyright__author_img_front" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/avatar.jpg" title="头像" alt="头像"></a><div class="post-copyright__author_name">Touko</div><div class="post-copyright__author_desc">🐾猫爪按日出, 按出彩虹糖🌈</div></div><div class="post-copyright__post__info"><a class="post-copyright__original" title="该文章为原创文章，注意版权协议" href="http://toukoxu.github.io/2022/02/01/event/">原创</a><a class="post-copyright-title"><span onclick="rm.copyPageUrl('http://toukoxu.github.io/2022/02/01/event/')">JS 事件系统完全指南与性能优化</span></a></div><div class="post-tools" id="post-tools"><div class="post-tools-left"><div class="rewardLeftButton"><div class="post-reward" onclick="anzhiyu.addRewardMask()"><div class="reward-button button--animated" title="赞赏作者"><i class="anzhiyufont anzhiyu-icon-hand-heart-fill"></i>打赏作者</div><div class="reward-main"><div class="reward-all"><span class="reward-title">感谢你赐予我前进的力量</span><ul class="reward-group"><li class="reward-item"><a href="/img/wechat.jpg" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/wechat.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="/img/alipay.jpg" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/alipay.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul><a class="reward-main-btn" href="/about/#about-reward" target="_blank"><div class="reward-text">赞赏者名单</div><div class="reward-dec">因为你们的支持让我意识到写文章的价值🙏</div></a></div></div></div><div id="quit-box" onclick="anzhiyu.removeRewardMask()" style="display: none"></div></div><div class="shareRight"><div class="share-link mobile"><div class="share-qrcode"><div class="share-button" title="使用手机访问这篇文章"><i class="anzhiyufont anzhiyu-icon-qrcode"></i></div><div class="share-main"><div class="share-main-all"><div id="qrcode" title="http://toukoxu.github.io/2022/02/01/event/"></div><div class="reward-dec">使用手机访问这篇文章</div></div></div></div></div><script>function copyCurrentPageUrl() {
   var currentPageUrl = window.location.href;
   var input = document.createElement("input");
@@ -967,7 +1006,7 @@ if (true) {
   input.setSelectionRange(0, 99999);
   document.execCommand("copy");
   document.body.removeChild(input);
-}</script><div class="share-link copyurl"><div class="share-button" id="post-share-url" title="复制链接" onclick="copyCurrentPageUrl()"><i class="anzhiyufont anzhiyu-icon-link"></i></div></div></div></div></div><div class="post-copyright__notice"><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://toukoxu.github.io" target="_blank">Touko</a>！</span></div></div><div class="post-tools-right"><div class="tag_share"><div class="post-meta__box"><div class="post-meta__box__category-list"><a class="post-meta__box__categoryes" href="/categories/%E5%89%8D%E7%AB%AF/"><span class="categoryes-punctuation"> <i class="anzhiyufont anzhiyu-icon-inbox"></i></span>前端<span class="categoryesPageCount">10</span></a><a class="post-meta__box__categoryes" href="/categories/%E5%89%8D%E7%AB%AF/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"><span class="categoryes-punctuation"> <i class="anzhiyufont anzhiyu-icon-inbox"></i></span>学习笔记<span class="categoryesPageCount">10</span></a></div><div class="post-meta__box__tag-list"><a class="post-meta__box__tags" href="/tags/JavaScript/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>JavaScript<span class="tagsPageCount">10</span></a><a class="post-meta__box__tags" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>性能优化<span class="tagsPageCount">6</span></a></div></div></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/05/02/prototype-chain/"><img class="prev-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/cover/prototype-chain.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">原型链（Prototype Chain）与 Class：深入探索对象继承的核心机制</div></div></a></div><div class="next-post pull-right"><a href="/2024/06/14/iterator/"><img class="next-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/cover/iterator.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">迭代器（Iterator）与解构：深入浅出的完全指南</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="anzhiyufont anzhiyu-icon-thumbs-up fa-fw" style="font-size: 1.5rem; margin-right: 4px"></i><span>喜欢这篇文章的人也看了</span></div><div class="relatedPosts-list"><div><a href="/2024/07/13/async&await/" title="Async&#x2F;Await 解密：原来你是这样的异步神器！"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/cover/async.png" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2024-07-13</div><div class="title">Async&#x2F;Await 解密：原来你是这样的异步神器！</div></div></a></div><div><a href="/2024/08/15/proxy/" title="代理（Proxy）"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/cover/proxy.png" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2024-08-15</div><div class="title">代理（Proxy）</div></div></a></div><div><a href="/2021/03/16/scope-chain/" title="作用域链（Scope Chain）：变量查找的寻宝地图"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/cover/event.png" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2021-03-16</div><div class="title">作用域链（Scope Chain）：变量查找的寻宝地图</div></div></a></div><div><a href="/2024/06/23/message-channel/" title="MessageChannel 及其使用场景"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/cover/messageChannel.png" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2024-06-23</div><div class="title">MessageChannel 及其使用场景</div></div></a></div><div><a href="/2021/05/02/prototype-chain/" title="原型链（Prototype Chain）与 Class：深入探索对象继承的核心机制"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/cover/prototype-chain.png" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2021-05-02</div><div class="title">原型链（Prototype Chain）与 Class：深入探索对象继承的核心机制</div></div></a></div><div><a href="/2021/04/03/closure/" title="闭包（Closure）：JavaScript 的时空胶囊"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/cover/closure.png" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2021-04-03</div><div class="title">闭包（Closure）：JavaScript 的时空胶囊</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="anzhiyufont anzhiyu-icon-comments"></i><span> 评论</span></div><div class="comment-randomInfo"><a onclick="anzhiyu.addRandomCommentInfo()" href="javascript:void(0)">匿名评论</a><a href="/privacy" style="margin-left: 4px">隐私政策</a></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div><div class="comment-barrage"></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-content"><div class="author-info__sayhi" id="author-info__sayhi" onclick="anzhiyu.changeSayHelloText()"></div><div class="author-info-avatar"><img class="avatar-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-status"><img class="g-status" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/sparkles.png" alt="status"/></div></div><div class="author-info__description"><div style="line-height:1.38;margin:0.6rem 0;text-align:justify;color:rgba(255, 255, 255, 0.8);">欢迎来到我的<b style="color:#fff">编程小天地</b>！这里有可爱的<b style="color:#fff">编程知识点</b>，致力于把复杂的概念变得<b style="color:#fff">简单可爱</b>。</div><div style="line-height:1.38;margin:0.6rem 0;text-align:justify;color:rgba(255, 255, 255, 0.8);">一起探索，让代码生活更精彩！</div></div><div class="author-info__bottom-group"><a class="author-info__bottom-group-left" href="/"><h1 class="author-info__name">Touko</h1><div class="author-info__desc">🐾猫爪按日出, 按出彩虹糖🌈</div></a><div class="card-info-social-icons is-center"><a class="social-icon faa-parent animated-hover" href="https://github.com/ToukoXu" target="_blank" title="Github"><i class="anzhiyufont anzhiyu-icon-github"></i></a></div></div></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-bullhorn anzhiyu-shake"></i><span>公告</span></div><div class="announcement_content">😊 欢迎来看我的博客鸭~</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-bars"></i><span>文章目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%BA%8B%E4%BB%B6%E7%B3%BB%E7%BB%9F%EF%BC%9A%E7%BD%91%E9%A1%B5%E7%9A%84%E7%A5%9E%E7%BB%8F%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.</span> <span class="toc-text">一、事件系统：网页的神经系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E4%BA%8B%E4%BB%B6%E6%B5%81%E4%B8%89%E9%98%B6%E6%AE%B5%EF%BC%9A%E6%8D%95%E8%8E%B7%E4%B8%8E%E5%86%92%E6%B3%A1"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 事件流三阶段：捕获与冒泡</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E4%BA%8B%E4%BB%B6%E7%9B%91%E5%90%AC%E6%96%B9%E5%BC%8F%E5%A4%A7%E6%AF%94%E6%8B%BC"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 事件监听方式大比拼</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-addEventListener"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 addEventListener()</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AF%AD%E6%B3%95"><span class="toc-number">1.3.1.</span> <span class="toc-text">语法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%82%E6%95%B0"><span class="toc-number">1.3.2.</span> <span class="toc-text">参数</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%BA%8B%E4%BB%B6%E7%B1%BB%E5%9E%8B%E5%A4%A7%E5%85%A8"><span class="toc-number">2.</span> <span class="toc-text">二、事件类型大全</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B1%BB%E5%9B%BE"><span class="toc-number">2.1.</span> <span class="toc-text">类图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Event%EF%BC%88%E5%9F%BA%E7%A1%80%E4%BA%8B%E4%BB%B6%EF%BC%89"><span class="toc-number">2.2.</span> <span class="toc-text">1. Event（基础事件）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-UIEvent%EF%BC%88%E7%94%A8%E6%88%B7%E7%95%8C%E9%9D%A2%E4%BA%8B%E4%BB%B6%EF%BC%89"><span class="toc-number">2.3.</span> <span class="toc-text">2. UIEvent（用户界面事件）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-MouseEvent%EF%BC%88%E9%BC%A0%E6%A0%87%E4%BA%8B%E4%BB%B6%EF%BC%89"><span class="toc-number">2.3.1.</span> <span class="toc-text">2.1 MouseEvent（鼠标事件）</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-1-WheelEvent%EF%BC%88%E6%BB%9A%E8%BD%AE%E4%BA%8B%E4%BB%B6%EF%BC%89"><span class="toc-number">2.3.1.1.</span> <span class="toc-text">2.1.1 WheelEvent（滚轮事件）</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-2-DragEvent%EF%BC%88%E6%8B%96%E6%94%BE%E4%BA%8B%E4%BB%B6%EF%BC%89"><span class="toc-number">2.3.1.2.</span> <span class="toc-text">2.1.2 DragEvent（拖放事件）</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-3-PointerEvent%EF%BC%88%E6%8C%87%E9%92%88%E4%BA%8B%E4%BB%B6%EF%BC%89"><span class="toc-number">2.3.1.3.</span> <span class="toc-text">2.1.3 PointerEvent（指针事件）</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-KeyboardEvent%EF%BC%88%E9%94%AE%E7%9B%98%E4%BA%8B%E4%BB%B6%EF%BC%89"><span class="toc-number">2.3.2.</span> <span class="toc-text">2.2 KeyboardEvent（键盘事件）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-FocusEvent%EF%BC%88%E7%84%A6%E7%82%B9%E4%BA%8B%E4%BB%B6%EF%BC%89"><span class="toc-number">2.3.3.</span> <span class="toc-text">2.3 FocusEvent（焦点事件）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-4-TouchEvent%EF%BC%88%E8%A7%A6%E6%91%B8%E4%BA%8B%E4%BB%B6%EF%BC%89"><span class="toc-number">2.3.4.</span> <span class="toc-text">2.4 TouchEvent（触摸事件）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-5-InputEvent%EF%BC%88%E8%BE%93%E5%85%A5%E4%BA%8B%E4%BB%B6%EF%BC%89"><span class="toc-number">2.3.5.</span> <span class="toc-text">2.5 InputEvent（输入事件）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-AnimationEvent%EF%BC%88%E5%8A%A8%E7%94%BB%E4%BA%8B%E4%BB%B6%EF%BC%89"><span class="toc-number">2.4.</span> <span class="toc-text">3. AnimationEvent（动画事件）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-TransitionEvent%EF%BC%88%E8%BF%87%E6%B8%A1%E4%BA%8B%E4%BB%B6%EF%BC%89"><span class="toc-number">2.5.</span> <span class="toc-text">4. TransitionEvent（过渡事件）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-ClipboardEvent%EF%BC%88%E5%89%AA%E8%B4%B4%E6%9D%BF%E4%BA%8B%E4%BB%B6%EF%BC%89"><span class="toc-number">2.6.</span> <span class="toc-text">5. ClipboardEvent（剪贴板事件）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-CustomEvent%EF%BC%88%E8%87%AA%E5%AE%9A%E4%B9%89%E4%BA%8B%E4%BB%B6%EF%BC%89"><span class="toc-number">2.7.</span> <span class="toc-text">6. CustomEvent（自定义事件）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="toc-number">3.</span> <span class="toc-text">三、性能优化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E9%AB%98%E9%A2%91%E4%BA%8B%E4%BB%B6%E7%9A%84%E9%98%B2%E6%8A%96%EF%BC%88debounce%EF%BC%89%E4%B8%8E%E8%8A%82%E6%B5%81%EF%BC%88throttle%EF%BC%89"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 高频事件的防抖（debounce）与节流（throttle）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E4%BA%8B%E4%BB%B6%E5%A7%94%E6%89%98%EF%BC%88%E5%87%8F%E5%B0%91DOM%E6%93%8D%E4%BD%9C%EF%BC%8C%E4%B8%94%E6%94%AF%E6%8C%81%E5%8A%A8%E6%80%81%E5%86%85%E5%AE%B9%EF%BC%89"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 事件委托（减少DOM操作，且支持动态内容）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E4%B8%80%E6%AC%A1%E6%80%A7%E4%BA%8B%E4%BB%B6%EF%BC%88-once-true-%EF%BC%89"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 一次性事件（{ once: true }）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-%E8%A2%AB%E5%8A%A8%E4%BA%8B%E4%BB%B6%E7%9B%91%E5%90%AC%E5%99%A8%EF%BC%88-passive-true-%EF%BC%89"><span class="toc-number">3.4.</span> <span class="toc-text">3.4 被动事件监听器（{ passive: true }）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-%E4%BA%8B%E4%BB%B6%E9%A1%BA%E5%BA%8F%E6%8E%A7%E5%88%B6%EF%BC%88-capture-true-%EF%BC%89"><span class="toc-number">3.5.</span> <span class="toc-text">3.5 事件顺序控制（{ capture: true }）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E5%BA%94%E7%94%A8%E6%A1%88%E4%BE%8B"><span class="toc-number">3.5.1.</span> <span class="toc-text">具体应用案例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-6-%E4%BA%8B%E4%BB%B6%E7%A7%BB%E9%99%A4%EF%BC%88removeEventListener%EF%BC%89"><span class="toc-number">3.6.</span> <span class="toc-text">3.6 事件移除（removeEventListener）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-7-%E4%BA%8B%E4%BB%B6%E9%80%89%E6%8B%A9%E5%8E%9F%E5%88%99"><span class="toc-number">3.7.</span> <span class="toc-text">3.7 事件选择原则</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%AE%9E%E6%88%98%E9%97%AE%E9%A2%98%E4%B8%8E%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-number">4.</span> <span class="toc-text">四、实战问题与解决方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-scroll%E4%BA%8B%E4%BB%B6%E8%A7%A6%E5%8F%91%E9%A2%91%E7%B9%81%E5%AF%BC%E8%87%B4%E5%8D%A1%E9%A1%BF"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 scroll事件触发频繁导致卡顿</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E7%A7%BB%E5%8A%A8%E7%AB%AF%E7%82%B9%E5%87%BB%E5%BB%B6%E8%BF%9F300ms"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 移动端点击延迟300ms</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E4%BA%8B%E4%BB%B6%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 事件内存泄漏</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-%E5%A4%9A%E4%B8%AA%E4%BA%8B%E4%BB%B6%E7%9B%91%E5%90%AC%E5%99%A8%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F%E4%B8%8D%E5%8F%AF%E6%8E%A7"><span class="toc-number">4.4.</span> <span class="toc-text">4.4 多个事件监听器执行顺序不可控</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-5-%E6%B5%8F%E8%A7%88%E5%99%A8%E5%85%BC%E5%AE%B9%E6%80%A7%E9%97%AE%E9%A2%98"><span class="toc-number">4.5.</span> <span class="toc-text">4.5 浏览器兼容性问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E7%8E%B0%E4%BB%A3%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86%E6%8A%80%E6%9C%AF"><span class="toc-number">5.</span> <span class="toc-text">五、现代事件处理技术</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E4%BA%8B%E4%BB%B6%E6%80%BB%E7%BA%BF%EF%BC%9A%E5%85%A8%E5%B1%80%E4%BA%8B%E4%BB%B6%E4%B8%AD%E5%BF%83"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 事件总线：全局事件中心</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-AbortController%EF%BC%9A%E4%BA%8B%E4%BB%B6%E7%AE%A1%E7%90%86%E6%96%B0%E6%96%B9%E5%BC%8F"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 AbortController：事件管理新方式</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-history"></i><span>最近发布</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/08/15/proxy/" title="代理（Proxy）"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/cover/proxy.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="代理（Proxy）"/></a><div class="content"><a class="title" href="/2024/08/15/proxy/" title="代理（Proxy）">代理（Proxy）</a><time datetime="2024-08-15T12:46:25.000Z" title="发表于 2024-08-15 20:46:25">2024-08-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/08/14/reflect/" title="Reflect"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/cover/reflect.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Reflect"/></a><div class="content"><a class="title" href="/2024/08/14/reflect/" title="Reflect">Reflect</a><time datetime="2024-08-14T12:46:25.000Z" title="发表于 2024-08-14 20:46:25">2024-08-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/07/13/async&amp;await/" title="Async/Await 解密：原来你是这样的异步神器！"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/cover/async.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Async/Await 解密：原来你是这样的异步神器！"/></a><div class="content"><a class="title" href="/2024/07/13/async&amp;await/" title="Async/Await 解密：原来你是这样的异步神器！">Async/Await 解密：原来你是这样的异步神器！</a><time datetime="2024-07-13T12:46:25.000Z" title="发表于 2024-07-13 20:46:25">2024-07-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/07/11/generator/" title="生成器函数与 yield：暂停与恢复的艺术"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/cover/generator.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="生成器函数与 yield：暂停与恢复的艺术"/></a><div class="content"><a class="title" href="/2024/07/11/generator/" title="生成器函数与 yield：暂停与恢复的艺术">生成器函数与 yield：暂停与恢复的艺术</a><time datetime="2024-07-11T12:46:25.000Z" title="发表于 2024-07-11 20:46:25">2024-07-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/06/23/message-channel/" title="MessageChannel 及其使用场景"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/cover/messageChannel.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="MessageChannel 及其使用场景"/></a><div class="content"><a class="title" href="/2024/06/23/message-channel/" title="MessageChannel 及其使用场景">MessageChannel 及其使用场景</a><time datetime="2024-06-23T12:46:25.000Z" title="发表于 2024-06-23 20:46:25">2024-06-23</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"></div><div id="footer-bar"><div class="footer-bar-links"><div class="footer-bar-left"><div id="footer-bar-tips"><div class="copyright">&copy;2020 - 2025 By <a class="footer-bar-link" href="/" title="Touko" target="_blank">Touko</a></div></div><div id="footer-type-tips"></div><div class="js-pjax"><script>function subtitleType () {
+}</script><div class="share-link copyurl"><div class="share-button" id="post-share-url" title="复制链接" onclick="copyCurrentPageUrl()"><i class="anzhiyufont anzhiyu-icon-link"></i></div></div></div></div></div><div class="post-copyright__notice"><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://toukoxu.github.io" target="_blank">Touko</a>！</span></div></div><div class="post-tools-right"><div class="tag_share"><div class="post-meta__box"><div class="post-meta__box__category-list"><a class="post-meta__box__categoryes" href="/categories/%E5%89%8D%E7%AB%AF/"><span class="categoryes-punctuation"> <i class="anzhiyufont anzhiyu-icon-inbox"></i></span>前端<span class="categoryesPageCount">10</span></a><a class="post-meta__box__categoryes" href="/categories/%E5%89%8D%E7%AB%AF/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"><span class="categoryes-punctuation"> <i class="anzhiyufont anzhiyu-icon-inbox"></i></span>学习笔记<span class="categoryesPageCount">10</span></a></div><div class="post-meta__box__tag-list"><a class="post-meta__box__tags" href="/tags/JavaScript/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>JavaScript<span class="tagsPageCount">10</span></a><a class="post-meta__box__tags" href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>性能优化<span class="tagsPageCount">6</span></a></div></div></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/05/02/prototype-chain/"><img class="prev-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/cover/prototype-chain.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">原型链（Prototype Chain）与 Class：深入探索对象继承的核心机制</div></div></a></div><div class="next-post pull-right"><a href="/2024/06/14/iterator/"><img class="next-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/cover/iterator.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">迭代器（Iterator）与解构：深入浅出的完全指南</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="anzhiyufont anzhiyu-icon-thumbs-up fa-fw" style="font-size: 1.5rem; margin-right: 4px"></i><span>喜欢这篇文章的人也看了</span></div><div class="relatedPosts-list"><div><a href="/2024/07/13/async&await/" title="Async&#x2F;Await 解密：原来你是这样的异步神器！"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/cover/async.png" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2024-07-13</div><div class="title">Async&#x2F;Await 解密：原来你是这样的异步神器！</div></div></a></div><div><a href="/2024/08/15/proxy/" title="代理（Proxy）"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/cover/proxy.png" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2024-08-15</div><div class="title">代理（Proxy）</div></div></a></div><div><a href="/2021/03/16/scope-chain/" title="作用域链（Scope Chain）：变量查找的寻宝地图"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/cover/event.png" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2021-03-16</div><div class="title">作用域链（Scope Chain）：变量查找的寻宝地图</div></div></a></div><div><a href="/2024/06/23/message-channel/" title="MessageChannel 及其使用场景"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/cover/messageChannel.png" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2024-06-23</div><div class="title">MessageChannel 及其使用场景</div></div></a></div><div><a href="/2021/05/02/prototype-chain/" title="原型链（Prototype Chain）与 Class：深入探索对象继承的核心机制"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/cover/prototype-chain.png" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2021-05-02</div><div class="title">原型链（Prototype Chain）与 Class：深入探索对象继承的核心机制</div></div></a></div><div><a href="/2021/04/03/closure/" title="闭包（Closure）：JavaScript 里的“记忆小助手”"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/cover/closure.png" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2021-04-03</div><div class="title">闭包（Closure）：JavaScript 里的“记忆小助手”</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="anzhiyufont anzhiyu-icon-comments"></i><span> 评论</span></div><div class="comment-randomInfo"><a onclick="anzhiyu.addRandomCommentInfo()" href="javascript:void(0)">匿名评论</a><a href="/privacy" style="margin-left: 4px">隐私政策</a></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div><div class="comment-barrage"></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-content"><div class="author-info__sayhi" id="author-info__sayhi" onclick="anzhiyu.changeSayHelloText()"></div><div class="author-info-avatar"><img class="avatar-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-status"><img class="g-status" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/sparkles.png" alt="status"/></div></div><div class="author-info__description"><div style="line-height:1.38;margin:0.6rem 0;text-align:justify;color:rgba(255, 255, 255, 0.8);">欢迎来到我的<b style="color:#fff">编程小天地</b>！这里有可爱的<b style="color:#fff">编程知识点</b>，致力于把复杂的概念变得<b style="color:#fff">简单可爱</b>。</div><div style="line-height:1.38;margin:0.6rem 0;text-align:justify;color:rgba(255, 255, 255, 0.8);">一起探索，让代码生活更精彩！</div></div><div class="author-info__bottom-group"><a class="author-info__bottom-group-left" href="/"><h1 class="author-info__name">Touko</h1><div class="author-info__desc">🐾猫爪按日出, 按出彩虹糖🌈</div></a><div class="card-info-social-icons is-center"><a class="social-icon faa-parent animated-hover" href="https://github.com/ToukoXu" target="_blank" title="Github"><i class="anzhiyufont anzhiyu-icon-github"></i></a></div></div></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-bullhorn anzhiyu-shake"></i><span>公告</span></div><div class="announcement_content">😊 欢迎来看我的博客鸭~</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-bars"></i><span>文章目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%BA%8B%E4%BB%B6%E7%B3%BB%E7%BB%9F%EF%BC%9A%E7%BD%91%E9%A1%B5%E7%9A%84%E2%80%9C%E4%BA%A4%E4%BA%92%E9%80%BB%E8%BE%91%E9%AA%A8%E6%9E%B6%E2%80%9D"><span class="toc-number">1.</span> <span class="toc-text">一、事件系统：网页的“交互逻辑骨架”</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E4%BA%8B%E4%BB%B6%E6%B5%81%E4%B8%89%E9%98%B6%E6%AE%B5%EF%BC%9A%E4%BB%8E%E9%A1%B6%E5%B1%82%E5%88%B0%E7%9B%AE%E6%A0%87%EF%BC%8C%E5%86%8D%E5%9B%9E%E5%88%B0%E9%A1%B6%E5%B1%82"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 事件流三阶段：从顶层到目标，再回到顶层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E4%B8%89%E7%A7%8D%E4%BA%8B%E4%BB%B6%E7%9B%91%E5%90%AC%E6%96%B9%E5%BC%8F%EF%BC%9A%E5%93%AA%E7%A7%8D%E6%9C%80%E5%AE%9E%E7%94%A8%EF%BC%9F"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 三种事件监听方式：哪种最实用？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-addEventListener%E8%AF%A6%E8%A7%A3%EF%BC%9A%E5%8F%82%E6%95%B0%E6%80%8E%E4%B9%88%E7%94%A8%EF%BC%9F"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 addEventListener详解：参数怎么用？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95"><span class="toc-number">1.3.1.</span> <span class="toc-text">基本语法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E"><span class="toc-number">1.3.2.</span> <span class="toc-text">关键参数说明</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%B8%B8%E7%94%A8%E4%BA%8B%E4%BB%B6%E7%B1%BB%E5%9E%8B%EF%BC%9A%E6%8C%89%E5%9C%BA%E6%99%AF%E5%88%86%E7%B1%BB%E6%95%B4%E7%90%86"><span class="toc-number">2.</span> <span class="toc-text">二、常用事件类型：按场景分类整理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%88%E7%9C%8B%E4%BA%8B%E4%BB%B6%E7%9A%84%E7%BB%A7%E6%89%BF%E5%85%B3%E7%B3%BB"><span class="toc-number">2.1.</span> <span class="toc-text">先看事件的继承关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Event%EF%BC%88%E5%9F%BA%E7%A1%80%E4%BA%8B%E4%BB%B6%EF%BC%89"><span class="toc-number">2.2.</span> <span class="toc-text">1. Event（基础事件）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%B1%9E%E6%80%A7"><span class="toc-number">2.2.1.</span> <span class="toc-text">常用属性</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95"><span class="toc-number">2.2.2.</span> <span class="toc-text">常用方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%AB%98%E9%A2%91%E5%9F%BA%E7%A1%80%E4%BA%8B%E4%BB%B6"><span class="toc-number">2.2.3.</span> <span class="toc-text">高频基础事件</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-UIEvent%EF%BC%88%E7%94%A8%E6%88%B7%E7%95%8C%E9%9D%A2%E4%BA%8B%E4%BB%B6%EF%BC%89"><span class="toc-number">2.3.</span> <span class="toc-text">2. UIEvent（用户界面事件）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-MouseEvent%EF%BC%88%E9%BC%A0%E6%A0%87%E4%BA%8B%E4%BB%B6%EF%BC%89"><span class="toc-number">2.3.1.</span> <span class="toc-text">2.1 MouseEvent（鼠标事件）</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-1-WheelEvent%EF%BC%88%E6%BB%9A%E8%BD%AE%E4%BA%8B%E4%BB%B6%EF%BC%89"><span class="toc-number">2.3.1.1.</span> <span class="toc-text">2.1.1 WheelEvent（滚轮事件）</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-2-DragEvent%EF%BC%88%E6%8B%96%E6%94%BE%E4%BA%8B%E4%BB%B6%EF%BC%89"><span class="toc-number">2.3.1.2.</span> <span class="toc-text">2.1.2 DragEvent（拖放事件）</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-3-PointerEvent%EF%BC%88%E6%8C%87%E9%92%88%E4%BA%8B%E4%BB%B6%EF%BC%89"><span class="toc-number">2.3.1.3.</span> <span class="toc-text">2.1.3 PointerEvent（指针事件）</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-KeyboardEvent%EF%BC%88%E9%94%AE%E7%9B%98%E4%BA%8B%E4%BB%B6%EF%BC%89"><span class="toc-number">2.3.2.</span> <span class="toc-text">2.2 KeyboardEvent（键盘事件）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-FocusEvent%EF%BC%88%E7%84%A6%E7%82%B9%E4%BA%8B%E4%BB%B6%EF%BC%89"><span class="toc-number">2.3.3.</span> <span class="toc-text">2.3 FocusEvent（焦点事件）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-4-TouchEvent%EF%BC%88%E8%A7%A6%E6%91%B8%E4%BA%8B%E4%BB%B6%EF%BC%89"><span class="toc-number">2.3.4.</span> <span class="toc-text">2.4 TouchEvent（触摸事件）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-5-InputEvent%EF%BC%88%E8%BE%93%E5%85%A5%E4%BA%8B%E4%BB%B6%EF%BC%89"><span class="toc-number">2.3.5.</span> <span class="toc-text">2.5 InputEvent（输入事件）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-AnimationEvent%EF%BC%88%E5%8A%A8%E7%94%BB%E4%BA%8B%E4%BB%B6%EF%BC%89"><span class="toc-number">2.4.</span> <span class="toc-text">3. AnimationEvent（动画事件）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-TransitionEvent%EF%BC%88%E8%BF%87%E6%B8%A1%E4%BA%8B%E4%BB%B6%EF%BC%89"><span class="toc-number">2.5.</span> <span class="toc-text">4. TransitionEvent（过渡事件）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-ClipboardEvent%EF%BC%88%E5%89%AA%E8%B4%B4%E6%9D%BF%E4%BA%8B%E4%BB%B6%EF%BC%89"><span class="toc-number">2.6.</span> <span class="toc-text">5. ClipboardEvent（剪贴板事件）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-CustomEvent%EF%BC%88%E8%87%AA%E5%AE%9A%E4%B9%89%E4%BA%8B%E4%BB%B6%EF%BC%89"><span class="toc-number">2.7.</span> <span class="toc-text">6. CustomEvent（自定义事件）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%A8%E6%B3%95%E7%A4%BA%E4%BE%8B"><span class="toc-number">2.7.1.</span> <span class="toc-text">用法示例</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E4%BA%8B%E4%BB%B6%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%EF%BC%9A%E9%81%BF%E5%85%8D%E5%8D%A1%E9%A1%BF%E3%80%81%E5%87%8F%E5%B0%91%E6%B5%AA%E8%B4%B9"><span class="toc-number">3.</span> <span class="toc-text">三、事件性能优化：避免卡顿、减少浪费</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E9%AB%98%E9%A2%91%E4%BA%8B%E4%BB%B6%EF%BC%9A%E7%94%A8%E9%98%B2%E6%8A%96%EF%BC%88debounce%EF%BC%89%E5%92%8C%E8%8A%82%E6%B5%81%EF%BC%88throttle%EF%BC%89%E6%8E%A7%E9%A2%91%E7%8E%87"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 高频事件：用防抖（debounce）和节流（throttle）控频率</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%98%B2%E6%8A%96%EF%BC%88debounce%EF%BC%89%EF%BC%9A%E8%BF%9E%E7%BB%AD%E8%A7%A6%E5%8F%91%E5%8F%AA%E6%89%A7%E8%A1%8C%E6%9C%80%E5%90%8E%E4%B8%80%E6%AC%A1"><span class="toc-number">3.1.1.</span> <span class="toc-text">防抖（debounce）：连续触发只执行最后一次</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8A%82%E6%B5%81%EF%BC%88throttle%EF%BC%89%EF%BC%9A%E5%9B%BA%E5%AE%9A%E9%97%B4%E9%9A%94%E6%89%A7%E8%A1%8C%E4%B8%80%E6%AC%A1"><span class="toc-number">3.1.2.</span> <span class="toc-text">节流（throttle）：固定间隔执行一次</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E5%A4%9A%E5%85%83%E7%B4%A0%E4%BA%8B%E4%BB%B6%EF%BC%9A%E7%94%A8%E4%BA%8B%E4%BB%B6%E5%A7%94%E6%89%98%E5%87%8F%E5%B0%91%E7%9B%91%E5%90%AC%E5%99%A8"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 多元素事件：用事件委托减少监听器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%8D%E9%9D%A2%E7%A4%BA%E4%BE%8B%EF%BC%9A%E9%80%90%E4%B8%AA%E7%BB%91%E5%AE%9A%EF%BC%88%E4%BD%8E%E6%95%88%EF%BC%89"><span class="toc-number">3.2.1.</span> <span class="toc-text">反面示例：逐个绑定（低效）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%AD%A3%E9%9D%A2%E7%A4%BA%E4%BE%8B%EF%BC%9A%E4%BA%8B%E4%BB%B6%E5%A7%94%E6%89%98%EF%BC%88%E9%AB%98%E6%95%88%EF%BC%89"><span class="toc-number">3.2.2.</span> <span class="toc-text">正面示例：事件委托（高效）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%A2%9D%E5%A4%96%E4%BC%98%E5%8A%BF%EF%BC%9A%E6%94%AF%E6%8C%81%E5%8A%A8%E6%80%81%E5%85%83%E7%B4%A0"><span class="toc-number">3.2.3.</span> <span class="toc-text">额外优势：支持动态元素</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E4%B8%80%E6%AC%A1%E6%80%A7%E4%BA%8B%E4%BB%B6%EF%BC%9A%E7%94%A8-once-true-%E8%87%AA%E5%8A%A8%E8%A7%A3%E7%BB%91"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 一次性事件：用 once: true 自动解绑</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-%E6%BB%9A%E5%8A%A8-%E8%A7%A6%E6%91%B8%E4%BA%8B%E4%BB%B6%EF%BC%9A%E7%94%A8-passive-true-%E6%8F%90%E5%8D%87%E6%B5%81%E7%95%85%E5%BA%A6"><span class="toc-number">3.4.</span> <span class="toc-text">3.4 滚动&#x2F;触摸事件：用 passive: true 提升流畅度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-%E4%BA%8B%E4%BB%B6%E9%A1%BA%E5%BA%8F%E6%8E%A7%E5%88%B6%EF%BC%9A%E7%94%A8-capture-true-%E7%B2%BE%E7%A1%AE%E6%8E%A7%E5%88%B6%E4%BA%8B%E4%BB%B6%E8%A7%A6%E5%8F%91%E9%A1%BA%E5%BA%8F%EF%BC%88%E4%B8%8D%E6%98%AF%E5%B8%B8%E8%A7%84%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%9A%84%E6%89%8B%E6%AE%B5%EF%BC%89"><span class="toc-number">3.5.</span> <span class="toc-text">3.5 事件顺序控制：用 capture: true 精确控制事件触发顺序（不是常规性能优化的手段）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-6-%E4%B8%8D%E5%86%8D%E9%9C%80%E8%A6%81%E7%9A%84%E4%BA%8B%E4%BB%B6%EF%BC%9A%E7%94%A8-removeEventListener-%E5%8F%8A%E6%97%B6%E8%A7%A3%E7%BB%91%E9%81%BF%E5%85%8D%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F"><span class="toc-number">3.6.</span> <span class="toc-text">3.6 不再需要的事件：用 removeEventListener 及时解绑避免内存泄漏</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%AD%A3%E7%A1%AE%E7%A4%BA%E4%BE%8B%EF%BC%9A%E7%BB%84%E4%BB%B6%E9%94%80%E6%AF%81%E6%97%B6%E8%A7%A3%E7%BB%91"><span class="toc-number">3.6.1.</span> <span class="toc-text">正确示例：组件销毁时解绑</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E7%82%B9"><span class="toc-number">3.6.2.</span> <span class="toc-text">注意点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-7-%E4%BA%8B%E4%BB%B6%E9%80%89%E6%8B%A9%E5%8E%9F%E5%88%99"><span class="toc-number">3.7.</span> <span class="toc-text">3.7 事件选择原则</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%AE%9E%E6%88%98%E9%97%AE%E9%A2%98%EF%BC%9A%E5%B8%B8%E8%A7%81%E5%9D%91%E4%B8%8E%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-number">4.</span> <span class="toc-text">四、实战问题：常见坑与解决方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E6%BB%9A%E5%8A%A8%E4%BA%8B%E4%BB%B6%E8%A7%A6%E5%8F%91%E5%A4%AA%E9%A2%91%E7%B9%81%EF%BC%8C%E9%A1%B5%E9%9D%A2%E5%8D%A1%E9%A1%BF"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 滚动事件触发太频繁，页面卡顿</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E7%A7%BB%E5%8A%A8%E7%AB%AF%E7%82%B9%E5%87%BB%E6%9C%89-300ms-%E5%BB%B6%E8%BF%9F"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 移动端点击有 300ms 延迟</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E4%BA%8B%E4%BB%B6%E5%86%92%E6%B3%A1%E5%AF%BC%E8%87%B4%E7%88%B6%E5%85%83%E7%B4%A0%E4%BA%8B%E4%BB%B6%E8%AF%AF%E8%A7%A6%E5%8F%91"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 事件冒泡导致父元素事件误触发</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-%E5%8D%95%E9%A1%B5%E5%BA%94%E7%94%A8%E5%88%87%E6%8D%A2%E7%BB%84%E4%BB%B6%EF%BC%8C%E4%BA%8B%E4%BB%B6%E7%9B%91%E5%90%AC%E5%99%A8%E6%B2%A1%E8%A7%A3%E7%BB%91"><span class="toc-number">4.4.</span> <span class="toc-text">4.4 单页应用切换组件，事件监听器没解绑</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E7%8E%B0%E4%BB%A3%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86%E6%8A%80%E5%B7%A7%EF%BC%9A%E6%9B%B4%E9%AB%98%E6%95%88%E7%9A%84%E7%8E%A9%E6%B3%95"><span class="toc-number">5.</span> <span class="toc-text">五、现代事件处理技巧：更高效的玩法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E4%BA%8B%E4%BB%B6%E6%80%BB%E7%BA%BF%EF%BC%88Event-Bus%EF%BC%89%EF%BC%9A%E9%9D%9E%E5%85%B3%E8%81%94%E7%BB%84%E4%BB%B6%E9%80%9A%E4%BF%A1"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 事件总线（Event Bus）：非关联组件通信</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AE%80%E5%8D%95%E5%AE%9E%E7%8E%B0%E4%BA%8B%E4%BB%B6%E6%80%BB%E7%BA%BF"><span class="toc-number">5.1.1.</span> <span class="toc-text">简单实现事件总线</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-AbortController%EF%BC%9A%E7%8E%B0%E4%BB%A3%E4%BA%8B%E4%BB%B6%E7%AE%A1%E7%90%86"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 AbortController：现代事件管理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%A8-AbortController-%E5%8F%96%E6%B6%88-fetch-%E8%AF%B7%E6%B1%82"><span class="toc-number">5.2.1.</span> <span class="toc-text">用 AbortController 取消 fetch 请求</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E5%90%8E%E5%B0%8F%E6%B5%8B%E9%AA%8C"><span class="toc-number">6.</span> <span class="toc-text">最后小测验</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-history"></i><span>最近发布</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/08/15/proxy/" title="代理（Proxy）"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/cover/proxy.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="代理（Proxy）"/></a><div class="content"><a class="title" href="/2024/08/15/proxy/" title="代理（Proxy）">代理（Proxy）</a><time datetime="2024-08-15T12:46:25.000Z" title="发表于 2024-08-15 20:46:25">2024-08-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/08/14/reflect/" title="Reflect"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/cover/reflect.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Reflect"/></a><div class="content"><a class="title" href="/2024/08/14/reflect/" title="Reflect">Reflect</a><time datetime="2024-08-14T12:46:25.000Z" title="发表于 2024-08-14 20:46:25">2024-08-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/07/13/async&amp;await/" title="Async/Await 解密：原来你是这样的异步神器！"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/cover/async.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Async/Await 解密：原来你是这样的异步神器！"/></a><div class="content"><a class="title" href="/2024/07/13/async&amp;await/" title="Async/Await 解密：原来你是这样的异步神器！">Async/Await 解密：原来你是这样的异步神器！</a><time datetime="2024-07-13T12:46:25.000Z" title="发表于 2024-07-13 20:46:25">2024-07-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/07/11/generator/" title="生成器函数与 yield：暂停与恢复的艺术"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/cover/generator.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="生成器函数与 yield：暂停与恢复的艺术"/></a><div class="content"><a class="title" href="/2024/07/11/generator/" title="生成器函数与 yield：暂停与恢复的艺术">生成器函数与 yield：暂停与恢复的艺术</a><time datetime="2024-07-11T12:46:25.000Z" title="发表于 2024-07-11 20:46:25">2024-07-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/06/23/message-channel/" title="MessageChannel 及其使用场景"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/cover/messageChannel.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="MessageChannel 及其使用场景"/></a><div class="content"><a class="title" href="/2024/06/23/message-channel/" title="MessageChannel 及其使用场景">MessageChannel 及其使用场景</a><time datetime="2024-06-23T12:46:25.000Z" title="发表于 2024-06-23 20:46:25">2024-06-23</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"></div><div id="footer-bar"><div class="footer-bar-links"><div class="footer-bar-left"><div id="footer-bar-tips"><div class="copyright">&copy;2020 - 2025 By <a class="footer-bar-link" href="/" title="Touko" target="_blank">Touko</a></div></div><div id="footer-type-tips"></div><div class="js-pjax"><script>function subtitleType () {
   fetch('https://v1.hitokoto.cn')
     .then(response => response.json())
     .then(data => {
