@@ -1275,6 +1275,10 @@ document.addEventListener("DOMContentLoaded", function () {
         } else if (GLOBAL_CONFIG.mainTone.mode == "api") {
           fetchPath = GLOBAL_CONFIG.mainTone.api + path;
         }
+        if (path.startsWith("http://localhost")) {
+            localColor(path);
+            return;
+        }
         // cdn/api模式请求
         try {
           const response = await fetch(fetchPath);
@@ -1366,6 +1370,51 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
   };
+
+  function localColor(path) {
+    var img = new Image();
+    img.crossOrigin = "Anonymous";
+    img.src = path;
+    img.onload = function () {
+        var canvas = document.createElement("canvas");
+        canvas.width = this.width;
+        canvas.height = this.height;
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(this, 0, 0);
+        var data = ctx.getImageData(0, 0, this.width, this.height).data;
+        var r = 0, g = 0, b = 0;
+        var step = 5;
+        for (var i = 0; i < data.length; i += 4 * step) {
+            r += data[i];
+            g += data[i + 1];
+            b += data[i + 2];
+        }
+        r = Math.floor(r / (data.length / 4 / step));
+        g = Math.floor(g / (data.length / 4 / step));
+        b = Math.floor(b / (data.length / 4 / step));
+        var value = "#" + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
+        if (getContrastYIQ(value) == "light") {
+            value = LightenDarkenColor(colorHex(value), -40)
+        }
+
+        const root = document.querySelector(":root");
+        root.style.setProperty("--anzhiyu-bar-background", value);
+        requestAnimationFrame(() => {
+          anzhiyu.initThemeColor();
+        });
+        if (GLOBAL_CONFIG.mainTone.cover_change) {
+            document.documentElement.style.setProperty("--anzhiyu-main", value);
+            document.documentElement.style.setProperty(
+              "--anzhiyu-theme-op",
+              getComputedStyle(document.documentElement).getPropertyValue("--anzhiyu-main") + "23"
+            );
+            document.documentElement.style.setProperty(
+              "--anzhiyu-theme-op-deep",
+              getComputedStyle(document.documentElement).getPropertyValue("--anzhiyu-main") + "dd"
+            );
+        }
+    }
+}
 
   //RGB颜色转化为16进制颜色
   const colorHex = str => {

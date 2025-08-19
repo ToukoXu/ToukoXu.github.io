@@ -9220,12 +9220,13 @@ h1.page-title + .tag-cloud-list {
 }
 #aside-content .card-widget .author-info__bottom-group .author-info__name {
   text-align: left;
-  font-weight: 700;
+  font-weight: 400;
   color: var(--anzhiyu-white);
   font-size: 20px;
   line-height: 1;
   margin-bottom: 5px;
   margin-top: 0;
+  font-family: 'Shina Baby', sans-serif;
 }
 #aside-content .card-widget .author-info__bottom-group .author-info__desc {
   font-size: 12px;
@@ -10453,7 +10454,7 @@ h1.page-title + .tag-cloud-list {
   margin-right: 1rem;
   color: var(--anzhiyu-fontcolor);
   font-size: 1rem;
-  font-weight: bold;
+  font-family: 'Shina Baby', sans-serif;
   white-space: nowrap;
 }
 #footer-bar .footer-bar-link.cc i {
@@ -11535,13 +11536,13 @@ h1.page-title + .tag-cloud-list {
   color: var(--white);
 }
 #nav #site-name {
-  font-weight: bold;
   cursor: pointer;
   -webkit-transition: 0.3s !important;
   -moz-transition: 0.3s !important;
   -o-transition: 0.3s !important;
   -ms-transition: 0.3s !important;
   transition: 0.3s !important;
+  font-family: 'Shina Baby', sans-serif;
 }
 #nav .menus_items {
   display: inline;
@@ -14406,9 +14407,9 @@ blockquote {
 #post .post-copyright__author_box .post-copyright__author_name {
   text-align: center;
   font-size: 20px;
-  font-weight: 700;
   color: var(--anzhiyu-fontcolor);
   line-height: 1;
+  font-family: 'Shina Baby', sans-serif;
 }
 #post .post-copyright__author_box .post-copyright__author_desc {
   text-align: center;
