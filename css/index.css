@@ -16338,7 +16338,7 @@ li.card-category-list-item {
   transform: rotate(360deg);
 }
 #vcomment textarea {
-  background: url("/img/comment_bg.png") 100% 100% no-repeat;
+  background: url("https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/site/comment_bg.webp") 100% 100% no-repeat;
 }
 #vcomment textarea:focus {
   background-image: none;
