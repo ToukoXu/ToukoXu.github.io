@@ -1,71 +1,92 @@
-<?xml version="1.0"?>
-<?xml-stylesheet type="text/xsl" href="sitemap.xsl"?>
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type="text/xsl" href="sitemap.xsl"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>http://toukoxu.github.io</loc>
-    <lastmod>2025-08-21T12:21:56+08:00</lastmod>
-    <priority>1</priority>
-    <changefreq>daily</changefreq>
-  </url>
-  <url>
-    <loc>http://toukoxu.github.io/2024/08/15/proxy/</loc>
-    <lastmod>2024-08-15T20:46:25+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>http://toukoxu.github.io/2024/08/14/reflect/</loc>
-    <lastmod>2024-08-15T20:46:25+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>http://toukoxu.github.io/2024/07/11/generator/</loc>
-    <lastmod>2024-07-13T20:46:25+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>http://toukoxu.github.io/2024/07/13/async+await/</loc>
-    <lastmod>2024-07-13T20:46:25+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>http://toukoxu.github.io/2024/06/23/message-channel/</loc>
-    <lastmod>2024-06-23T20:46:25+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>http://toukoxu.github.io/2024/06/14/iterator/</loc>
-    <lastmod>2024-06-14T20:46:25+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>http://toukoxu.github.io/2022/02/01/event/</loc>
-    <lastmod>2022-02-01T20:46:25+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>http://toukoxu.github.io/2021/05/02/prototype-chain/</loc>
-    <lastmod>2021-05-02T20:46:25+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>http://toukoxu.github.io/2021/04/03/closure/</loc>
-    <lastmod>2021-04-03T20:46:25+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>http://toukoxu.github.io/2021/03/16/scope-chain/</loc>
-    <lastmod>2021-04-03T20:46:25+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
+
+    <url>
+        <loc>http://toukoxu.github.io/</loc>
+        <changefreq>daily</changefreq>
+        <priority>1</priority>
+    </url>
+
+
+    <url>
+        <loc>http://toukoxu.github.io/2024/08/15/proxy/</loc>
+        <lastmod>2024-08-15T12:46:25.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://toukoxu.github.io/2024/08/14/reflect/</loc>
+        <lastmod>2024-08-15T12:46:25.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://toukoxu.github.io/2024/07/13/async+await/</loc>
+        <lastmod>2024-07-13T12:46:25.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://toukoxu.github.io/2024/07/11/generator/</loc>
+        <lastmod>2024-07-13T12:46:25.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://toukoxu.github.io/2024/06/23/message-channel/</loc>
+        <lastmod>2024-06-23T12:46:25.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://toukoxu.github.io/2024/06/14/iterator/</loc>
+        <lastmod>2024-06-14T12:46:25.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://toukoxu.github.io/2022/02/01/event/</loc>
+        <lastmod>2022-02-01T12:46:25.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://toukoxu.github.io/2021/05/02/prototype-chain/</loc>
+        <lastmod>2021-05-02T12:46:25.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://toukoxu.github.io/2021/04/03/closure/</loc>
+        <lastmod>2021-04-03T12:46:25.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://toukoxu.github.io/2021/03/16/scope-chain/</loc>
+        <lastmod>2021-04-03T12:46:25.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
 </urlset>
-<!-- XML Sitemap generated by Dimas Lanjaka -->
+<!-- XML Sitemap generated by Hexo SEO Friendly Sitemap Generator -->
