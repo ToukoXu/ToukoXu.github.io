@@ -1275,7 +1275,7 @@ document.addEventListener("DOMContentLoaded", function () {
         } else if (GLOBAL_CONFIG.mainTone.mode == "api") {
           fetchPath = GLOBAL_CONFIG.mainTone.api + path;
         }
-        if (path.startsWith("http://localhost")) {
+        if (path.startsWith("http://localhost") || path.endsWith(".webp")) {
             localColor(path);
             return;
         }
@@ -1413,6 +1413,7 @@ document.addEventListener("DOMContentLoaded", function () {
               getComputedStyle(document.documentElement).getPropertyValue("--anzhiyu-main") + "dd"
             );
         }
+        canvas.remove();
     }
 }
 
