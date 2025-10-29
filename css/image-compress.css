@@ -1,0 +1,154 @@
+#ic-container {
+  .ic-progress-container {
+    margin-bottom: 30px;
+  }
+
+  .ic-progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+
+  .ic-progress-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #2d3748;
+  }
+
+  .ic-progress-bar {
+    height: 12px;
+    background-color: #edf2f7;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .ic-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--anzhiyu-theme), #8e7dff);
+    border-radius: 10px;
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+
+  .ic-images-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+
+    &:has(.ic-empty-state) {
+      display: flex;
+      justify-content: center;
+    }
+  }
+
+  .ic-image-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+  }
+
+  .ic-image-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .ic-image-preview {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .ic-image-info {
+    padding: 15px;
+  }
+
+  .ic-image-name {
+    font-weight: 600;
+    margin-bottom: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .ic-image-details {
+    display: flex;
+    justify-content: space-between;
+    color: #718096;
+    font-size: 0.85rem;
+    margin-bottom: 12px;
+  }
+
+  .ic-image-status {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    font-size: 0.9rem;
+  }
+
+  .ic-status-icon {
+    margin-right: 8px;
+    font-size: 1.1rem;
+  }
+
+  .ic-status-waiting {
+    color: var(--project-info);
+  }
+
+  .ic-status-processing {
+    color: var(--project-primary);
+  }
+
+  .ic-status-completed {
+    color: var(--project-success);
+  }
+
+  .ic-status-error {
+    color: var(--project-danger);
+  }
+
+  .ic-image-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .ic-global-actions {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #e2e8f0;
+  }
+
+  .ic-empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #a0aec0;
+  }
+
+  .ic-empty-icon {
+    font-size: 60px;
+    margin-bottom: 15px;
+    opacity: 0.5;
+  }
+
+  .ic-add-prefix-options {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  #ic-container {
+    .ic-images-container {
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    }
+  }
+}

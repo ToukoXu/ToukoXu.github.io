@@ -1,0 +1,707 @@
+<!DOCTYPE html><html lang="zh" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"><title>生成器函数与 yield：掌控函数执行的 “暂停键” | Touko</title><meta name="keywords" content="JavaScript,ES6"><meta name="author" content="Touko"><meta name="copyright" content="Touko"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#f7f9fe"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-touch-fullscreen" content="yes"><meta name="apple-mobile-web-app-title" content="生成器函数与 yield：掌控函数执行的 “暂停键”"><meta name="application-name" content="生成器函数与 yield：掌控函数执行的 “暂停键”"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="#f7f9fe"><meta property="og:type" content="article"><meta property="og:title" content="生成器函数与 yield：掌控函数执行的 “暂停键”"><meta property="og:url" content="http://toukoxu.github.io/archives/generator/index.html"><meta property="og:site_name" content="Touko"><meta property="og:description" content="生成器函数是 ES6 里很实用的特性，而 yield 就像给函数装了个 “暂停开关”—— 能让函数执行到一半停下来，需要的时候再接着跑。这种 “可控的执行流程”，在处理异步操作、遍历大数据、实现状态切换时特别好用。  一、生成器：能 “中场休息” 的特殊函数1.1 什么是生成器函数？生成器函数是可"><meta property="og:locale" content="zh"><meta property="og:image" content="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/cover/generator.webp"><meta property="article:author" content="Touko"><meta property="article:tag"><meta name="twitter:card" content="summary"><meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/cover/generator.webp"><meta name="description" content="生成器函数是 ES6 里很实用的特性，而 yield 就像给函数装了个 “暂停开关”—— 能让函数执行到一半停下来，需要的时候再接着跑。这种 “可控的执行流程”，在处理异步操作、遍历大数据、实现状态切换时特别好用。  一、生成器：能 “中场休息” 的特殊函数1.1 什么是生成器函数？生成器函数是可"><link rel="shortcut icon" href="/favicon.ico"><link rel="canonical" href="http://toukoxu.github.io/archives/generator/"><link rel="preconnect" href="//cdn.cbd.int"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="google-site-verification" content="xxx"/><meta name="baidu-site-verification" content="code-xxx"/><meta name="msvalidate.01" content="xxx"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.cbd.int/@fancyapps/ui@5.0.28/dist/fancybox/fancybox.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/anzhiyu-theme-static@1.0.0/swiper/swiper.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  linkPageTop: undefined,
+  peoplecanvas: undefined,
+  postHeadAiDescription: undefined,
+  diytitle: {"enable":true,"leaveTitle":"w(ﾟДﾟ)w 不要走！再看看嘛！","backTitle":"♪(^∇^*)欢迎肥来！"},
+  LA51: {"enable":true,"ck":"3NsfNkdtkVbxAr4D","LingQueMonitorID":"3NsfQzcXKkH79lbY"},
+  greetingBox: {"enable":true,"default":"晚上好👋","list":[{"greeting":"晚安😴","startTime":0,"endTime":5},{"greeting":"早上好鸭👋, 祝你一天好心情！","startTime":6,"endTime":9},{"greeting":"上午好👋, 状态很好，鼓励一下～","startTime":10,"endTime":10},{"greeting":"11点多啦, 在坚持一下就吃饭啦～","startTime":11,"endTime":11},{"greeting":"午安👋, 宝贝","startTime":12,"endTime":14},{"greeting":"🌈充实的一天辛苦啦！","startTime":14,"endTime":18},{"greeting":"19点喽, 奖励一顿丰盛的大餐吧🍔。","startTime":19,"endTime":19},{"greeting":"晚上好👋, 在属于自己的时间好好放松😌~","startTime":20,"endTime":24}]},
+  twikooEnvId: '',
+  commentBarrageConfig:undefined,
+  music_page_default: "nav_music",
+  root: '/',
+  preloader: {"source":3},
+  friends_vue_info: undefined,
+  navMusic: true,
+  mainTone: {"mode":"both","api":"https://img2color-go.vercel.app/api?img=","cover_change":true},
+  authorStatus: {"skills":["🤖️ 科技爱好者","🔨 开发一条龙","🌌 Hello World 宇宙","⌨️ 键盘撸猫区","🐱 万物皆可rua"]},
+  algolia: {"appId":"PYE1KWH569","apiKey":"cf60fd4b204d6ed4fc261c973f2a5489","indexName":"blog","hits":{"per_page":6},"languages":{"input_placeholder":"输入关键词后按下回车查找","hits_empty":"找不到您查询的内容：${query}","hits_stats":"找到 ${hits} 条结果，用时 ${time} 毫秒"}},
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简","rightMenuMsgToTraditionalChinese":"转为繁体","rightMenuMsgToSimplifiedChinese":"转为简体"},
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"本文最后一次更新为","messageNext":"天前，文章中的某些内容可能已过时！"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":330},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    simplehomepage: true,
+    post: false
+  },
+  runtime: '天',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"copy":true,"copyrightEbable":true,"limitCount":50,"languages":{"author":"作者: Touko","link":"链接: ","source":"来源: Touko","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。","copySuccess":"复制成功，复制和转载请标注本文地址"},"ignore":["/projects/image-base64","/projects/text-diff"]},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#425AEF","bgDark":"#1f1f1f","position":"top-center"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.min.js',
+      css: 'https://cdn.cbd.int/flickr-justified-gallery@2.1.2/dist/fjGallery.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: true,
+  shortcutKey: undefined,
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  configTitle: 'Touko',
+  title: '生成器函数与 yield：掌控函数执行的 “暂停键”',
+  postAI: '',
+  pageFillDescription: '一、生成器：能 中场休息 的特殊函数, 1.1 什么是生成器函数？, 1.2 生成器对象的核心方法, 1.3 必须注意的两个点, 二、yield：生成器的 暂停开关 与 数据通道, 2.1 yield 的两个核心作用, 2.2 yield 的使用限制, 三、生成器的实际用途：这些场景用它很顺手, 3.1 自定义迭代器：轻松遍历复杂数据, 3.2 无限序列：按需生成不占内存, 3.3 异步流程管理：async / await 之前的方案, 3.4 状态机：清晰管理状态切换, 四、yield*：生成器的 委托执行, 4.1 基本用法：委托执行其他生成器, 4.2 实用场景：递归遍历树形结构, 五、生成器最佳实践：避坑与优化, 5.1 资源清理：用 try…finally 确保释放, 5.2 避免无限循环：加安全边界, 5.3 异常处理：用 throw () 抛错try / catch 捕获, 六、生成器 vs 普通函数：核心差异对比生成器函数是里很实用的特性而就像给函数装了个暂停开关能让函数执行到一半停下来需要的时候再接着跑这种可控的执行流程在处理异步操作遍历大数据实现状态切换时特别好用一生成器能中场休息的特殊函数什么是生成器函数生成器函数是可以暂停执行后续恢复的特殊函数它的语法很容易识别用定义内部用控制暂停举个最简单的例子感受下它的暂停恢复能力用定义生成器函数第一步准备第二步执行第三步完成的值会作为最后一次的调用生成器函数不会立即执行而是返回一个生成器对象类似控制器调用恢复执行直到遇到下一个或输出第一步准备执行到第一个暂停输出第二步执行恢复后到第二个暂停输出第三步完成恢复后执行到生成器结束生成器对象的核心方法生成器对象比如上面的有三个关键方法用来控制函数执行方法作用示例恢复执行可给上一个传值传入的数据提前结束生成器后续都会返回提前终止向生成器内部抛错可在生成器里用捕获出错了必须注意的两个点箭头函数不能做生成器箭头函数没有自己的和也不支持所以没法写成这种形式调用生成器不立即执行和普通函数不同调用后不会跑函数体而是先返回生成器对象必须调用才会开始执行二生成器的暂停开关与数据通道不只是暂停键还能在生成器和外部之间传递数据相当于一个双向通道的两个核心作用暂停执行向外传值表达式会让函数暂停同时把表达式的值传给外部通过获取苹果暂停时向外传苹果香蕉再次暂停时向外传香蕉拿到苹果拿到香蕉接收外部传入的值外部调用值时这个值会作为上一个表达式的返回值传给生成器内部第一个向外传你叫什么名字暂停后等待外部传值你叫什么名字外部传值后恢复执行用收到的拼接新内容再向外传你好第一次执行到第一个拿到你叫什么名字第二次小明把小明传给上一个作为的值执行到第二个小明输出你好小明注意值的值只给上一个如果是第一次调用传值是无效的因为此时还没有执行过任何的使用限制只能在生成器函数内部用哪怕是生成器里的嵌套函数也不行否则会报错错误不能在的回调里用超出了生成器函数的直接作用域原理和类似嵌套函数的不能直接让外层函数返回也无法跨越函数边界三生成器的实际用途这些场景用它很顺手生成器不是花架子实际开发中很多场景都能用到分享几个高频用法自定义迭代器轻松遍历复杂数据里的循环需要可迭代对象比如数组字符串而生成器可以轻松创建自定义的迭代器不用手动实现比如实现一个指定范围的数字迭代器生成从到步长为的数字每次迭代返回一个数字用遍历生成器生成器对象默认是可迭代的输出也可以用转成数组输出无限序列按需生成不占内存如果需要无限循环的序列比如斐波那契数列用普通函数会陷入死循环但生成器可以按需产出想要多少要多少生成无限的斐波那契数列无限循环但不会卡因为每次都会暂停产出当前项更新下一项想要几项就调用几次什么时候停完全由外部控制异步流程管理之前的方案在用同步的方式写异步真香普及前生成器常用来简化异步代码避免回调地狱核心思路是用暂停等待异步结果拿到结果后再恢复执行模拟两个异步请求小明手机用生成器管理异步流程等待完成拿到用户数据用用户发起第二个请求等待完成返回最终结果自动执行器帮我们调用不用手动处理异步递归处理异步结果生成器结束返回最终结果结果是等待完成后把数据传给下一个执行异步流程最终结果秒后输出小明手机现在虽然更常用但理解这种思路能帮你更好地掌握异步编程的本质状态机清晰管理状态切换比如交通灯的红绿黄循环用生成器实现状态切换逻辑特别清晰交通灯状态机红灯等待秒绿灯通行秒黄灯准备秒每次调用切换一次状态红灯等待秒绿灯通行秒黄灯准备秒红灯等待秒循环四生成器的委托执行如果一个生成器需要调用另一个生成器可以用实现委托让被调用的生成器先执行完再回到当前生成器基本用法委托执行其他生成器生成器生成器委托执行委托先把执行完遍历看看顺序输出可以看到会让的所有先执行再继续后续的代码实用场景递归遍历树形结构比如遍历树文件夹目录这种层级结构用递归委托特别方便遍历树形结构比如树先产出当前节点如果有子节点递归委托遍历子节点遍历下的所有节点依次输出等标签名五生成器最佳实践避坑与优化资源清理用确保释放如果生成器里用到了需要手动释放的资源比如文件句柄网络连接一定要用哪怕生成器被提前终止比如调用里的代码也会执行避免资源泄漏模拟获取资源比如打开文件使用资源处理数据继续使用资源无论生成器正常结束还是提前终止都会执行这里释放资源执行到第一个提前结束提前终止会触发里的避免无限循环加安全边界除非确实需要无限序列比如斐波那契否则一定要给生成器加终止条件避免不小心写成死循环导致内存溢出安全的生成器最多生成个值终止条件到就停异常处理用抛错捕获如果生成器执行中需要处理错误可以在外部调用错误然后在生成器内部用捕获正常执行中这一步可能出错捕获外部抛入的错误捕获到错误输出正常执行中向生成器抛错测试错误输出捕获到错误测试错误六生成器普通函数核心差异对比特性普通函数生成器函数执行流程一旦开始必须执行完可暂停可恢复返回值只能返回一次值可多次返回值最后一次是收尾内存效率一次性处理所有数据大数据易内存溢出按需生成值处理大数据更高效状态保持执行完后局部变量销毁不保持状态暂停时保留局部变量状态恢复后继续使用定义语法函数名函数名生成器的核心价值在于可控的执行流程和按需产出数据它不像那样专门解决异步问题而是在迭代状态管理大数据处理等场景都能发挥作用如果你需要更灵活地控制函数执行或者想简化复杂的遍历逻辑不妨试试生成器',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-07-13 20:46:25',
+  postMainColor: '',
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#18171d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#f7f9fe')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><link href="https://fonts.cdnfonts.com/css/shina-baby" rel="stylesheet"><link rel="alternate" type="application/rss+xml" title="Touko" href="http://toukoxu.github.io/rss.xml"><link rel="alternate" type="application/atom+xml" title="Touko" href="http://toukoxu.github.io/atom.xml"><link rel="alternate" type="application/json" title="Touko" href="http://toukoxu.github.io/feed.json"><meta name="generator" content="Hexo 7.3.0"></head><body data-type="anzhiyu"><div id="web_bg"></div><div id="an_music_bg"></div><div id="loading-box" onclick="document.getElementById(&quot;loading-box&quot;).classList.add(&quot;loaded&quot;)"><div class="loading-bg"><img class="loading-img nolazyload" alt="加载头像" src="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/site/loading.webp"/><div class="loading-image-dot"></div></div></div><script>const preloader = {
+  endLoading: () => {
+    document.getElementById('loading-box').classList.add("loaded");
+  },
+  initLoading: () => {
+    document.getElementById('loading-box').classList.remove("loaded")
+  }
+}
+window.addEventListener('load',()=> { preloader.endLoading() })
+setTimeout(function(){preloader.endLoading();},10000)
+
+if (true) {
+  document.addEventListener('pjax:send', () => { preloader.initLoading() })
+  document.addEventListener('pjax:complete', () => { preloader.endLoading() })
+}</script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.10/progress_bar/progress_bar.css"/><script async="async" src="https://cdn.cbd.int/pace-js@1.2.4/pace.min.js" data-pace-options="{ &quot;restartOnRequestAfter&quot;:false,&quot;eventLag&quot;:false}"></script><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><div id="nav-group"><span id="blog_name"><div class="back-home-button"><i class="anzhiyufont anzhiyu-icon-grip-vertical"></i><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">网页</div><div class="back-menu-list"><a class="back-menu-item" href="https://toukoxu.github.io/" title="博客" target="_blank"><img class="back-menu-item-icon" src="/img/favicon.ico" alt="博客"/><span class="back-menu-item-text">博客</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">图片工具</div><div class="back-menu-list"><a class="back-menu-item" href="/projects/image-base64" title="图片转Base64" target="_blank"><img class="back-menu-item-icon" src="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/gif/picture.gif" alt="图片转Base64"/><span class="back-menu-item-text">图片转Base64</span></a><a class="back-menu-item" href="/projects/image-webp" title="图片转WebP" target="_blank"><img class="back-menu-item-icon" src="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/gif/picture.gif" alt="图片转WebP"/><span class="back-menu-item-text">图片转WebP</span></a><a class="back-menu-item" href="/projects/image-compress" title="图片压缩" target="_blank"><img class="back-menu-item-icon" src="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/gif/picture.gif" alt="图片压缩"/><span class="back-menu-item-text">图片压缩</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">文本工具</div><div class="back-menu-list"><a class="back-menu-item" href="/projects/text-diff" title="文本差异对比" target="_blank"><img class="back-menu-item-icon" src="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/gif/text.gif" alt="文本差异对比"/><span class="back-menu-item-text">文本差异对比</span></a><a class="back-menu-item" href="/projects/image-base64" title="CSS/JS压缩" target="_blank"><img class="back-menu-item-icon" src="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/gif/text.gif" alt="CSS/JS压缩"/><span class="back-menu-item-text">CSS/JS压缩</span></a></div></div></div></div><a id="site-name" href="/" accesskey="h"><div class="title">Touko</div><i class="anzhiyufont anzhiyu-icon-house-chimney"></i></a></span><div class="mask-name-container"><div id="name-container"><a id="page-name" href="javascript:anzhiyu.scrollToDest(0, 500)">PAGE_NAME</a></div></div><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 文章</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><i class="anzhiyufont anzhiyu-icon-box-archive faa-tada" style="font-size: 0.9em;"></i><span> 总览</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><i class="anzhiyufont anzhiyu-icon-shapes faa-tada" style="font-size: 0.9em;"></i><span> 分类</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags faa-tada" style="font-size: 0.9em;"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 我的</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/music/"><i class="anzhiyufont anzhiyu-icon-music faa-tada" style="font-size: 0.9em;"></i><span> 音乐馆</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/album/"><i class="anzhiyufont anzhiyu-icon-images faa-tada" style="font-size: 0.9em;"></i><span> 相册集</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/comments/"><i class="anzhiyufont anzhiyu-icon-envelope faa-tada" style="font-size: 0.9em;"></i><span> 留言板</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 关于</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/about/"><i class="anzhiyufont anzhiyu-icon-paper-plane faa-tada" style="font-size: 0.9em;"></i><span> 关于本人</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/essay/"><i class="anzhiyufont anzhiyu-icon-lightbulb faa-tada" style="font-size: 0.9em;"></i><span> 闲言碎语</span></a></li><li><a class="site-page child faa-parent animated-hover" href="javascript:toRandomPost()"><i class="anzhiyufont anzhiyu-icon-shoe-prints1 faa-tada" style="font-size: 0.9em;"></i><span> 随便逛逛</span></a></li></ul></div></div></div><div id="nav-right"><div class="nav-button" id="randomPost_button"><a class="site-page" onclick="toRandomPost()" title="随机前往一个文章" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-dice"></i></a></div><div class="nav-button" id="search-button"><a class="site-page social-icon search" href="javascript:void(0);" title="搜索🔍" accesskey="s"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span> 搜索</span></a></div><input id="center-console" type="checkbox"/><label class="widget" for="center-console" title="中控台" onclick="anzhiyu.switchConsole();"><i class="left"></i><i class="widget center"></i><i class="widget right"></i></label><div id="console"><div class="console-card-group-reward"><ul class="reward-all console-card"><li class="reward-item"><a href="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/pay/wechat.webp" target="_blank"><img class="post-qr-code-img" alt="微信" src="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/pay/wechat.webp"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/pay/alipay.webp" target="_blank"><img class="post-qr-code-img" alt="支付宝" src="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/pay/alipay.webp"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div><div class="console-card-group"><div class="console-card-group-left"><div class="console-card" id="card-newest-comments"><div class="card-content"><div class="author-content-item-tips">互动</div><span class="author-content-item-title"> 最新评论</span></div><div class="aside-list"><span>正在加载中...</span></div></div></div><div class="console-card-group-right"><div class="console-card tags"><div class="card-content"><div class="author-content-item-tips">音乐</div><span class="author-content-item-title">灵魂的碰撞💥</span></div></div><div class="console-card history"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-box-archiv"></i><span>文章</span></div><div class="card-archives"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/08/"><span class="card-archive-list-date">August 2024</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">2</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/07/"><span class="card-archive-list-date">July 2024</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">2</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2024/06/"><span class="card-archive-list-date">June 2024</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">2</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2022/02/"><span class="card-archive-list-date">February 2022</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">1</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2021/05/"><span class="card-archive-list-date">May 2021</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">1</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2021/04/"><span class="card-archive-list-date">April 2021</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">1</span><span>篇</span></div></a></li><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2021/03/"><span class="card-archive-list-date">March 2021</span><div class="card-archive-list-count-group"><span class="card-archive-list-count">1</span><span>篇</span></div></a></li></ul></div><hr/></div></div></div><div class="button-group"><div class="console-btn-item"><a class="darkmode_switchbutton" title="显示模式切换" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-moon"></i></a></div><div class="console-btn-item" id="consoleHideAside" onclick="anzhiyu.hideAsideBtn()" title="边栏显示控制"><a class="asideSwitch"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></a></div><div class="console-btn-item" id="consoleMusic" onclick="anzhiyu.musicToggle()" title="音乐开关"><a class="music-switch"><i class="anzhiyufont anzhiyu-icon-music"></i></a></div></div><div class="console-mask" onclick="anzhiyu.hideConsole()" href="javascript:void(0);"></div></div><div class="nav-button" id="nav-totop"><a class="totopbtn" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i><span id="percent" onclick="anzhiyu.scrollToDest(0,500)">0</span></a></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);" title="切换"><i class="anzhiyufont anzhiyu-icon-bars"></i></a></div></div></div></nav><div id="post-info"><div id="post-firstinfo"><div class="meta-firstline"><a class="post-meta-original">原创</a><span class="post-meta-categories"><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-inbox post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%89%8D%E7%AB%AF/" itemprop="url">前端</a></span><span class="article-meta tags"><a class="article-meta__tags" href="/tags/JavaScript/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>JavaScript</span></a><a class="article-meta__tags" href="/tags/ES6/" tabindex="-1" itemprop="url"> <span> <i class="anzhiyufont anzhiyu-icon-hashtag"></i>ES6</span></a></span></div></div><h1 class="post-title" itemprop="name headline">生成器函数与 yield：掌控函数执行的 “暂停键”</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="anzhiyufont anzhiyu-icon-calendar-days post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" itemprop="dateCreated datePublished" datetime="2024-07-11T12:46:25.000Z" title="发表于 2024-07-11 20:46:25">2024-07-11</time><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-history post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" itemprop="dateCreated datePublished" datetime="2024-07-13T12:46:25.000Z" title="更新于 2024-07-13 20:46:25">2024-07-13</time></span></div><div class="meta-secondline"><span class="post-meta-separator"></span><span class="post-meta-wordcount"><i class="anzhiyufont anzhiyu-icon-file-word post-meta-icon" title="文章字数"></i><span class="post-meta-label" title="文章字数">字数总计:</span><span class="word-count" title="文章字数">2.8k</span><span class="post-meta-separator"></span><i class="anzhiyufont anzhiyu-icon-clock post-meta-icon" title="阅读时长"></i><span class="post-meta-label" title="阅读时长">阅读时长:</span><span>9分钟</span></span><span class="post-meta-separator"></span><span class="post-meta-pv-cv" id="" data-flag-title="生成器函数与 yield：掌控函数执行的 “暂停键”"><i class="anzhiyufont anzhiyu-icon-fw-eye post-meta-icon"></i><span class="post-meta-label" title="阅读量">阅读量:</span><span id="busuanzi_value_page_pv"><i class="anzhiyufont anzhiyu-icon-spinner anzhiyu-spin"></i></span></span><span class="post-meta-separator">       </span><span class="post-meta-position" title="作者IP属地为上海"><i class="anzhiyufont anzhiyu-icon-location-dot"></i>上海</span></div></div></div><section class="main-hero-waves-area waves-area"><svg class="waves-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M -160 44 c 30 0 58 -18 88 -18 s 58 18 88 18 s 58 -18 88 -18 s 58 18 88 18 v 44 h -352 Z"></path></defs><g class="parallax"><use href="#gentle-wave" x="48" y="0"></use><use href="#gentle-wave" x="48" y="3"></use><use href="#gentle-wave" x="48" y="5"></use><use href="#gentle-wave" x="48" y="7"></use></g></svg></section><div id="post-top-cover"><img class="nolazyload" id="post-top-bg" src="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/cover/generator.webp"></div></header><main id="blog-container"><div class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container" itemscope itemtype="http://toukoxu.github.io/archives/generator/"><header><a class="post-meta-categories" href="/categories/%E5%89%8D%E7%AB%AF/" itemprop="url">前端</a><a href="/tags/JavaScript/" tabindex="-1" itemprop="url">JavaScript</a><a href="/tags/ES6/" tabindex="-1" itemprop="url">ES6</a><h1 id="CrawlerTitle" itemprop="name headline">生成器函数与 yield：掌控函数执行的 “暂停键”</h1><span itemprop="author" itemscope itemtype="http://schema.org/Person">Touko</span><time itemprop="dateCreated datePublished" datetime="2024-07-11T12:46:25.000Z" title="发表于 2024-07-11 20:46:25">2024-07-11</time><time itemprop="dateCreated datePublished" datetime="2024-07-13T12:46:25.000Z" title="更新于 2024-07-13 20:46:25">2024-07-13</time></header><blockquote>
+<p>生成器函数是 ES6 里很实用的特性，而 <code>yield</code> 就像给函数装了个 “暂停开关”—— 能让函数执行到一半停下来，需要的时候再接着跑。这种 “可控的执行流程”，在处理异步操作、遍历大数据、实现状态切换时特别好用。</p>
+</blockquote>
+<h2 id="一、生成器：能“中场休息”的特殊函数"><a href="#一、生成器：能“中场休息”的特殊函数" class="headerlink" title="一、生成器：能“中场休息”的特殊函数"></a>一、生成器：能 “中场休息” 的特殊函数</h2><h3 id="1-1-什么是生成器函数？"><a href="#1-1-什么是生成器函数？" class="headerlink" title="1.1 什么是生成器函数？"></a>1.1 什么是生成器函数？</h3><p><strong>生成器函数是可以暂停执行、后续恢复的特殊函数</strong>，它的语法很容易识别：用 <code>function*</code> 定义，内部用 <code>yield</code> 控制暂停。</p>
+<p>举个最简单的例子，感受下它的 “暂停 - 恢复” 能力：</p>
+<figure class="highlight javascript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 用 function* 定义生成器函数</span></span><br><span class="line"><span class="keyword">function</span>* <span class="title function_">stepGenerator</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="keyword">yield</span> <span class="string">'第一步：准备'</span>;</span><br><span class="line">  <span class="keyword">yield</span> <span class="string">'第二步：执行'</span>;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">'第三步：完成'</span>; <span class="comment">// return 的值会作为最后一次 next() 的 value</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 调用生成器函数：不会立即执行，而是返回一个“生成器对象”（类似控制器）</span></span><br><span class="line"><span class="keyword">const</span> generator = <span class="title function_">stepGenerator</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 调用 next() 恢复执行，直到遇到下一个 yield 或 return</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(generator.<span class="title function_">next</span>().<span class="property">value</span>); <span class="comment">// 输出“第一步：准备”（执行到第一个 yield 暂停）</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(generator.<span class="title function_">next</span>().<span class="property">value</span>); <span class="comment">// 输出“第二步：执行”（恢复后到第二个 yield 暂停）</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(generator.<span class="title function_">next</span>().<span class="property">value</span>); <span class="comment">// 输出“第三步：完成”（恢复后执行到 return，生成器结束）</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="1-2-生成器对象的核心方法"><a href="#1-2-生成器对象的核心方法" class="headerlink" title="1.2 生成器对象的核心方法"></a>1.2 生成器对象的核心方法</h3><p>生成器对象（比如上面的 <code>generator</code>）有三个关键方法，用来控制函数执行：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>作用</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>next(value)</code></td>
+<td>恢复执行，可给上一个 <code>yield</code> 传值</td>
+<td><code>generator.next('传入的数据')</code></td>
+</tr>
+<tr>
+<td><code>return(value)</code></td>
+<td>提前结束生成器，后续 <code>next()</code> 都会返回 <code>done: true</code></td>
+<td><code>generator.return('提前终止')</code></td>
+</tr>
+<tr>
+<td><code>throw(error)</code></td>
+<td>向生成器内部抛错，可在生成器里用 <code>try/catch</code> 捕获</td>
+<td><code>generator.throw(new Error('出错了'))</code></td>
+</tr>
+</tbody></table>
+<h3 id="1-3-必须注意的两个点"><a href="#1-3-必须注意的两个点" class="headerlink" title="1.3 必须注意的两个点"></a>1.3 必须注意的两个点</h3><ol>
+<li><p>箭头函数不能做生成器<br>箭头函数没有自己的 <code>this</code> 和 <code>arguments</code>，也不支持 <code>yield</code>，所以没法写成 <code>()* =&gt; {}</code> 这种形式。</p>
+</li>
+<li><p>调用生成器不立即执行<br>和普通函数不同，<code>stepGenerator()</code> 调用后不会跑函数体，而是先返回生成器对象 —— 必须调用 <code>next()</code> 才会开始执行。</p>
+</li>
+</ol>
+<h2 id="二、yield：生成器的“暂停开关”与“数据通道”"><a href="#二、yield：生成器的“暂停开关”与“数据通道”" class="headerlink" title="二、yield：生成器的“暂停开关”与“数据通道”"></a>二、yield：生成器的 “暂停开关” 与 “数据通道”</h2><p><code>yield</code> 不只是 “暂停键”，还能在生成器和外部之间传递数据，相当于一个 “双向通道”。</p>
+<h3 id="2-1-yield-的两个核心作用"><a href="#2-1-yield-的两个核心作用" class="headerlink" title="2.1 yield 的两个核心作用"></a>2.1 yield 的两个核心作用</h3><ol>
+<li>暂停执行，向外传值<br><code>yield 表达式</code> 会让函数暂停，同时把 “表达式的值” 传给外部（通过 <code>next().value</code> 获取）：</li>
+</ol>
+<figure class="highlight javascript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span>* <span class="title function_">fruitGenerator</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="keyword">yield</span> <span class="string">'苹果'</span>; <span class="comment">// 暂停时，向外传“苹果”</span></span><br><span class="line">  <span class="keyword">yield</span> <span class="string">'香蕉'</span>; <span class="comment">// 再次暂停时，向外传“香蕉”</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> gen = <span class="title function_">fruitGenerator</span>();</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(gen.<span class="title function_">next</span>().<span class="property">value</span>); <span class="comment">// 拿到“苹果”</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(gen.<span class="title function_">next</span>().<span class="property">value</span>); <span class="comment">// 拿到“香蕉”</span></span><br></pre></td></tr></tbody></table></figure>
+
+<ol start="2">
+<li>接收外部传入的值<br>外部调用 <code>next(值)</code> 时，这个 “值” 会作为<strong>上一个 <code>yield</code> 表达式的返回值</strong>，传给生成器内部：</li>
+</ol>
+<figure class="highlight javascript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span>* <span class="title function_">chatGenerator</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// 第一个 yield：向外传“你叫什么名字？”，暂停后等待外部传值</span></span><br><span class="line">  <span class="keyword">const</span> name = <span class="keyword">yield</span> <span class="string">'你叫什么名字？'</span>;</span><br><span class="line">  <span class="comment">// 外部传值后，恢复执行：用收到的 name 拼接新内容，再向外传</span></span><br><span class="line">  <span class="keyword">yield</span> <span class="string">`你好，<span class="subst">${name}</span>！`</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> chat = <span class="title function_">chatGenerator</span>();</span><br><span class="line"><span class="comment">// 第一次 next()：执行到第一个 yield，拿到“你叫什么名字？”</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(chat.<span class="title function_">next</span>().<span class="property">value</span>);</span><br><span class="line"><span class="comment">// 第二次 next('小明')：把“小明”传给上一个 yield，作为 name 的值，执行到第二个 yield</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(chat.<span class="title function_">next</span>(<span class="string">'小明'</span>).<span class="property">value</span>); <span class="comment">// 输出“你好，小明！”</span></span><br></pre></td></tr></tbody></table></figure>
+
+<div class="note warning flat"><p><strong>注意：</strong> <code>next(值)</code> 的 “值”<strong>只给上一个 <code>yield</code></strong>。如果是第一次调用 <code>next()</code>，传值是无效的 —— 因为此时还没有执行过任何 <code>yield</code>。</p>
+</div>
+
+<h3 id="2-2-yield-的使用限制"><a href="#2-2-yield-的使用限制" class="headerlink" title="2.2 yield 的使用限制"></a>2.2 yield 的使用限制</h3><p><code>yield</code> 只能在生成器函数内部用，哪怕是生成器里的嵌套函数也不行，否则会报错：</p>
+<figure class="highlight javascript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span>* <span class="title function_">wrongGenerator</span>(<span class="params">items</span>) {</span><br><span class="line">  items.<span class="title function_">forEach</span>(<span class="function"><span class="params">item</span> =&gt;</span> {</span><br><span class="line">    <span class="comment">// 错误：yield 不能在 forEach 的回调里用（超出了生成器函数的直接作用域）</span></span><br><span class="line">    <span class="keyword">yield</span> item + <span class="number">1</span>;</span><br><span class="line">  });</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>原理和 <code>return</code> 类似：嵌套函数的 <code>return</code> 不能直接让外层函数返回，<code>yield</code> 也无法跨越函数边界。</p>
+</blockquote>
+<h2 id="三、生成器的实际用途：这些场景用它很顺手"><a href="#三、生成器的实际用途：这些场景用它很顺手" class="headerlink" title="三、生成器的实际用途：这些场景用它很顺手"></a>三、生成器的实际用途：这些场景用它很顺手</h2><p>生成器不是花架子，实际开发中很多场景都能用到，分享几个高频用法：</p>
+<h3 id="3-1-自定义迭代器：轻松遍历复杂数据"><a href="#3-1-自定义迭代器：轻松遍历复杂数据" class="headerlink" title="3.1 自定义迭代器：轻松遍历复杂数据"></a>3.1 自定义迭代器：轻松遍历复杂数据</h3><p>JavaScript 里的 <code>for...of</code> 循环需要 “可迭代对象”（比如数组、字符串），而生成器可以轻松创建自定义的迭代器，不用手动实现 <code>Symbol.iterator</code>。</p>
+<p>比如实现一个 “指定范围的数字迭代器”：</p>
+<figure class="highlight javascript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 生成 从 start 到 end、步长为 step 的数字</span></span><br><span class="line"><span class="keyword">function</span>* <span class="title function_">range</span>(<span class="params">start, end, step = <span class="number">1</span></span>) {</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = start; i &lt;= end; i += step) {</span><br><span class="line">    <span class="keyword">yield</span> i; <span class="comment">// 每次迭代返回一个数字</span></span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 用 for...of 遍历生成器（生成器对象默认是可迭代的）</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> num <span class="keyword">of</span> <span class="title function_">range</span>(<span class="number">1</span>, <span class="number">5</span>, <span class="number">2</span>)) {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(num); <span class="comment">// 输出 1、3、5</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 也可以用 [...gen] 转成数组</span></span><br><span class="line"><span class="keyword">const</span> numArray = [...<span class="title function_">range</span>(<span class="number">2</span>, <span class="number">6</span>)];</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(numArray); <span class="comment">// 输出 [2, 3, 4, 5, 6]</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="3-2-无限序列：按需生成，不占内存"><a href="#3-2-无限序列：按需生成，不占内存" class="headerlink" title="3.2 无限序列：按需生成，不占内存"></a>3.2 无限序列：按需生成，不占内存</h3><p>如果需要无限循环的序列（比如斐波那契数列），用普通函数会陷入死循环，但生成器可以 “按需产出”，想要多少要多少：</p>
+<figure class="highlight javascript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 生成无限的斐波那契数列</span></span><br><span class="line"><span class="keyword">function</span>* <span class="title function_">fibonacci</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="keyword">let</span> [prev, curr] = [<span class="number">0</span>, <span class="number">1</span>];</span><br><span class="line">  <span class="keyword">while</span> (<span class="literal">true</span>) {</span><br><span class="line">    <span class="comment">// 无限循环，但不会卡，因为每次 yield 都会暂停</span></span><br><span class="line">    <span class="keyword">yield</span> curr; <span class="comment">// 产出当前项</span></span><br><span class="line">    [prev, curr] = [curr, prev + curr]; <span class="comment">// 更新下一项</span></span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> fib = <span class="title function_">fibonacci</span>();</span><br><span class="line"><span class="comment">// 想要几项就调用几次 next()</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(fib.<span class="title function_">next</span>().<span class="property">value</span>); <span class="comment">// 1</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(fib.<span class="title function_">next</span>().<span class="property">value</span>); <span class="comment">// 1</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(fib.<span class="title function_">next</span>().<span class="property">value</span>); <span class="comment">// 2</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(fib.<span class="title function_">next</span>().<span class="property">value</span>); <span class="comment">// 3</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(fib.<span class="title function_">next</span>().<span class="property">value</span>); <span class="comment">// 5</span></span><br><span class="line"><span class="comment">// 什么时候停，完全由外部控制</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="3-3-异步流程管理：async-await-之前的方案"><a href="#3-3-异步流程管理：async-await-之前的方案" class="headerlink" title="3.3 异步流程管理：async/await 之前的方案"></a>3.3 异步流程管理：async / await 之前的方案</h3><p>在 async / await（👉 <a href="/archives/async+await/" title="Async/Await：用同步的方式写异步，真香！">Async / Await：用同步的方式写异步，真香！</a>）普及前，生成器常用来简化异步代码（避免回调地狱）。核心思路是：用 <code>yield</code> 暂停等待异步结果，拿到结果后再恢复执行。</p>
+<figure class="highlight javascript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 模拟两个异步请求</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">fetchUser</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> <span class="title function_">resolve</span>({ <span class="attr">id</span>: <span class="number">1</span>, <span class="attr">name</span>: <span class="string">'小明'</span> }), <span class="number">1000</span>));</span><br><span class="line">}</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">fetchUserOrders</span>(<span class="params">userId</span>) {</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function">(<span class="params">resolve</span>) =&gt;</span> <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> <span class="title function_">resolve</span>([{ <span class="attr">id</span>: <span class="number">101</span>, <span class="attr">goods</span>: <span class="string">'手机'</span> }]), <span class="number">1000</span>));</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 用生成器管理异步流程</span></span><br><span class="line"><span class="keyword">function</span>* <span class="title function_">asyncFlow</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// 等待 fetchUser 完成，拿到用户数据</span></span><br><span class="line">  <span class="keyword">const</span> user = <span class="keyword">yield</span> <span class="title function_">fetchUser</span>();</span><br><span class="line">  <span class="comment">// 用用户 id 发起第二个请求，等待完成</span></span><br><span class="line">  <span class="keyword">const</span> orders = <span class="keyword">yield</span> <span class="title function_">fetchUserOrders</span>(user.<span class="property">id</span>);</span><br><span class="line">  <span class="comment">// 返回最终结果</span></span><br><span class="line">  <span class="keyword">return</span> { user, orders };</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 自动执行器：帮我们调用 next()，不用手动处理异步</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">runAsync</span>(<span class="params">gen</span>) {</span><br><span class="line">  <span class="keyword">const</span> generator = <span class="title function_">gen</span>();</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 递归处理异步结果</span></span><br><span class="line">  <span class="keyword">function</span> <span class="title function_">handleResult</span>(<span class="params">result</span>) {</span><br><span class="line">    <span class="keyword">if</span> (result.<span class="property">done</span>) {</span><br><span class="line">      <span class="comment">// 生成器结束，返回最终结果</span></span><br><span class="line">      <span class="keyword">return</span> <span class="title class_">Promise</span>.<span class="title function_">resolve</span>(result.<span class="property">value</span>);</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">// 结果是 Promise，等待完成后把数据传给下一个 next()</span></span><br><span class="line">    <span class="keyword">return</span> result.<span class="property">value</span>.<span class="title function_">then</span>(<span class="function">(<span class="params">data</span>) =&gt;</span> <span class="title function_">handleResult</span>(generator.<span class="title function_">next</span>(data)));</span><br><span class="line">  }</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="title function_">handleResult</span>(generator.<span class="title function_">next</span>());</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 执行异步流程</span></span><br><span class="line"><span class="title function_">runAsync</span>(asyncFlow).<span class="title function_">then</span>(<span class="function">(<span class="params">result</span>) =&gt;</span> {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">'最终结果：'</span>, result);</span><br><span class="line">  <span class="comment">// 2秒后输出：{ user: { id:1, name:'小明' }, orders: [{ id:101, goods:'手机' }] }</span></span><br><span class="line">});</span><br></pre></td></tr></tbody></table></figure>
+
+<p>现在虽然 <code>async/await</code> 更常用，但理解这种思路，能帮你更好地掌握异步编程的本质。</p>
+<h3 id="3-4-状态机：清晰管理状态切换"><a href="#3-4-状态机：清晰管理状态切换" class="headerlink" title="3.4 状态机：清晰管理状态切换"></a>3.4 状态机：清晰管理状态切换</h3><p>比如交通灯的 “红 → 绿 → 黄” 循环，用生成器实现状态切换，逻辑特别清晰：</p>
+<figure class="highlight javascript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 交通灯状态机</span></span><br><span class="line"><span class="keyword">function</span>* <span class="title function_">trafficLight</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="keyword">while</span> (<span class="literal">true</span>) {</span><br><span class="line">    <span class="keyword">yield</span> <span class="string">'红灯：等待3秒'</span>;</span><br><span class="line">    <span class="keyword">yield</span> <span class="string">'绿灯：通行5秒'</span>;</span><br><span class="line">    <span class="keyword">yield</span> <span class="string">'黄灯：准备2秒'</span>;</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> light = <span class="title function_">trafficLight</span>();</span><br><span class="line"><span class="comment">// 每次调用 next()，切换一次状态</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(light.<span class="title function_">next</span>().<span class="property">value</span>); <span class="comment">// 红灯：等待3秒</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(light.<span class="title function_">next</span>().<span class="property">value</span>); <span class="comment">// 绿灯：通行5秒</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(light.<span class="title function_">next</span>().<span class="property">value</span>); <span class="comment">// 黄灯：准备2秒</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(light.<span class="title function_">next</span>().<span class="property">value</span>); <span class="comment">// 红灯：等待3秒（循环）</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="四、yield-：生成器的“委托执行”"><a href="#四、yield-：生成器的“委托执行”" class="headerlink" title="四、yield*：生成器的“委托执行”"></a>四、yield*：生成器的 “委托执行”</h2><p>如果一个生成器需要调用另一个生成器，可以用 <code>yield*</code> 实现 “委托”—— 让被调用的生成器先执行完，再回到当前生成器。</p>
+<h3 id="4-1-基本用法：委托执行其他生成器"><a href="#4-1-基本用法：委托执行其他生成器" class="headerlink" title="4.1 基本用法：委托执行其他生成器"></a>4.1 基本用法：委托执行其他生成器</h3><figure class="highlight javascript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 生成器 A</span></span><br><span class="line"><span class="keyword">function</span>* <span class="title function_">generatorA</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="keyword">yield</span> <span class="string">'A1'</span>;</span><br><span class="line">  <span class="keyword">yield</span> <span class="string">'A2'</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 生成器 B：委托 generatorA 执行</span></span><br><span class="line"><span class="keyword">function</span>* <span class="title function_">generatorB</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="keyword">yield</span> <span class="string">'B1'</span>;</span><br><span class="line">  <span class="keyword">yield</span>* <span class="title function_">generatorA</span>(); <span class="comment">// 委托：先把 generatorA 执行完</span></span><br><span class="line">  <span class="keyword">yield</span> <span class="string">'B2'</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 遍历 generatorB，看看顺序</span></span><br><span class="line"><span class="keyword">const</span> result = [...<span class="title function_">generatorB</span>()];</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(result); <span class="comment">// 输出 ["B1", "A1", "A2", "B2"]</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>可以看到，<code>yield* generatorA()</code> 会让 <code>generatorA</code> 的所有 <code>yield</code> 先执行，再继续 <code>generatorB</code> 后续的代码。</p>
+<h3 id="4-2-实用场景：递归遍历树形结构"><a href="#4-2-实用场景：递归遍历树形结构" class="headerlink" title="4.2 实用场景：递归遍历树形结构"></a>4.2 实用场景：递归遍历树形结构</h3><p>比如遍历 DOM 树、文件夹目录这种层级结构，用 <code>yield*</code> 递归委托特别方便：</p>
+<figure class="highlight javascript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 遍历树形结构（比如 DOM 树）</span></span><br><span class="line"><span class="keyword">function</span>* <span class="title function_">traverseTree</span>(<span class="params">node</span>) {</span><br><span class="line">  <span class="keyword">yield</span> node; <span class="comment">// 先产出当前节点</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 如果有子节点，递归委托遍历子节点</span></span><br><span class="line">  <span class="keyword">if</span> (node.<span class="property">children</span>) {</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">const</span> child <span class="keyword">of</span> node.<span class="property">children</span>) {</span><br><span class="line">      <span class="keyword">yield</span>* <span class="title function_">traverseTree</span>(child);</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 遍历 body 下的所有 DOM 节点</span></span><br><span class="line"><span class="keyword">const</span> bodyTree = <span class="variable language_">document</span>.<span class="property">body</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">const</span> node <span class="keyword">of</span> <span class="title function_">traverseTree</span>(bodyTree)) {</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(node.<span class="property">tagName</span>); <span class="comment">// 依次输出 body、div、p、span 等标签名</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="五、生成器最佳实践：避坑与优化"><a href="#五、生成器最佳实践：避坑与优化" class="headerlink" title="五、生成器最佳实践：避坑与优化"></a>五、生成器最佳实践：避坑与优化</h2><h3 id="5-1-资源清理：用-try…finally-确保释放"><a href="#5-1-资源清理：用-try…finally-确保释放" class="headerlink" title="5.1 资源清理：用 try…finally 确保释放"></a>5.1 资源清理：用 try…finally 确保释放</h3><p>如果生成器里用到了需要手动释放的资源（比如文件句柄、网络连接），一定要用 <code>try...finally</code>—— 哪怕生成器被提前终止（比如调用 <code>return()</code>），<code>finally</code> 里的代码也会执行，避免资源泄漏。</p>
+<figure class="highlight javascript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span>* <span class="title function_">resourceGenerator</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="comment">// 模拟获取资源（比如打开文件）</span></span><br><span class="line">  <span class="keyword">const</span> resource = <span class="title function_">openResource</span>();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">try</span> {</span><br><span class="line">    <span class="keyword">yield</span> <span class="string">'使用资源处理数据'</span>;</span><br><span class="line">    <span class="keyword">yield</span> <span class="string">'继续使用资源'</span>;</span><br><span class="line">  } <span class="keyword">finally</span> {</span><br><span class="line">    <span class="comment">// 无论生成器正常结束还是提前终止，都会执行这里</span></span><br><span class="line">    <span class="title function_">closeResource</span>(resource); <span class="comment">// 释放资源</span></span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> gen = <span class="title function_">resourceGenerator</span>();</span><br><span class="line">gen.<span class="title function_">next</span>(); <span class="comment">// 执行到第一个 yield</span></span><br><span class="line">gen.<span class="keyword">return</span>(<span class="string">'提前结束'</span>); <span class="comment">// 提前终止，会触发 finally 里的 closeResource</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="5-2-避免无限循环：加安全边界"><a href="#5-2-避免无限循环：加安全边界" class="headerlink" title="5.2 避免无限循环：加安全边界"></a>5.2 避免无限循环：加安全边界</h3><p>除非确实需要 “无限序列”（比如斐波那契），否则一定要给生成器加终止条件 —— 避免不小心写成死循环，导致内存溢出。</p>
+<figure class="highlight javascript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 安全的生成器：最多生成 100 个值</span></span><br><span class="line"><span class="keyword">function</span>* <span class="title function_">limitedGenerator</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="keyword">let</span> count = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">while</span> (count &lt; <span class="number">100</span>) {</span><br><span class="line">    <span class="comment">// 终止条件：count 到 100 就停</span></span><br><span class="line">    <span class="keyword">yield</span> count++;</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="5-3-异常处理：用-throw-抛错，try-catch-捕获"><a href="#5-3-异常处理：用-throw-抛错，try-catch-捕获" class="headerlink" title="5.3 异常处理：用 throw() 抛错，try/catch 捕获"></a>5.3 异常处理：用 throw () 抛错，try / catch 捕获</h3><p>如果生成器执行中需要处理错误，可以在外部调用 <code>generator.throw(错误)</code>，然后在生成器内部用 <code>try/catch</code> 捕获：</p>
+<figure class="highlight javascript"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span>* <span class="title function_">errorHandleGenerator</span>(<span class="params"></span>) {</span><br><span class="line">  <span class="keyword">try</span> {</span><br><span class="line">    <span class="keyword">yield</span> <span class="string">'正常执行中'</span>;</span><br><span class="line">    <span class="keyword">yield</span> <span class="string">'这一步可能出错'</span>;</span><br><span class="line">  } <span class="keyword">catch</span> (err) {</span><br><span class="line">    <span class="comment">// 捕获外部抛入的错误</span></span><br><span class="line">    <span class="keyword">yield</span> <span class="string">`捕获到错误：<span class="subst">${err.message}</span>`</span>;</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> gen = <span class="title function_">errorHandleGenerator</span>();</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(gen.<span class="title function_">next</span>().<span class="property">value</span>); <span class="comment">// 输出“正常执行中”</span></span><br><span class="line"><span class="comment">// 向生成器抛错</span></span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(gen.<span class="keyword">throw</span>(<span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">'测试错误'</span>)).<span class="property">value</span>); <span class="comment">// 输出“捕获到错误：测试错误”</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="六、生成器-vs-普通函数：核心差异对比"><a href="#六、生成器-vs-普通函数：核心差异对比" class="headerlink" title="六、生成器 vs 普通函数：核心差异对比"></a>六、生成器 vs 普通函数：核心差异对比</h2><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>普通函数</th>
+<th>生成器函数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>执行流程</strong></td>
+<td>一旦开始，必须执行完</td>
+<td>可暂停（<code>yield</code>）、可恢复（<code>next()</code>）</td>
+</tr>
+<tr>
+<td><strong>返回值</strong></td>
+<td>只能返回一次值（<code>return</code>）</td>
+<td>可多次返回值（<code>yield</code>），最后一次 <code>return</code> 是收尾</td>
+</tr>
+<tr>
+<td><strong>内存效率</strong></td>
+<td>一次性处理所有数据，大数据易内存溢出</td>
+<td>按需生成值，处理大数据更高效</td>
+</tr>
+<tr>
+<td><strong>状态保持</strong></td>
+<td>执行完后局部变量销毁，不保持状态</td>
+<td>暂停时保留局部变量状态，恢复后继续使用</td>
+</tr>
+<tr>
+<td><strong>定义语法</strong></td>
+<td><code>function 函数名() {}</code></td>
+<td><code>function* 函数名() {}</code></td>
+</tr>
+</tbody></table>
+<hr>
+<p>生成器的核心价值在于 “可控的执行流程” 和 “按需产出数据”—— 它不像 <code>async/await</code> 那样专门解决异步问题，而是在迭代、状态管理、大数据处理等场景都能发挥作用。如果你需要更灵活地控制函数执行，或者想简化复杂的遍历逻辑，不妨试试生成器～</p>
+</article><div class="post-copyright"><div class="copyright-cc-box"><i class="anzhiyufont anzhiyu-icon-copyright"></i></div><div class="post-copyright__author_box"><a class="post-copyright__author_img" href="/" title="头像"><img class="post-copyright__author_img_back" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/site/avatar.webp" title="头像" alt="头像"><img class="post-copyright__author_img_front" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/site/avatar.webp" title="头像" alt="头像"></a><div class="post-copyright__author_name">Touko</div><div class="post-copyright__author_desc">🐾猫爪按日出, 按出彩虹糖🌈</div></div><div class="post-copyright__post__info"><a class="post-copyright__original" title="该文章为原创文章，注意版权协议" href="http://toukoxu.github.io/archives/generator/">原创</a><a class="post-copyright-title"><span onclick="rm.copyPageUrl('http://toukoxu.github.io/archives/generator/')">生成器函数与 yield：掌控函数执行的 “暂停键”</span></a></div><div class="post-tools" id="post-tools"><div class="post-tools-left"><div class="rewardLeftButton"><div class="post-reward" onclick="anzhiyu.addRewardMask()"><div class="reward-button button--animated" title="赞赏作者"><i class="anzhiyufont anzhiyu-icon-hand-heart-fill"></i>打赏作者</div><div class="reward-main"><div class="reward-all"><span class="reward-title">感谢你赐予我前进的力量</span><ul class="reward-group"><li class="reward-item"><a href="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/pay/wechat.webp" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/pay/wechat.webp" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/pay/alipay.webp" target="_blank"><img class="post-qr-code-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/pay/alipay.webp" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul><a class="reward-main-btn" href="/about/#about-reward" target="_blank"><div class="reward-text">赞赏者名单</div><div class="reward-dec">因为你们的支持让我意识到写文章的价值🙏</div></a></div></div></div><div id="quit-box" onclick="anzhiyu.removeRewardMask()" style="display: none"></div></div><div class="shareRight"><div class="share-link mobile"><div class="share-qrcode"><div class="share-button" title="使用手机访问这篇文章"><i class="anzhiyufont anzhiyu-icon-qrcode"></i></div><div class="share-main"><div class="share-main-all"><div id="qrcode" title="http://toukoxu.github.io/archives/generator/"></div><div class="reward-dec">使用手机访问这篇文章</div></div></div></div></div><script>function copyCurrentPageUrl() {
+  var currentPageUrl = window.location.href;
+  var input = document.createElement("input");
+  input.setAttribute("value", currentPageUrl);
+  document.body.appendChild(input);
+  input.select();
+  input.setSelectionRange(0, 99999);
+  document.execCommand("copy");
+  document.body.removeChild(input);
+}</script><div class="share-link copyurl"><div class="share-button" id="post-share-url" title="复制链接" onclick="copyCurrentPageUrl()"><i class="anzhiyufont anzhiyu-icon-link"></i></div></div></div></div></div><div class="post-copyright__notice"><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://toukoxu.github.io" target="_blank">Touko</a>！</span></div></div><div class="post-tools-right"><div class="tag_share"><div class="post-meta__box"><div class="post-meta__box__category-list"><a class="post-meta__box__categoryes" href="/categories/%E5%89%8D%E7%AB%AF/"><span class="categoryes-punctuation"> <i class="anzhiyufont anzhiyu-icon-inbox"></i></span>前端<span class="categoryesPageCount">10</span></a></div><div class="post-meta__box__tag-list"><a class="post-meta__box__tags" href="/tags/JavaScript/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>JavaScript<span class="tagsPageCount">10</span></a><a class="post-meta__box__tags" href="/tags/ES6/"><span class="tags-punctuation"> <i class="anzhiyufont anzhiyu-icon-tag"></i></span>ES6<span class="tagsPageCount">6</span></a></div></div></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/archives/message-channel/"><img class="prev-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/cover/message-channel.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">MessageChannel 详解：浏览器中的 “点对点双向通信管道”</div></div></a></div><div class="next-post pull-right"><a href="/archives/async+await/"><img class="next-cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/cover/async.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Async / Await：用同步的方式写异步，真香！</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="anzhiyufont anzhiyu-icon-thumbs-up fa-fw" style="font-size: 1.5rem; margin-right: 4px"></i><span>喜欢这篇文章的人也看了</span></div><div class="relatedPosts-list"><div><a href="/archives/closure/" title="闭包（Closure）：JavaScript 里的 “记忆小助手”"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/cover/closure.webp" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2021-04-03</div><div class="title">闭包（Closure）：JavaScript 里的 “记忆小助手”</div></div></a></div><div><a href="/archives/iterator/" title="迭代器（Iterator）与解构：JS 数据遍历与拆箱的实用指南"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/cover/iterator.webp" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2024-06-14</div><div class="title">迭代器（Iterator）与解构：JS 数据遍历与拆箱的实用指南</div></div></a></div><div><a href="/archives/prototype-chain/" title="原型链（Prototype Chain）与 Class：吃透 JS 对象继承的核心"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/cover/prototype-chain.webp" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2021-05-02</div><div class="title">原型链（Prototype Chain）与 Class：吃透 JS 对象继承的核心</div></div></a></div><div><a href="/archives/proxy/" title="代理（Proxy）：ES6 元编程的 “对象拦截器”"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/cover/proxy.webp" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2024-08-15</div><div class="title">代理（Proxy）：ES6 元编程的 “对象拦截器”</div></div></a></div><div><a href="/archives/reflect/" title="Reflect：ES6 标准化对象操作的 “工具库”"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/cover/reflect.webp" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2024-08-14</div><div class="title">Reflect：ES6 标准化对象操作的 “工具库”</div></div></a></div><div><a href="/archives/async+await/" title="Async &#x2F; Await：用同步的方式写异步，真香！"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/cover/async.webp" alt="cover"><div class="content is-center"><div class="date"><i class="anzhiyufont anzhiyu-icon-calendar-days fa-fw"></i> 2024-07-13</div><div class="title">Async &#x2F; Await：用同步的方式写异步，真香！</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="anzhiyufont anzhiyu-icon-comments"></i><span> 评论</span></div><div class="comment-randomInfo"><a onclick="anzhiyu.addRandomCommentInfo()" href="javascript:void(0)">匿名评论</a><a href="/privacy" style="margin-left: 4px">隐私政策</a></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div><div class="comment-barrage"></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-content"><div class="author-info__sayhi" id="author-info__sayhi" onclick="anzhiyu.changeSayHelloText()"></div><div class="author-info-avatar"><img class="avatar-img" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/site/avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-status"><img class="g-status" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/emoji/sparkles.png" alt="status"/></div></div><div class="author-info__description"><div style="line-height:1.38;margin:0.6rem 0;text-align:justify;color:rgba(255, 255, 255, 0.8);">欢迎来到我的<b style="color:#fff">编程小天地</b>！这里有可爱的<b style="color:#fff">编程知识点</b>，致力于把复杂的概念变得<b style="color:#fff">简单可爱</b>。</div><div style="line-height:1.38;margin:0.6rem 0;text-align:justify;color:rgba(255, 255, 255, 0.8);">一起探索，让代码生活更精彩！</div></div><div class="author-info__bottom-group"><a class="author-info__bottom-group-left" href="/about/"><h1 class="author-info__name">Touko</h1><div class="author-info__desc">🐾猫爪按日出, 按出彩虹糖🌈</div></a><div class="card-info-social-icons is-center"><a class="social-icon faa-parent animated-hover" href="https://github.com/ToukoXu" target="_blank" title="Github"><i class="anzhiyufont anzhiyu-icon-github"></i></a></div></div></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-bullhorn anzhiyu-shake"></i><span>公告</span></div><div class="announcement_content">😊 欢迎来看我的博客鸭~</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-bars"></i><span>文章目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%94%9F%E6%88%90%E5%99%A8%EF%BC%9A%E8%83%BD%E2%80%9C%E4%B8%AD%E5%9C%BA%E4%BC%91%E6%81%AF%E2%80%9D%E7%9A%84%E7%89%B9%E6%AE%8A%E5%87%BD%E6%95%B0"><span class="toc-number">1.</span> <span class="toc-text">一、生成器：能 “中场休息” 的特殊函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E4%BB%80%E4%B9%88%E6%98%AF%E7%94%9F%E6%88%90%E5%99%A8%E5%87%BD%E6%95%B0%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 什么是生成器函数？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E7%94%9F%E6%88%90%E5%99%A8%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%A0%B8%E5%BF%83%E6%96%B9%E6%B3%95"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 生成器对象的核心方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E5%BF%85%E9%A1%BB%E6%B3%A8%E6%84%8F%E7%9A%84%E4%B8%A4%E4%B8%AA%E7%82%B9"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 必须注意的两个点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81yield%EF%BC%9A%E7%94%9F%E6%88%90%E5%99%A8%E7%9A%84%E2%80%9C%E6%9A%82%E5%81%9C%E5%BC%80%E5%85%B3%E2%80%9D%E4%B8%8E%E2%80%9C%E6%95%B0%E6%8D%AE%E9%80%9A%E9%81%93%E2%80%9D"><span class="toc-number">2.</span> <span class="toc-text">二、yield：生成器的 “暂停开关” 与 “数据通道”</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-yield-%E7%9A%84%E4%B8%A4%E4%B8%AA%E6%A0%B8%E5%BF%83%E4%BD%9C%E7%94%A8"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 yield 的两个核心作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-yield-%E7%9A%84%E4%BD%BF%E7%94%A8%E9%99%90%E5%88%B6"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 yield 的使用限制</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E7%94%9F%E6%88%90%E5%99%A8%E7%9A%84%E5%AE%9E%E9%99%85%E7%94%A8%E9%80%94%EF%BC%9A%E8%BF%99%E4%BA%9B%E5%9C%BA%E6%99%AF%E7%94%A8%E5%AE%83%E5%BE%88%E9%A1%BA%E6%89%8B"><span class="toc-number">3.</span> <span class="toc-text">三、生成器的实际用途：这些场景用它很顺手</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E8%87%AA%E5%AE%9A%E4%B9%89%E8%BF%AD%E4%BB%A3%E5%99%A8%EF%BC%9A%E8%BD%BB%E6%9D%BE%E9%81%8D%E5%8E%86%E5%A4%8D%E6%9D%82%E6%95%B0%E6%8D%AE"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 自定义迭代器：轻松遍历复杂数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E6%97%A0%E9%99%90%E5%BA%8F%E5%88%97%EF%BC%9A%E6%8C%89%E9%9C%80%E7%94%9F%E6%88%90%EF%BC%8C%E4%B8%8D%E5%8D%A0%E5%86%85%E5%AD%98"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 无限序列：按需生成，不占内存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E5%BC%82%E6%AD%A5%E6%B5%81%E7%A8%8B%E7%AE%A1%E7%90%86%EF%BC%9Aasync-await-%E4%B9%8B%E5%89%8D%E7%9A%84%E6%96%B9%E6%A1%88"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 异步流程管理：async &#x2F; await 之前的方案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-%E7%8A%B6%E6%80%81%E6%9C%BA%EF%BC%9A%E6%B8%85%E6%99%B0%E7%AE%A1%E7%90%86%E7%8A%B6%E6%80%81%E5%88%87%E6%8D%A2"><span class="toc-number">3.4.</span> <span class="toc-text">3.4 状态机：清晰管理状态切换</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81yield-%EF%BC%9A%E7%94%9F%E6%88%90%E5%99%A8%E7%9A%84%E2%80%9C%E5%A7%94%E6%89%98%E6%89%A7%E8%A1%8C%E2%80%9D"><span class="toc-number">4.</span> <span class="toc-text">四、yield*：生成器的 “委托执行”</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95%EF%BC%9A%E5%A7%94%E6%89%98%E6%89%A7%E8%A1%8C%E5%85%B6%E4%BB%96%E7%94%9F%E6%88%90%E5%99%A8"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 基本用法：委托执行其他生成器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E5%AE%9E%E7%94%A8%E5%9C%BA%E6%99%AF%EF%BC%9A%E9%80%92%E5%BD%92%E9%81%8D%E5%8E%86%E6%A0%91%E5%BD%A2%E7%BB%93%E6%9E%84"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 实用场景：递归遍历树形结构</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E7%94%9F%E6%88%90%E5%99%A8%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5%EF%BC%9A%E9%81%BF%E5%9D%91%E4%B8%8E%E4%BC%98%E5%8C%96"><span class="toc-number">5.</span> <span class="toc-text">五、生成器最佳实践：避坑与优化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E8%B5%84%E6%BA%90%E6%B8%85%E7%90%86%EF%BC%9A%E7%94%A8-try%E2%80%A6finally-%E7%A1%AE%E4%BF%9D%E9%87%8A%E6%94%BE"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 资源清理：用 try…finally 确保释放</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-%E9%81%BF%E5%85%8D%E6%97%A0%E9%99%90%E5%BE%AA%E7%8E%AF%EF%BC%9A%E5%8A%A0%E5%AE%89%E5%85%A8%E8%BE%B9%E7%95%8C"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 避免无限循环：加安全边界</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%EF%BC%9A%E7%94%A8-throw-%E6%8A%9B%E9%94%99%EF%BC%8Ctry-catch-%E6%8D%95%E8%8E%B7"><span class="toc-number">5.3.</span> <span class="toc-text">5.3 异常处理：用 throw () 抛错，try &#x2F; catch 捕获</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E7%94%9F%E6%88%90%E5%99%A8-vs-%E6%99%AE%E9%80%9A%E5%87%BD%E6%95%B0%EF%BC%9A%E6%A0%B8%E5%BF%83%E5%B7%AE%E5%BC%82%E5%AF%B9%E6%AF%94"><span class="toc-number">6.</span> <span class="toc-text">六、生成器 vs 普通函数：核心差异对比</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="anzhiyufont anzhiyu-icon-history"></i><span>最近发布</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/archives/proxy/" title="代理（Proxy）：ES6 元编程的 “对象拦截器”"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/cover/proxy.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="代理（Proxy）：ES6 元编程的 “对象拦截器”"/></a><div class="content"><a class="title" href="/archives/proxy/" title="代理（Proxy）：ES6 元编程的 “对象拦截器”">代理（Proxy）：ES6 元编程的 “对象拦截器”</a><time datetime="2024-08-15T12:46:25.000Z" title="发表于 2024-08-15 20:46:25">2024-08-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/archives/reflect/" title="Reflect：ES6 标准化对象操作的 “工具库”"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/cover/reflect.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Reflect：ES6 标准化对象操作的 “工具库”"/></a><div class="content"><a class="title" href="/archives/reflect/" title="Reflect：ES6 标准化对象操作的 “工具库”">Reflect：ES6 标准化对象操作的 “工具库”</a><time datetime="2024-08-14T12:46:25.000Z" title="发表于 2024-08-14 20:46:25">2024-08-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/archives/async+await/" title="Async / Await：用同步的方式写异步，真香！"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/cover/async.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Async / Await：用同步的方式写异步，真香！"/></a><div class="content"><a class="title" href="/archives/async+await/" title="Async / Await：用同步的方式写异步，真香！">Async / Await：用同步的方式写异步，真香！</a><time datetime="2024-07-13T12:46:25.000Z" title="发表于 2024-07-13 20:46:25">2024-07-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/archives/generator/" title="生成器函数与 yield：掌控函数执行的 “暂停键”"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/cover/generator.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="生成器函数与 yield：掌控函数执行的 “暂停键”"/></a><div class="content"><a class="title" href="/archives/generator/" title="生成器函数与 yield：掌控函数执行的 “暂停键”">生成器函数与 yield：掌控函数执行的 “暂停键”</a><time datetime="2024-07-11T12:46:25.000Z" title="发表于 2024-07-11 20:46:25">2024-07-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/archives/message-channel/" title="MessageChannel 详解：浏览器中的 “点对点双向通信管道”"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/cover/message-channel.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="MessageChannel 详解：浏览器中的 “点对点双向通信管道”"/></a><div class="content"><a class="title" href="/archives/message-channel/" title="MessageChannel 详解：浏览器中的 “点对点双向通信管道”">MessageChannel 详解：浏览器中的 “点对点双向通信管道”</a><time datetime="2024-06-23T12:46:25.000Z" title="发表于 2024-06-23 20:46:25">2024-06-23</time></div></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div id="footer_deal"><a class="deal_link" href="mailto:toukoxu@qq.com" title="给我发邮件" target="_blank"><i class="anzhiyufont anzhiyu-icon-envelope"></i></a><a class="deal_link" href="/atom.xml" title="RSS" target="_blank"><i class="anzhiyufont anzhiyu-icon-rss"></i></a><img class="footer_mini_logo" title="返回顶部" alt="返回顶部" onclick="anzhiyu.scrollToDest(0, 500)" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/site/avatar.webp" size="50px"/><a class="deal_link" href="https://github.com/toukoxu" title="Github" target="_blank"><i class="anzhiyufont anzhiyu-icon-github"></i></a><a class="deal_link" href="/copyright" title="CC" target="_blank"><i class="anzhiyufont anzhiyu-icon-copyright-line"></i></a></div><div id="workboard"><img class="workSituationImg boardsign" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://img.shields.io/badge/Touko-%E5%8D%96%E5%8A%9B%E4%B8%8A%E7%8F%AD%E4%B8%AD-white?style=social&amp;logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciICB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNHB4IiBoZWlnaHQ9IjI0cHgiPjxwYXRoIGZpbGw9IiNmZmMxMDciIGQ9Im0xNC41IDcuOTk1YzAtLjQxNC0uMzM2LS43NS0uNzUtLjc1LTMuMDMyIDAtNS41LTIuNDY4LTUuNS01LjUgMC0uNDE0LS4zMzYtLjc1LS43NS0uNzVzLS43NS4zMzYtLjc1Ljc1YzAgMy4wMzItMi40NjggNS41LTUuNSA1LjUtLjQxNCAwLS43NS4zMzYtLjc1Ljc1cy4zMzYuNzUuNzUuNzVjMy4wMzIgMCA1LjUgMi40NjggNS41IDUuNSAwIC40MTQuMzM2Ljc1Ljc1Ljc1cy43NS0uMzM2Ljc1LS43NWMwLTMuMDMyIDIuNDY4LTUuNSA1LjUtNS41LjQxNCAwIC43NS0uMzM2Ljc1LS43NXoiLz48cGF0aCBmaWxsPSIjZmZjMTA3IiBkPSJtMjEuNSAxNi4yNDVjLTIuNDgxIDAtNC41LTIuMDE5LTQuNS00LjUgMC0uNDE0LS4zMzYtLjc1LS43NS0uNzVzLS43NS4zMzYtLjc1Ljc1YzAgMi40ODEtMi4wMTkgNC41LTQuNSA0LjUtLjQxNCAwLS43NS4zMzYtLjc1Ljc1cy4zMzYuNzUuNzUuNzVjMi40ODEgMCA0LjUgMi4wMTkgNC41IDQuNSAwIC40MTQuMzM2Ljc1Ljc1Ljc1cy43NS0uMzM2Ljc1LS43NWMwLTIuNDgxIDIuMDE5LTQuNSA0LjUtNC41LjQxNCAwIC43NS0uMzM2Ljc1LS43NXMtLjMzNi0uNzUtLjc1LS43NXoiLz48ZyBmaWxsPSIjZmZjYTI4Ij48cGF0aCBkPSJtMjMuMjUgNC4yNDVjLTEuOTMgMC0zLjUtMS41Ny0zLjUtMy41IDAtLjQxNC0uMzM2LS43NS0uNzUtLjc1cy0uNzUuMzM2LS43NS43NWMwIDEuOTMtMS41NyAzLjUtMy41IDMuNS0uNDE0IDAtLjc1LjMzNi0uNzUuNzVzLjMzNi43NS43NS43NWMxLjkzIDAgMy41IDEuNTcgMy41IDMuNSAwIC40MTQuMzM2Ljc1Ljc1Ljc1cy43NS0uMzM2Ljc1LS43NWMwLTEuOTMgMS41Ny0zLjUgMy41LTMuNS40MTQgMCAuNzUtLjMzNi43NS0uNzVzLS4zMzYtLjc1LS43NS0uNzV6Ii8+PHBhdGggZD0ibTguNzUgMTkuMjQ1Yy0xLjM3OSAwLTIuNS0xLjEyMS0yLjUtMi41IDAtLjQxNC0uMzM2LS43NS0uNzUtLjc1cy0uNzUuMzM2LS43NS43NWMwIDEuMzc5LTEuMTIxIDIuNS0yLjUgMi41LS40MTQgMC0uNzUuMzM2LS43NS43NXMuMzM2Ljc1Ljc1Ljc1YzEuMzc5IDAgMi41IDEuMTIxIDIuNSAyLjUgMCAuNDE0LjMzNi43NS43NS43NXMuNzUtLjMzNi43NS0uNzVjMC0xLjM3OSAxLjEyMS0yLjUgMi41LTIuNS40MTQgMCAuNzUtLjMzNi43NS0uNzVzLS4zMzYtLjc1LS43NS0uNzV6Ii8+PC9nPjwvc3ZnPg==" alt="距离月入25k也就还差一个大佬带我~" title="距离月入25k也就还差一个大佬带我~"/><div id="runtimeTextTip"></div></div><p id="ghbdages"><a class="github-badge" target="_blank" href="https://hexo.io/" style="margin-inline:5px" data-title="博客框架为Hexo_v5.4.0" title="博客框架为Hexo_v5.4.0"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@2.1.5/img/badge/Frame-Hexo.svg" alt="博客框架为Hexo_v5.4.0"/></a><a class="github-badge" target="_blank" href="https://www.dogecloud.com/" style="margin-inline:5px" data-title="本站使用jsDelivr为静态资源提供CDN加速" title="本站使用jsDelivr为静态资源提供CDN加速"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://img.shields.io/badge/CDN-jsDelivr-E84D3D.svg?logo=jsdelivr" alt="本站使用jsDelivr为静态资源提供CDN加速"/></a><a class="github-badge" target="_blank" href="https://github.com/" style="margin-inline:5px" data-title="本站项目由Github托管" title="本站项目由Github托管"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://img.shields.io/badge/Source-GitHub-181717.svg?logo=github" alt="本站项目由Github托管"/></a><a class="github-badge" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" style="margin-inline:5px" data-title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可" title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://npm.elemecdn.com/anzhiyu-blog@2.2.0/img/badge/Copyright-BY-NC-SA.svg" alt="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可"/></a></p></div><div id="footer-bar"><div class="footer-bar-links"><div class="footer-bar-left"><div id="footer-bar-tips"><div class="copyright">&copy;2020 - 2025 By <a class="footer-bar-link" href="/" title="Touko" target="_blank">Touko</a></div></div><div id="footer-type-tips"></div><div class="js-pjax"><script>function subtitleType () {
+  fetch('https://v1.hitokoto.cn')
+    .then(response => response.json())
+    .then(data => {
+      if (true) {
+        const from = '出自 ' + data.from
+        const sub = ["晨光温柔&#44; 晚风清甜&#44; 岁岁无忧&#44; 步步生暖."]
+        sub.unshift(data.hitokoto, from)
+        window.typed = new Typed('#footer-type-tips', {
+          strings: sub,
+          startDelay: 300,
+          typeSpeed: 150,
+          loop: true,
+          backSpeed: 50,
+        })
+      } else {
+        document.getElementById('footer-type-tips').innerHTML = data.hitokoto
+      }
+    })
+}
+
+if (true) {
+  if (typeof Typed === 'function') {
+    subtitleType()
+  } else {
+    getScript('https://cdn.cbd.int/typed.js@2.1.0/dist/typed.umd.js').then(subtitleType)
+  }
+} else {
+  subtitleType()
+}
+</script></div></div><div class="footer-bar-right"></div></div></div></footer></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="sidebar-site-data site-data is-center"><a href="/archives/" title="archive"><div class="headline">文章</div><div class="length-num">10</div></a><a href="/tags/" title="tag"><div class="headline">标签</div><div class="length-num">4</div></a><a href="/categories/" title="category"><div class="headline">分类</div><div class="length-num">1</div></a></div><span class="sidebar-menu-item-title">功能</span><div class="sidebar-menu-item"><a class="darkmode_switchbutton menu-child" href="javascript:void(0);" title="显示模式"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span>显示模式</span></a></div><div class="back-menu-list-groups"><div class="back-menu-list-group"><div class="back-menu-list-title">网页</div><div class="back-menu-list"><a class="back-menu-item" href="https://toukoxu.github.io/" title="博客"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="/img/favicon.ico" alt="博客"/><span class="back-menu-item-text">博客</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">图片工具</div><div class="back-menu-list"><a class="back-menu-item" href="/projects/image-base64" title="图片转Base64"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/gif/picture.gif" alt="图片转Base64"/><span class="back-menu-item-text">图片转Base64</span></a><a class="back-menu-item" href="/projects/image-webp" title="图片转WebP"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/gif/picture.gif" alt="图片转WebP"/><span class="back-menu-item-text">图片转WebP</span></a><a class="back-menu-item" href="/projects/image-compress" title="图片压缩"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/gif/picture.gif" alt="图片压缩"/><span class="back-menu-item-text">图片压缩</span></a></div></div><div class="back-menu-list-group"><div class="back-menu-list-title">文本工具</div><div class="back-menu-list"><a class="back-menu-item" href="/projects/text-diff" title="文本差异对比"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/gif/text.gif" alt="文本差异对比"/><span class="back-menu-item-text">文本差异对比</span></a><a class="back-menu-item" href="/projects/image-base64" title="CSS/JS压缩"><img class="back-menu-item-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.onerror=null,this.src=&quot;/img/404.jpg&quot;" data-lazy-src="https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/gif/text.gif" alt="CSS/JS压缩"/><span class="back-menu-item-text">CSS/JS压缩</span></a></div></div></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 文章</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/archives/"><i class="anzhiyufont anzhiyu-icon-box-archive faa-tada" style="font-size: 0.9em;"></i><span> 总览</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/categories/"><i class="anzhiyufont anzhiyu-icon-shapes faa-tada" style="font-size: 0.9em;"></i><span> 分类</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags faa-tada" style="font-size: 0.9em;"></i><span> 标签</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 我的</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/music/"><i class="anzhiyufont anzhiyu-icon-music faa-tada" style="font-size: 0.9em;"></i><span> 音乐馆</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/album/"><i class="anzhiyufont anzhiyu-icon-images faa-tada" style="font-size: 0.9em;"></i><span> 相册集</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/comments/"><i class="anzhiyufont anzhiyu-icon-envelope faa-tada" style="font-size: 0.9em;"></i><span> 留言板</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><span> 关于</span></a><ul class="menus_item_child"><li><a class="site-page child faa-parent animated-hover" href="/about/"><i class="anzhiyufont anzhiyu-icon-paper-plane faa-tada" style="font-size: 0.9em;"></i><span> 关于本人</span></a></li><li><a class="site-page child faa-parent animated-hover" href="/essay/"><i class="anzhiyufont anzhiyu-icon-lightbulb faa-tada" style="font-size: 0.9em;"></i><span> 闲言碎语</span></a></li><li><a class="site-page child faa-parent animated-hover" href="javascript:toRandomPost()"><i class="anzhiyufont anzhiyu-icon-shoe-prints1 faa-tada" style="font-size: 0.9em;"></i><span> 随便逛逛</span></a></li></ul></div></div><span class="sidebar-menu-item-title">标签</span><div class="card-tags"><div class="item-headline"></div><div class="card-tag-cloud"><a href="/tags/ES2017-ES8/" style="font-size: 0.88rem;">ES2017(ES8)<sup>1</sup></a><a href="/tags/ES6/" style="font-size: 0.88rem;">ES6<sup>6</sup></a><a href="/tags/JavaScript/" style="font-size: 0.88rem; font-weight: 500; color: var(--anzhiyu-lighttext)">JavaScript<sup>10</sup></a><a href="/tags/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/" style="font-size: 0.88rem;">性能优化<sup>6</sup></a></div></div><hr/></div></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="anzhiyufont anzhiyu-icon-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="anzhiyufont anzhiyu-icon-arrows-left-right"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="anzhiyufont anzhiyu-icon-gear"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="anzhiyufont anzhiyu-icon-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="anzhiyufont anzhiyu-icon-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></button></div></div><div id="nav-music"><a id="nav-music-hoverTips" onclick="anzhiyu.musicToggle()" accesskey="m">播放音乐</a><div id="console-music-bg"></div><meting-js id="8152976493" server="netease" type="playlist" mutex="true" preload="none" theme="var(--anzhiyu-main)" data-lrctype="0" order="random" volume="0.7"></meting-js></div><div id="algolia-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><button class="search-close-button"><i class="anzhiyufont anzhiyu-icon-xmark"></i></button></nav><div class="search-wrap"><div id="algolia-search-input"></div><hr/><div id="algolia-search-results"><div id="algolia-hits"><a class="tag-list" href="/tags/JavaScript" title="JavaScript">JavaScript</a><a class="tag-list" href="/tags/Vue" title="Vue">Vue</a></div><div id="algolia-pagination"></div><div id="algolia-info"><div class="algolia-stats"></div><div class="algolia-poweredBy"></div></div></div></div></div><div id="search-mask"></div></div><div id="rightMenu"><div class="rightMenu-group rightMenu-small"><div class="rightMenu-item" id="menu-backward"><i class="anzhiyufont anzhiyu-icon-arrow-left"></i></div><div class="rightMenu-item" id="menu-forward"><i class="anzhiyufont anzhiyu-icon-arrow-right"></i></div><div class="rightMenu-item" id="menu-refresh"><i class="anzhiyufont anzhiyu-icon-arrow-rotate-right" style="font-size: 1rem;"></i></div><div class="rightMenu-item" id="menu-top"><i class="anzhiyufont anzhiyu-icon-arrow-up"></i></div></div><div class="rightMenu-group rightMenu-line rightMenuPlugin"><div class="rightMenu-item" id="menu-copytext"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制选中文本</span></div><div class="rightMenu-item" id="menu-pastetext"><i class="anzhiyufont anzhiyu-icon-paste"></i><span>粘贴文本</span></div><a class="rightMenu-item" id="menu-commenttext"><i class="anzhiyufont anzhiyu-icon-comment-medical"></i><span>引用到评论</span></a><div class="rightMenu-item" id="menu-newwindow"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开</span></div><div class="rightMenu-item" id="menu-copylink"><i class="anzhiyufont anzhiyu-icon-link"></i><span>复制链接地址</span></div><div class="rightMenu-item" id="menu-copyimg"><i class="anzhiyufont anzhiyu-icon-images"></i><span>复制此图片</span></div><div class="rightMenu-item" id="menu-downloadimg"><i class="anzhiyufont anzhiyu-icon-download"></i><span>下载此图片</span></div><div class="rightMenu-item" id="menu-newwindowimg"><i class="anzhiyufont anzhiyu-icon-window-restore"></i><span>新窗口打开图片</span></div><div class="rightMenu-item" id="menu-search"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>站内搜索</span></div><div class="rightMenu-item" id="menu-searchBaidu"><i class="anzhiyufont anzhiyu-icon-magnifying-glass"></i><span>百度搜索</span></div><div class="rightMenu-item" id="menu-music-toggle"><i class="anzhiyufont anzhiyu-icon-play"></i><span>播放音乐</span></div><div class="rightMenu-item" id="menu-music-back"><i class="anzhiyufont anzhiyu-icon-backward"></i><span>切换到上一首</span></div><div class="rightMenu-item" id="menu-music-forward"><i class="anzhiyufont anzhiyu-icon-forward"></i><span>切换到下一首</span></div><div class="rightMenu-item" id="menu-music-playlist" onclick="window.open(&quot;https://y.qq.com/n/ryqq/playlist/8802438608&quot;, &quot;_blank&quot;);" style="display: none;"><i class="anzhiyufont anzhiyu-icon-radio"></i><span>查看所有歌曲</span></div><div class="rightMenu-item" id="menu-music-copyMusicName"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制歌名</span></div></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item menu-link" id="menu-randomPost"><i class="anzhiyufont anzhiyu-icon-shuffle"></i><span>随便逛逛</span></a><a class="rightMenu-item menu-link" href="/categories/"><i class="anzhiyufont anzhiyu-icon-cube"></i><span>博客分类</span></a><a class="rightMenu-item menu-link" href="/tags/"><i class="anzhiyufont anzhiyu-icon-tags"></i><span>文章标签</span></a></div><div class="rightMenu-group rightMenu-line rightMenuOther"><a class="rightMenu-item" id="menu-copy" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-copy"></i><span>复制地址</span></a><a class="rightMenu-item" id="menu-commentBarrage" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-message"></i><span class="menu-commentBarrage-text">关闭热评</span></a><a class="rightMenu-item" id="menu-darkmode" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-circle-half-stroke"></i><span class="menu-darkmode-text">深色模式</span></a><a class="rightMenu-item" id="menu-translate" href="javascript:void(0);"><i class="anzhiyufont anzhiyu-icon-language"></i><span>轉為繁體</span></a></div></div><div id="rightmenu-mask"></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/svg-pan-zoom@3.6.2/dist/svg-pan-zoom.min.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.cbd.int/@fancyapps/ui@5.0.28/dist/fancybox/fancybox.umd.js"></script><script src="https://cdn.cbd.int/instant.page@5.2.0/instantpage.js" type="module"></script><script src="https://cdn.cbd.int/vanilla-lazyload@17.8.5/dist/lazyload.iife.min.js"></script><script src="https://cdn.cbd.int/node-snackbar@0.1.16/dist/snackbar.min.js"></script><canvas id="universe"></canvas><script async src="https://npm.elemecdn.com/anzhiyu-theme-static@1.0.0/dark/dark.js"></script><script>// 消除控制台打印
+var HoldLog = console.log;
+console.log = function () {};
+let now1 = new Date();
+queueMicrotask(() => {
+  const Log = function () {
+    HoldLog.apply(console, arguments);
+  }; //在恢复前输出日志
+  const grt = new Date("04/01/2021 00:00:00"); //此处修改你的建站时间或者网站上线时间
+  now1.setTime(now1.getTime() + 250);
+  const days = (now1 - grt) / 1000 / 60 / 60 / 24;
+  const dnum = Math.floor(days);
+  const ascll = [`叮！可爱加载中... `, `🐱`];
+  const ascll2 = [`NCC2-036`, `调用前置摄像头拍照成功，识别为【小笨蛋】.`, `Photo captured: `, `🤪`];
+
+  setTimeout(
+    Log.bind(
+      console,
+      `%c ${ascll[0]} %c${ascll[1]}`,
+      "color:white; background-color:#f0ad4e",
+      ''
+    )
+  );
+  setTimeout(
+    Log.bind(
+      console,
+      `%c ${ascll2[0]} %c ${ascll2[1]} %c \n${ascll2[2]} %c\n${ascll2[3]}\n`,
+      "color:white; background-color:#4fd953",
+      "",
+      "",
+      'background:url("https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/tinggge.gif") no-repeat;font-size:450%'
+    )
+  );
+
+  setTimeout(Log.bind(console, "%c WELCOME %c 你好，小笨蛋.", "color:white; background-color:#4f90d9", ""));
+
+  setTimeout(
+    console.warn.bind(
+      console,
+      "你正在访问 Touko 的博客.",
+      ""
+    )
+  );
+
+  setTimeout(Log.bind(console, "%c W23-12 %c 你已打开控制台.", "color:white; background-color:#4f90d9", ""));
+
+  setTimeout(
+    console.warn.bind(console, "%c S013-782 %c 你现在正处于监控中.", "color:white; background-color:#d9534f", "")
+  );
+});</script><script async src="/anzhiyu/random.js"></script><script async="async">(function () {
+  var grt = new Date("04/01/2021 00:00:00"); //设置网站上线时间
+  var now = new Date();
+  var dnum;
+  var hnum;
+  var mnum;
+  var snum;
+  var nowHour;
+
+  // 计算并更新天数、小时数、分钟数和秒数
+  function updateTime() {
+    now = new Date(); // 更新 now 的值
+    nowHour = now.getHours(); // 更新 nowHour 的值
+    var days = (now - grt) / 1000 / 60 / 60 / 24;
+    dnum = Math.floor(days);
+    var hours = (now - grt) / 1000 / 60 / 60 - 24 * dnum;
+    hnum = Math.floor(hours);
+    if (String(hnum).length == 1) {
+      hnum = "0" + hnum;
+    }
+    var minutes = (now - grt) / 1000 / 60 - 24 * 60 * dnum - 60 * hnum;
+    mnum = Math.floor(minutes);
+    if (String(mnum).length == 1) {
+      mnum = "0" + mnum;
+    }
+    var seconds = (now - grt) / 1000 - 24 * 60 * 60 * dnum - 60 * 60 * hnum - 60 * mnum;
+    snum = Math.round(seconds);
+    if (String(snum).length == 1) {
+      snum = "0" + snum;
+    }
+  }
+
+  // 更新网页中显示的网站运行时间
+  function updateHtml() {
+    const footer = document.getElementById("footer");
+    if (!footer) return
+    let currentTimeHtml = "";
+    if (nowHour < 18 && nowHour >= 9) {
+      // 如果是上班时间，默认就是"安知鱼-上班摸鱼中.svg"图片，不需要更改
+      currentTimeHtml = `本站居然运行了 ${dnum} 天<span id='runtime'> ${hnum} 小时 ${mnum} 分 ${snum} 秒 </span><i class='anzhiyufont anzhiyu-icon-heartbeat' style='color:red'></i>`;
+    } else {
+      // 如果是下班时间，插入"安知鱼-下班啦.svg"图片
+      let img = document.querySelector("#workboard .workSituationImg");
+      if (img != null) {
+        img.src = "https://img.shields.io/badge/Touko-%E4%B8%8B%E7%8F%AD%E5%95%A6~-white?style=social&amp;logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciICB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNHB4IiBoZWlnaHQ9IjI0cHgiPjxwYXRoIGZpbGw9IiNmZmMxMDciIGQ9Im0xNC41IDcuOTk1YzAtLjQxNC0uMzM2LS43NS0uNzUtLjc1LTMuMDMyIDAtNS41LTIuNDY4LTUuNS01LjUgMC0uNDE0LS4zMzYtLjc1LS43NS0uNzVzLS43NS4zMzYtLjc1Ljc1YzAgMy4wMzItMi40NjggNS41LTUuNSA1LjUtLjQxNCAwLS43NS4zMzYtLjc1Ljc1cy4zMzYuNzUuNzUuNzVjMy4wMzIgMCA1LjUgMi40NjggNS41IDUuNSAwIC40MTQuMzM2Ljc1Ljc1Ljc1cy43NS0uMzM2Ljc1LS43NWMwLTMuMDMyIDIuNDY4LTUuNSA1LjUtNS41LjQxNCAwIC43NS0uMzM2Ljc1LS43NXoiLz48cGF0aCBmaWxsPSIjZmZjMTA3IiBkPSJtMjEuNSAxNi4yNDVjLTIuNDgxIDAtNC41LTIuMDE5LTQuNS00LjUgMC0uNDE0LS4zMzYtLjc1LS43NS0uNzVzLS43NS4zMzYtLjc1Ljc1YzAgMi40ODEtMi4wMTkgNC41LTQuNSA0LjUtLjQxNCAwLS43NS4zMzYtLjc1Ljc1cy4zMzYuNzUuNzUuNzVjMi40ODEgMCA0LjUgMi4wMTkgNC41IDQuNSAwIC40MTQuMzM2Ljc1Ljc1Ljc1cy43NS0uMzM2Ljc1LS43NWMwLTIuNDgxIDIuMDE5LTQuNSA0LjUtNC41LjQxNCAwIC43NS0uMzM2Ljc1LS43NXMtLjMzNi0uNzUtLjc1LS43NXoiLz48ZyBmaWxsPSIjZmZjYTI4Ij48cGF0aCBkPSJtMjMuMjUgNC4yNDVjLTEuOTMgMC0zLjUtMS41Ny0zLjUtMy41IDAtLjQxNC0uMzM2LS43NS0uNzUtLjc1cy0uNzUuMzM2LS43NS43NWMwIDEuOTMtMS41NyAzLjUtMy41IDMuNS0uNDE0IDAtLjc1LjMzNi0uNzUuNzVzLjMzNi43NS43NS43NWMxLjkzIDAgMy41IDEuNTcgMy41IDMuNSAwIC40MTQuMzM2Ljc1Ljc1Ljc1cy43NS0uMzM2Ljc1LS43NWMwLTEuOTMgMS41Ny0zLjUgMy41LTMuNS40MTQgMCAuNzUtLjMzNi43NS0uNzVzLS4zMzYtLjc1LS43NS0uNzV6Ii8+PHBhdGggZD0ibTguNzUgMTkuMjQ1Yy0xLjM3OSAwLTIuNS0xLjEyMS0yLjUtMi41IDAtLjQxNC0uMzM2LS43NS0uNzUtLjc1cy0uNzUuMzM2LS43NS43NWMwIDEuMzc5LTEuMTIxIDIuNS0yLjUgMi41LS40MTQgMC0uNzUuMzM2LS43NS43NXMuMzM2Ljc1Ljc1Ljc1YzEuMzc5IDAgMi41IDEuMTIxIDIuNSAyLjUgMCAuNDE0LjMzNi43NS43NS43NXMuNzUtLjMzNi43NS0uNzVjMC0xLjM3OSAxLjEyMS0yLjUgMi41LTIuNS40MTQgMCAuNzUtLjMzNi43NS0uNzVzLS4zMzYtLjc1LS43NS0uNzV6Ii8+PC9nPjwvc3ZnPg==";
+        img.title = "下班了就该开开心心的玩耍，嘿嘿~";
+        img.alt = "下班了就该开开心心的玩耍，嘿嘿~";
+      }
+
+      currentTimeHtml = `本站居然运行了 ${dnum} 天<span id='runtime'> ${hnum} 小时 ${mnum} 分 ${snum} 秒 </span><i class='anzhiyufont anzhiyu-icon-heartbeat' style='color:red'></i>`;
+    }
+
+    if (document.getElementById("runtimeTextTip")) {
+      document.getElementById("runtimeTextTip").innerHTML = currentTimeHtml;
+    }
+  }
+
+  setInterval(() => {
+    updateTime();
+    updateHtml();
+  }, 1000);
+})();</script><script src="https://cdn.cbd.int/algoliasearch@4.18.0/dist/algoliasearch-lite.umd.js"></script><script src="https://cdn.cbd.int/instantsearch.js@4.60.0/dist/instantsearch.production.min.js"></script><script src="/js/search/algolia.js"></script><div class="js-pjax"><script>(() => {
+  const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+  if ($mermaid.length === 0) return
+  const runMermaid = () => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    Array.from($mermaid).forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const mermaidThemeConfig = '%%{init:{ \'theme\':\'' + theme + '\'}}%%\n'
+      const mermaidID = 'mermaid-' + index
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc?.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+
+      const renderV10 = () => {
+        renderFn.then(({svg}) => {
+          mermaidSrc.insertAdjacentHTML('afterend', svg)
+          const svgElement = document.getElementById(mermaidID)
+          const viewBox = svgElement.getAttribute('viewBox')
+          const viewBoxValues = viewBox.split(/[\s,]+/)
+          window.svgPanZoom ? svgPanZoom(svgElement, { contain: true, controlIconsEnabled: true }) : ''
+          const width = Number(getComputedStyle(svgElement).getPropertyValue('width').slice(0, -2))
+          svgElement.setAttribute('height', `${viewBoxValues[3] * width / viewBoxValues[2]}px`)
+        })
+      }
+
+      const renderV9 = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      typeof renderFn === 'string' ? renderV9(renderFn) : renderV10()
+    })
+  }
+
+  const loadMermaid = () => {
+    window.loadMermaid ? runMermaid() : getScript('https://cdn.cbd.int/mermaid@10.2.4/dist/mermaid.min.js').then(runMermaid)
+  }
+
+  anzhiyu.addGlobalFn('themeChange', runMermaid, 'mermaid')
+
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script><script>(() => {
+  const initValine = () => {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'BsIRp7GQE8IZ5fkI0JRj8Vys-gzGzoHsz',
+      appKey: 'vla82YKrFnfwtuQfgoaDnzu9',
+      avatar: 'mp',
+      serverURLs: 'https://bsirp7gq.lc-cn-n1-shared.com',
+      emojiMaps: {"3d眼镜":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/3d眼镜.png","EDG":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/EDG.png","LPL":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/LPL.png","beluga":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/beluga.png","不好意思":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/不好意思.png","不服吗":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/不服吗.png","亲亲":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/亲亲.png","伞兵":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/伞兵.png","倚墙笑":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/倚墙笑.png","值得肯定":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/值得肯定.png","偷偷看":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/偷偷看.png","傻笑":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/傻笑.png","再见":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/再见.png","出家人":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/出家人.png","击剑":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/击剑.png","加班":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/加班.png","勉强笑":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/勉强笑.png","危险":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/危险.png","发红包":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/发红包.png","吃手":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/吃手.png","吃瓜":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/吃瓜.png","吐血":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/吐血.png","吵架":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/吵架.png","呦吼":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/呦吼.png","呲牙笑":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/呲牙笑.png","哈士奇":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/哈士奇.png","哈士奇失去意识":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/哈士奇失去意识.png","哈士奇失望":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/哈士奇失望.png","哭泣":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/哭泣.png","唱歌":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/唱歌.png","喜欢":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/喜欢.png","嘿哈":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/嘿哈.png","大笑":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/大笑.png","失去信号":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/失去信号.png","失望":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/失望.png","头秃":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/头秃.png","奋斗":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/奋斗.png","好奇":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/好奇.png","好的":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/好的.png","害羞":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/害羞.png","小丑":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/小丑.png","小偷":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/小偷.png","尬笑":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/尬笑.png","尴尬":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/尴尬.png","应援":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/应援.png","开心":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/开心.png","引起不适":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/引起不适.png","微笑":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/微笑.png","思考":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/思考.png","恶心":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/恶心.png","恶魔":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/恶魔.png","恶魔恐惧":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/恶魔恐惧.png","惊吓":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/惊吓.png","惊吓白眼":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/惊吓白眼.png","惊讶":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/惊讶.png","惬意":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/惬意.png","感动":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/感动.png","愤怒":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/愤怒.png","我看好你":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/我看好你.png","手机相机":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/手机相机.png","打咩":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/打咩.png","打牌":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/打牌.png","托腮":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/托腮.png","扶额":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/扶额.png","抠鼻":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/抠鼻.png","抬眼镜":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/抬眼镜.png","拜托":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/拜托.png","捂嘴笑":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/捂嘴笑.png","捂脸":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/捂脸.png","擦汗":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/擦汗.png","放鞭炮":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/放鞭炮.png","敬礼":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/敬礼.png","整理发型":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/整理发型.png","斗鸡眼":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/斗鸡眼.png","智慧的眼神":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/智慧的眼神.png","月饼":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/月饼.png","有没有搞错":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/有没有搞错.png","正确":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/正确.png","没招":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/没招.png","波吉":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/波吉.png","泪奔":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/泪奔.png","流汗微笑":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/流汗微笑.png","流鼻涕":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/流鼻涕.png","深思":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/深思.png","滑稽":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/滑稽.png","滑稽吃瓜":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/滑稽吃瓜.png","滑稽喝水":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/滑稽喝水.png","滑稽奶茶":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/滑稽奶茶.png","滑稽柠檬":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/滑稽柠檬.png","滑稽狂汗":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/滑稽狂汗.png","滑稽被子":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/滑稽被子.png","烦恼":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/烦恼.png","熊熊":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/熊熊.png","熊猫":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/熊猫.png","熊猫唱歌":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/熊猫唱歌.png","熊猫喜欢":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/熊猫喜欢.png","熊猫失望":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/熊猫失望.png","熊猫意外":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/熊猫意外.png","熬夜":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/熬夜.png","爆炸":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/爆炸.png","牛年进宝":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/牛年进宝.png","狂热":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/狂热.png","狗头":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/狗头.png","狗头围脖":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/狗头围脖.png","狗头失望":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/狗头失望.png","狗头意外":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/狗头意外.png","狗头胖次":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/狗头胖次.png","狗头花":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/狗头花.png","狗头草":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/狗头草.png","猪头":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/猪头.png","猪头意外":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/猪头意外.png","生病":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/生病.png","电话":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/电话.png","疑问":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/疑问.png","疼痛":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/疼痛.png","痛哭":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/痛哭.png","看穿一切":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/看穿一切.png","眩晕":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/眩晕.png","睡觉":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/睡觉.png","禁言":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/禁言.png","笑哭":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/笑哭.png","纠结":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/纠结.png","绿帽":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/绿帽.png","缺牙笑":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/缺牙笑.png","翻白眼":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/翻白眼.png","老虎意外":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/老虎意外.png","耍酷":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/耍酷.png","胡子":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/胡子.png","菜狗":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/菜狗.png","菜狗花":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/菜狗花.png","蒙面滑稽":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/蒙面滑稽.png","虎年进宝":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/虎年进宝.png","被打":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/被打.png","裂开":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/裂开.png","警告":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/警告.png","读书":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/读书.png","财神红包":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/财神红包.png","超爱":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/超爱.png","这是啥":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/这是啥.png","送福":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/送福.png","送花":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/送花.png","错误":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/错误.png","阴险":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/阴险.png","难以置信":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/难以置信.png","面具":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/面具.png","饥渴":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/饥渴.png","鬼脸":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/鬼脸.png","黑线":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/黑线.png","鼓掌":"https://cdn.jsdelivr.net/npm/sticker-heo@2022.7.5/Sticker-100/鼓掌.png"},
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  const loadValine = async () => {
+    if (typeof Valine === 'function') initValine()
+    else {
+      await getScript('https://cdn.cbd.int/valine@1.5.1/dist/Valine.min.js')
+      initValine()
+    }
+  }
+
+  if ('Valine' === 'Valine' || !true) {
+    if (true) anzhiyu.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script><input type="hidden" name="page-type" id="page-type" value="post"></div><script src="https://cdn.cbd.int/blueimp-md5@2.19.0/js/md5.min.js"></script><script>window.addEventListener('load', () => {
+  const changeContent = (content) => {
+    if (content === '') return content
+
+    content = content.replace(/<img.*?src="(.*?)"?[^\>]+>/ig, '[图片]') // replace image link
+    content = content.replace(/<a[^>]+?href=["']?([^"']+)["']?[^>]*>([^<]+)<\/a>/gi, '[链接]') // replace url
+    content = content.replace(/<pre><code>.*?<\/pre>/gi, '[代码]') // replace code
+    content = content.replace(/<[^>]+>/g,"") // remove html tag
+
+    if (content.length > 150) {
+      content = content.substring(0,150) + '...'
+    }
+    return content
+  }
+
+  const getIcon = (icon, mail) => {
+    if (icon) return icon
+    let defaultIcon = '?d=mp'
+    let iconUrl = `https://gravatar.loli.net/avatar/${md5(mail.toLowerCase()) + defaultIcon}`
+    return iconUrl
+  }
+
+  const generateHtml = array => {
+    let result = ''
+
+    if (array.length) {
+      for (let i = 0; i < array.length; i++) {
+        result += '<div class=\'aside-list-item\'>'
+
+        if (true) {
+          const name = 'data-lazy-src'
+          result += `<a href='${array[i].url}' class='thumbnail'><img ${name}='${array[i].avatar}' alt='${array[i].nick}'><div class='name'><span>${array[i].nick} </span></div></a>`
+        }
+
+        result += `<div class='content'>
+        <a class='comment' href='${array[i].url}' title='${array[i].content}'>${array[i].content}</a>
+        <time datetime="${array[i].date}">${anzhiyu.diffDate(array[i].date, true)}</time></div>
+        </div>`
+      }
+    } else {
+      result += '没有评论'
+    }
+
+    let $dom = document.querySelector('#card-newest-comments .aside-list')
+    $dom && ($dom.innerHTML= result)
+    window.lazyLoadInstance && window.lazyLoadInstance.update()
+    window.pjax && window.pjax.refresh($dom)
+  }
+
+  const getComment = () => {
+    const serverURL = 'https://bsirp7gq.lc-cn-n1-shared.com'
+
+    var settings = {
+      "method": "GET",
+      "headers": {
+        "X-LC-Id": 'BsIRp7GQE8IZ5fkI0JRj8Vys-gzGzoHsz',
+        "X-LC-Key": 'vla82YKrFnfwtuQfgoaDnzu9',
+        "Content-Type": "application/json"
+      },
+    }
+
+    fetch(`${serverURL}/1.1/classes/Comment?limit=6&order=-createdAt`,settings)
+      .then(response => response.json())
+      .then(data => {
+        const valineArray = data.results.map(function (e) {
+          return {
+            'avatar': getIcon(e.QQAvatar, e.mail),
+            'content': changeContent(e.comment),
+            'nick': e.nick,
+            'url': e.url + '#' + e.objectId,
+            'date': e.updatedAt,
+          }
+        })
+        saveToLocal.set('valine-newest-comments', JSON.stringify(valineArray), 10/(60*24))
+        generateHtml(valineArray)
+      }).catch(e => {
+        const $dom = document.querySelector('#card-newest-comments .aside-list')
+        $dom.textContent= "无法获取评论，请确认相关配置是否正确"
+      }) 
+  }
+
+  const newestCommentInit = () => {
+    if (document.querySelector('#card-newest-comments .aside-list')) {
+      const data = saveToLocal.get('valine-newest-comments')
+      if (data) {
+        generateHtml(JSON.parse(data))
+      } else {
+        getComment()
+      }
+    }
+  }
+
+  newestCommentInit()
+  document.addEventListener('pjax:complete', newestCommentInit)
+})</script><script>var visitorMail = "visitor@touko.com";
+</script><script async data-pjax src="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/waterfall/waterfall.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script><script src="/js/anzhiyu/right_click_menu.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.1.9/icon/ali_iconfont_css.css"><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="false" src="https://cdn.cbd.int/butterfly-extsrc@1.1.3/dist/canvas-nest.min.js"></script><link rel="stylesheet" href="https://cdn.cbd.int/anzhiyu-theme-static@1.0.0/aplayer/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.cbd.int/anzhiyu-blog-static@1.0.1/js/APlayer.min.js"></script><script src="https://cdn.cbd.int/hexo-anzhiyu-music@1.0.1/assets/js/Meting2.min.js"></script><script src="https://cdn.cbd.int/pjax@0.2.8/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+  // removeEventListener scroll 
+  anzhiyu.removeGlobalFnEvent('pjax')
+  anzhiyu.removeGlobalFnEvent('themeChange')
+
+  document.getElementById('rightside').classList.remove('rightside-show')
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', e => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><script charset="UTF-8" src="https://cdn.cbd.int/anzhiyu-theme-static@1.1.5/accesskey/accesskey.js"></script></div><div id="popup-window"><div class="popup-window-title">通知</div><div class="popup-window-divider"></div><div class="popup-window-content"><div class="popup-tip">你好呀</div><div class="popup-link"><i class="anzhiyufont anzhiyu-icon-arrow-circle-right"></i></div></div></div></body></html>

@@ -10,8 +10,125 @@
     
     
     <url>
+        <loc>http://toukoxu.github.io/comments/</loc>
+        <lastmod>2025-10-29T05:44:34.576Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    
+    
+    <url>
+        <loc>http://toukoxu.github.io/album/</loc>
+        <lastmod>2025-09-28T04:51:32.595Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    
+    
+    <url>
+        <loc>http://toukoxu.github.io/album/cats/</loc>
+        <lastmod>2025-09-26T03:43:28.396Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    
+    
+    <url>
+        <loc>http://toukoxu.github.io/projects/image-compress.html</loc>
+        <lastmod>2025-09-10T10:04:12.766Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    
+    
+    <url>
+        <loc>http://toukoxu.github.io/projects/image-webp.html</loc>
+        <lastmod>2025-09-10T09:46:43.335Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    
+    
+    <url>
+        <loc>http://toukoxu.github.io/projects/text-diff.html</loc>
+        <lastmod>2025-09-10T07:50:37.589Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    
+    
+    <url>
+        <loc>http://toukoxu.github.io/projects/image-base64.html</loc>
+        <lastmod>2025-09-10T07:50:27.032Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    
+    
+    <url>
+        <loc>http://toukoxu.github.io/album/nikki-1/</loc>
+        <lastmod>2025-08-25T12:42:45.112Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    
+    
+    <url>
+        <loc>http://toukoxu.github.io/album/nikki-2/</loc>
+        <lastmod>2025-08-25T12:42:45.112Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    
+    
+    <url>
+        <loc>http://toukoxu.github.io/about/</loc>
+        <lastmod>2025-08-25T12:30:15.689Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    
+    
+    <url>
+        <loc>http://toukoxu.github.io/essay/</loc>
+        <lastmod>2025-08-25T09:30:25.404Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    
+    
+    <url>
+        <loc>http://toukoxu.github.io/music/</loc>
+        <lastmod>2025-08-25T08:51:22.248Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    
+    
+    <url>
+        <loc>http://toukoxu.github.io/copyright/</loc>
+        <lastmod>2025-08-22T08:27:32.912Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    
+    
+    <url>
         <loc>http://toukoxu.github.io/tags/</loc>
-        <lastmod>2025-08-21T09:05:05.406Z</lastmod>
+        <lastmod>2025-08-22T08:20:10.633Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>

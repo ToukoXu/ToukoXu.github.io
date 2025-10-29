@@ -941,13 +941,13 @@ document.addEventListener("DOMContentLoaded", function () {
    * 複製時加上版權信息
    */
   const addCopyright = () => {
-    const { limitCount, languages, copy, copyrightEbable } = GLOBAL_CONFIG.copyright;
+    const { limitCount, languages, copy, copyrightEbable, ignore } = GLOBAL_CONFIG.copyright;
 
     const handleCopy = e => {
       if (copy) {
         anzhiyu.snackbarShow(languages.copySuccess);
       }
-      if (copyrightEbable) {
+      if (copyrightEbable && !ignore.includes(window.location.pathname)) {
         e.preventDefault();
         const copyFont = window.getSelection(0).toString();
         let textFont = copyFont;

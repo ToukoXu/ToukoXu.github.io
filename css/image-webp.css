@@ -1,0 +1,154 @@
+#iw-container {
+  .iw-progress-container {
+    margin-bottom: 30px;
+  }
+
+  .iw-progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+
+  .iw-progress-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #2d3748;
+  }
+
+  .iw-progress-bar {
+    height: 12px;
+    background-color: #edf2f7;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .iw-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--anzhiyu-theme), #8e7dff);
+    border-radius: 10px;
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+
+  .iw-images-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+
+    &:has(.iw-empty-state) {
+      display: flex;
+      justify-content: center;
+    }
+  }
+
+  .iw-image-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+  }
+
+  .iw-image-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .iw-image-preview {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .iw-image-info {
+    padding: 15px;
+  }
+
+  .iw-image-name {
+    font-weight: 600;
+    margin-bottom: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .iw-image-details {
+    display: flex;
+    justify-content: space-between;
+    color: #718096;
+    font-size: 0.85rem;
+    margin-bottom: 12px;
+  }
+
+  .iw-image-status {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    font-size: 0.9rem;
+  }
+
+  .iw-status-icon {
+    margin-right: 8px;
+    font-size: 1.1rem;
+  }
+
+  .iw-status-waiting {
+    color: var(--project-info);
+  }
+
+  .iw-status-processing {
+    color: var(--project-primary);
+  }
+
+  .iw-status-completed {
+    color: var(--project-success);
+  }
+
+  .iw-status-error {
+    color: var(--project-danger);
+  }
+
+  .iw-image-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .iw-global-actions {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap; 
+    gap: 15px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #e2e8f0;
+  }
+
+  .iw-empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #a0aec0;
+  }
+
+  .iw-empty-icon {
+    font-size: 60px;
+    margin-bottom: 15px;
+    opacity: 0.5;
+  }
+
+  .iw-add-prefix-options {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  #iw-container {
+    .iw-images-container {
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    }
+  }
+}

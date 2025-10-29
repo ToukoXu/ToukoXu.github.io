@@ -1,0 +1,14 @@
+#td-container {
+  .td-options {
+    display: flex;
+    align-items: center;
+    padding-bottom: 10px;
+  }
+
+  #td-diff-container {
+    height: 600px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+}

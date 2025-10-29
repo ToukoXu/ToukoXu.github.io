@@ -4331,7 +4331,7 @@ body[data-type='about'] #web_bg {
   background: none !important;
 }
 .author-content-item.personalities {
-  width: 59%;
+  width: 39%;
 }
 .author-content-item.personalities .image {
   position: absolute;
@@ -4730,7 +4730,7 @@ body[data-type='about'] #web_bg {
   min-height: 300px;
   overflow: hidden;
   color: var(--anzhiyu-white);
-  width: 59%;
+  min-height: 230px;
 }
 .author-content-item .content-bottom {
   margin-top: auto;
@@ -4779,7 +4779,6 @@ body[data-type='about'] #web_bg {
   left: 0;
 }
 .author-content-item.comic-content {
-  width: 39%;
   min-height: 300px;
   overflow: hidden;
 }
@@ -5107,7 +5106,7 @@ body[data-type='about'] #web_bg {
   -webkit-flex-direction: column;
   -ms-flex-direction: column;
   flex-direction: column;
-  width: 50%;
+  width: 59%;
   min-height: 450px;
 }
 .skills .skill-icon {
@@ -5496,23 +5495,8 @@ body[data-type='about'] #web_bg {
   pointer-events: none;
   z-index: 3;
 }
-#about-page .author-content-item-group.column.mapAndInfo {
-  width: 100%;
-}
-#about-page .author-content-item-group.column {
-  -webkit-box-orient: horizontal;
-  -moz-box-orient: horizontal;
-  -o-box-orient: horizontal;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-}
-#about-page .author-content-item.map {
-  width: 50%;
-}
-#about-page .author-content-item.selfInfo {
-  height: 100%;
-  width: 49%;
+ {
+  body: 1;
 }
 @-moz-keyframes loading-bar {
   0% {
@@ -7850,9 +7834,6 @@ body[data-type="music"] .s-sticker div {
   -o-transition: 0.3s;
   -ms-transition: 0.3s;
   transition: 0.3s;
-}
-body:has(#console.show) #nav-music {
-  display: none !important;
 }
 @media screen and (max-width: 1400px) {
   body #anMusic-page #anMusicSwitching,
@@ -13071,6 +13052,7 @@ h1.page-title + .tag-cloud-list {
   -webkit-flex-direction: column;
   -ms-flex-direction: column;
   flex-direction: column;
+  cursor: default;
 }
 .back-home-button .back-menu-list-group .back-menu-list-title {
   margin: 8px 0 0 16px;
@@ -16306,6 +16288,7 @@ li.card-category-list-item {
   -o-transition: all 0.3s;
   -ms-transition: all 0.3s;
   transition: all 0.3s;
+  padding: 0;
 }
 #vcomment .vimg:hover {
   -webkit-transform: rotate(360deg);
@@ -19872,7 +19855,7 @@ body[data-type="album_detail"] #page .page-title {
 }
 #album_detail .timeline ul li.album-item {
   position: relative;
-  width: 32%;
+  width: 23.5%;
   border: var(--style-border-always);
   border-radius: 12px;
   padding: 1rem 1rem 0.5rem;
