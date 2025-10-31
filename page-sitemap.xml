@@ -10,8 +10,26 @@
     
     
     <url>
+        <loc>http://toukoxu.github.io/projects/px-rem.html</loc>
+        <lastmod>2025-10-31T09:21:33.639Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    
+    
+    <url>
         <loc>http://toukoxu.github.io/projects/finance-calculator.html</loc>
-        <lastmod>2025-10-31T05:36:01.694Z</lastmod>
+        <lastmod>2025-10-31T07:42:48.163Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    
+    
+    <url>
+        <loc>http://toukoxu.github.io/projects/text-diff.html</loc>
+        <lastmod>2025-10-31T07:30:28.235Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
@@ -64,15 +82,6 @@
     
     
     <url>
-        <loc>http://toukoxu.github.io/projects/text-diff.html</loc>
-        <lastmod>2025-09-10T07:50:37.589Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    
-    
-    
-    <url>
         <loc>http://toukoxu.github.io/projects/image-base64.html</loc>
         <lastmod>2025-09-10T07:50:27.032Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -82,7 +91,7 @@
     
     
     <url>
-        <loc>http://toukoxu.github.io/album/nikki-1/</loc>
+        <loc>http://toukoxu.github.io/album/nikki-2/</loc>
         <lastmod>2025-08-25T12:42:45.112Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
@@ -91,7 +100,7 @@
     
     
     <url>
-        <loc>http://toukoxu.github.io/album/nikki-2/</loc>
+        <loc>http://toukoxu.github.io/album/nikki-1/</loc>
         <lastmod>2025-08-25T12:42:45.112Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>

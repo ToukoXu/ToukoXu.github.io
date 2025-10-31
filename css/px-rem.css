@@ -1,0 +1,51 @@
+#pr-container {
+  #pr-base-setting {
+    gap: 15px;
+    padding: 20px 28px;
+    background: #f8f9fa;
+    border-radius: 8px;
+
+    #pr-base-size {
+      width: 80px;
+    }
+
+    #pr-base-input-wrapper {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  #pr-conversion-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .pr-info {
+    margin-top: 4rem;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+
+    .pr-info-title {
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 10px;
+
+      .project-icon {
+        margin-right: 8px;
+      }
+    }
+
+    .pr-info-content {
+      color: #4a5568;
+      line-height: 1.6;
+    }
+  }
+
+  @media (max-width: 768px) {
+    #pr-conversion-section {
+      grid-template-columns: 1fr;
+    }
+  }
+}

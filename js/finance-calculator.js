@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const endDate1 = document.getElementById('fc-end-date1'); // 终止日期
   const interest1 = document.getElementById('fc-interest1'); // 利息
   const calculate1 = document.getElementById('fc-calculate1'); // 计算按钮
-  const reset1 = document.getElementById('fc-reset1'); // 重置按钮
+  const reset1 = document.getElementById('fc-reset1'); // 清空按钮
   const result1 = document.getElementById('fc-result1'); // 结果容器
   const resultValue1 = document.getElementById('fc-result-value1'); // 收益率结果
   const evaluation1 = document.getElementById('fc-evaluation1'); // 收益率评价
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const endDate2 = document.getElementById('fc-end-date2'); // 终止日期
   const endValue2 = document.getElementById('fc-end-value2'); // 终止净值
   const calculate2 = document.getElementById('fc-calculate2'); // 计算按钮
-  const reset2 = document.getElementById('fc-reset2'); // 重置按钮
+  const reset2 = document.getElementById('fc-reset2'); // 清空按钮
   const result2 = document.getElementById('fc-result2'); // 结果容器
   const resultValue2 = document.getElementById('fc-result-value2'); // 收益率结果
   const evaluation2 = document.getElementById('fc-evaluation2'); // 收益率评价
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const period3 = document.getElementById('fc-period3'); // 期限
   const rate3 = document.getElementById('fc-rate3'); // 年利率
   const calculate3 = document.getElementById('fc-calculate3'); // 计算按钮
-  const reset3 = document.getElementById('fc-reset3'); // 重置按钮
+  const reset3 = document.getElementById('fc-reset3'); // 清空按钮
   const result3 = document.getElementById('fc-result3'); // 结果容器
   const resultValue3 = document.getElementById('fc-result-value3'); // 利息结果
   const resultDesc3 = document.getElementById('fc-result-desc3'); // 利息结果描述

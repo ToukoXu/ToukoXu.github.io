@@ -226,6 +226,23 @@
     }
   }
 
+  .project-input-wrapper {
+    position: relative;
+
+    .suffix {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #718096;
+    }
+
+    .extra-large + .suffix {
+      right: 40px;
+      font-weight: 600;
+    }
+  }
+
   .project-input {
     padding: 8px 12px;
     border: 1px solid #e2e8f0;
@@ -233,6 +250,7 @@
     font-size: 0.9rem;
     transition: border-color 0.3s;
     height: 2.25rem;
+    width: 100%;
 
     &:focus {
       outline: none;
@@ -248,6 +266,22 @@
 
     &::placeholder {
       opacity: 0.5;
+    }
+
+    &.large {
+      font-size: 1.1rem;
+      padding: 12px 16px;
+      height: 3rem;
+    }
+
+    &.extra-large {
+      font-size: 1.3rem;
+      padding: 16px 20px;
+      height: 3.5rem;
+    }
+
+    &.center {
+      text-align: center;
     }
   }
 
@@ -315,6 +349,11 @@
       flex-direction: column;
       gap: 8px;
 
+      &.inline {
+        flex-direction: row;
+        align-items: center;
+      }
+
       .project-form-label {
         font-weight: 600;
         color: #2d3748;
@@ -353,6 +392,15 @@
       .project-tab {
         padding: 14px 15px;
         font-size: 1rem;
+      }
+    }
+
+    .project-form {
+      .project-form-item {
+        &.inline {
+          flex-direction: column;
+          align-items: flex-start;
+        }
       }
     }
   }

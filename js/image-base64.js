@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function () {
   convertToImageBtn.addEventListener('click', () => {
     const base64Data = base64Input.value.trim();
 
-    if (!base64Data) {
+    if (!base64Data || !isBase64(base64Data)) {
       alert('请输入Base64编码！');
       return;
     }
@@ -126,6 +126,22 @@ document.addEventListener('DOMContentLoaded', function () {
       console.error(e);
     }
   });
+
+  function isBase64(str) {
+    // 检查格式和填充
+    const strictBase64Regex = /^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/;
+
+    // 移除可能的 Data URL 前缀
+    const cleanStr = str.replace(/^data:[^;]+;base64,/, '');
+
+    // 检查长度是否为4的倍数
+    if (cleanStr.length % 4 !== 0) {
+      return false;
+    }
+
+    // 检查字符是否合法
+    return strictBase64Regex.test(cleanStr);
+  }
 
   // 下载图片
   downloadImageBtn.addEventListener('click', () => {
