@@ -143,6 +143,10 @@
     align-items: center;
     gap: 10px;
   }
+
+  #ic-prefix-text {
+    width: 120px;
+  }
 }
 
 @media (max-width: 768px) {

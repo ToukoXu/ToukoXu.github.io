@@ -5746,12 +5746,21 @@ body[data-type='about'] #web_bg {
   font-size: 1rem;
   color: var(--anzhiyu-secondtext);
   margin-bottom: 0.25rem;
+  padding-left: 1rem;
+  font-weight: 700;
+  margin-left: -4px;
 }
 .article-sort-item.year:hover:before {
   border-color: #425aef;
 }
 .article-sort-item.year:before {
-  border-color: var(--pseudo-hover);
+  background: var(--anzhiyu-main);
+  border-radius: 4px;
+  content: "";
+  height: 1.5rem;
+  left: 2px;
+  position: absolute;
+  width: 6px;
 }
 .article-sort-item-time {
   color: var(--anzhiyu-fontcolor);
@@ -5868,6 +5877,15 @@ body[data-type='about'] #web_bg {
 }
 .article-sort-item-info .article-meta-wrap .article-sort-item-time {
   font-size: 12px;
+}
+.article-sort-title sup {
+  font-size: 16px;
+  font-weight: 700;
+  margin-left: 4px;
+  opacity: 0.4;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=40)";
+  filter: alpha(opacity=40);
+  top: -0.8rem;
 }
 .category-lists .category-title {
   font-size: 2.57em;
