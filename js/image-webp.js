@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function () {
+(() => {
   // 移除文章容器的 ID 以避免样式冲突
   const articleContainer = document.getElementById('article-container');
   articleContainer.id = '';
@@ -446,4 +446,4 @@ document.addEventListener('DOMContentLoaded', function () {
     const baseName = originalName.replace(/\.[^/.]+$/, '');
     return prefix + baseName + '.webp';
   }
-});
+})();

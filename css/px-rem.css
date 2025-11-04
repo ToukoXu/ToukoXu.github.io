@@ -43,6 +43,11 @@
     }
   }
 
+  .pr-input-tips {
+    margin-left: 0;
+    text-align: center;
+  }
+
   @media (max-width: 768px) {
     #pr-conversion-section {
       grid-template-columns: 1fr;

@@ -76,10 +76,6 @@
     font-size: 0.9rem;
   }
 
-  .cursor {
-    margin: 0;
-  }
-
   .project-btn-group {
     display: flex;
     gap: 15px;
@@ -367,6 +363,7 @@
     }
   }
 }
+
 @media (max-width: 768px) {
   .project-container {
     margin: -21px -15px -15px -15px;

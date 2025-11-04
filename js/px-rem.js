@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function () {
+(() => {
   // 元素引用
   const baseSizeInput = document.getElementById('pr-base-size');
   const pxInput = document.getElementById('pr-px-input');
@@ -13,10 +13,12 @@ document.addEventListener('DOMContentLoaded', function () {
       const pxValue = parseFloat(pxInput.value);
       if (!isNaN(pxValue)) {
         const remValue = pxValue / baseSize;
-        remInput.value = remValue.toFixed(4);
+        remInput.value = Number(remValue.toFixed(4));
         pxInput.style.color = '#000000';
         remInput.style.color = 'var(--anzhiyu-theme)';
       }
+    } else {
+      remInput.value = '';
     }
   }
 
@@ -33,6 +35,8 @@ document.addEventListener('DOMContentLoaded', function () {
         pxInput.style.color = 'var(--anzhiyu-theme)';
         remInput.style.color = '#000000';
       }
+    } else {
+      pxInput.value = '';
     }
   }
 
@@ -42,7 +46,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // 基准字体大小变化时重新计算
   baseSizeInput.oninput = () => {
+    if (baseSizeInput.value <= 0) {
+      baseSizeInput.value = '';
+    }
+
     if (pxInput.value !== '') convertToREM();
     else if (remInput.value !== '') convertToPX;
   };
-});
+})();

@@ -1,0 +1,265 @@
+.ts-tabs {
+  display: flex;
+  background: #f0f4ff;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.ts-tab {
+  padding: 16px 30px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  flex: 1;
+}
+
+.ts-tab.active {
+  background: #ffffff;
+  color: var(--anzhiyu-theme);
+  border-bottom: 3px solid var(--anzhiyu-theme);
+}
+
+.ts-tab-content {
+  display: none;
+  animation: fadeIn 0.5s ease;
+}
+
+.ts-tab-content.active {
+  display: block;
+}
+
+.ts-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.ts-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ts-form-label {
+  font-weight: 600;
+  color: #2d3748;
+  display: flex;
+  align-items: center;
+}
+
+.ts-form-label span {
+  margin-right: 8px;
+}
+
+.ts-form-input {
+  padding: 12px 15px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.ts-form-input:focus {
+  outline: none;
+  border-color: var(--anzhiyu-theme);
+  box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.2);
+}
+
+.ts-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.ts-unit-selector {
+  display: flex;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.ts-unit-option {
+  flex: 1;
+  padding: 12px 15px;
+  text-align: center;
+  background: #f8f9fa;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.ts-unit-option.active {
+  background: var(--anzhiyu-theme);
+  color: white;
+}
+
+.ts-controls {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.ts-result {
+  margin-top: 30px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.ts-result-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.ts-result-row:last-child {
+  border-bottom: none;
+}
+
+.ts-result-label {
+  font-weight: 600;
+  color: #4a5568;
+  display: flex;
+  align-items: center;
+}
+
+.ts-result-value {
+  font-weight: 500;
+  color: #2d3748;
+}
+
+.ts-copy-btn {
+  background: none;
+  border: none;
+  color: var(--anzhiyu-theme);
+  cursor: pointer;
+  font-size: 1.2rem;
+  margin-left: 10px;
+}
+
+.ts-current-time {
+  margin-top: 30px;
+  padding: 20px;
+  background: #f0fff4;
+  border-radius: 8px;
+  border-left: 4px solid var(--project-success);
+}
+
+.ts-current-time-title {
+  font-weight: 600;
+  color: #22543d;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.ts-current-time-title span {
+  margin-right: 8px;
+}
+
+.ts-current-time-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.ts-current-time-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.ts-current-time-label {
+  font-size: 0.9rem;
+  color: #718096;
+}
+
+.ts-current-time-value {
+  font-weight: 600;
+  color: #2d3748;
+  font-size: 1.1rem;
+}
+
+.ts-timezone-selector {
+  margin-top: 10px;
+}
+
+.ts-timezone-select {
+  width: 100%;
+  padding: 10px 15px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: white;
+}
+
+.ts-info-tooltip {
+  position: relative;
+  display: inline-block;
+  margin-left: 8px;
+  cursor: help;
+}
+
+.ts-info-tooltip .ts-tooltip-text {
+  visibility: hidden;
+  width: 300px;
+  background-color: #2d3748;
+  color: #fff;
+  text-align: left;
+  border-radius: 6px;
+  padding: 10px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -150px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 0.9rem;
+  font-weight: normal;
+  line-height: 1.4;
+}
+
+.ts-info-tooltip:hover .ts-tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+.ts-info-tooltip .ts-tooltip-text::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #2d3748 transparent transparent transparent;
+}
+
+@media (max-width: 768px) {
+  .ts-form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .ts-controls {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .ts-tab {
+    padding: 14px 15px;
+    font-size: 1rem;
+  }
+
+  .ts-current-time-content {
+    grid-template-columns: 1fr;
+  }
+
+  .ts-info-tooltip .ts-tooltip-text {
+    width: 250px;
+    margin-left: -125px;
+  }
+}

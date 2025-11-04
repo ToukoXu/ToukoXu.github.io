@@ -1,0 +1,30 @@
+#projects-container {
+  .project-type-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .project-type-icon {
+    margin: 0 10px 0 0;
+    width: 32px;
+  }
+  .project-type-label {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--font-color);
+  }
+  .project-item {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: box-shadow 0.3s ease;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+  }
+  .tag-Link {
+    width: 100%;
+    margin: 0;
+  }
+}

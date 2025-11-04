@@ -16,8 +16,7 @@
 &lt;p&gt;&lt;strong&gt;Proxy&lt;/strong&gt; 是 ES6 引入的元编程特性，简单说就是给对象 “装一层拦截器”—— 所有对对象的操作（比如读属性、改属性、删属性），都会先经过这层拦截器，我们可以在拦截器里自定义操作逻辑。它的灵活性极高，是 Vue3 响应式、数据验证、API 拦截等场景的核心技术。&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h2 id=&#34;关联知识&#34;&gt;&lt;a href=&#34;#关联知识&#34; class=&#34;headerlink&#34; title=&#34;关联知识&#34;&gt;&lt;/a&gt;关联知识&lt;/h2&gt;&lt;p&gt;可以将 Proxy 和 Reflect 合并在一起学习～&lt;/p&gt;
-&lt;div calss=&#34;anzhiyu-tag-link&#34;&gt;&lt;a class=&#34;tag-Link&#34; target=&#34;_blank&#34; href=&#34;/2024/08/14/reflect&#34;&gt;
-    &lt;div class=&#34;tag-link-tips&#34;&gt;站内地址&lt;/div&gt;
+&lt;div&gt;&lt;a class=&#34;tag-Link&#34; target=&#34;_blank&#34; href=&#34;/archives/reflect&#34;&gt;
     &lt;div class=&#34;tag-link-bottom&#34;&gt;
         &lt;div class=&#34;tag-link-left&#34; style=&#34;background-image: url(/img/512.png)&#34;&gt;
           &lt;i class=&#34;anzhiyufont anzhiyu-icon-link&#34; style=&#34;display: none&#34;&gt;&lt;/i&gt;
@@ -211,8 +210,7 @@
 &lt;p&gt;&lt;strong&gt;Reflect&lt;/strong&gt; 是 ES6 新增的内置对象，核心作用是&lt;strong&gt;提供一套统一、函数式的对象操作 API&lt;/strong&gt;。它的方法与 Proxy 拦截器一一对应，既能替代传统的对象操作方式（如 &lt;code&gt;delete&lt;/code&gt;、&lt;code&gt;in&lt;/code&gt;），又能解决旧语法的不一致问题，是元编程和 Proxy 配合的 “最佳搭档”。&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h2 id=&#34;关联知识&#34;&gt;&lt;a href=&#34;#关联知识&#34; class=&#34;headerlink&#34; title=&#34;关联知识&#34;&gt;&lt;/a&gt;关联知识&lt;/h2&gt;&lt;p&gt;可以将 Proxy 和 Reflect 合并在一起学习～&lt;/p&gt;
-&lt;div calss=&#34;anzhiyu-tag-link&#34;&gt;&lt;a class=&#34;tag-Link&#34; target=&#34;_blank&#34; href=&#34;/2024/08/15/proxy&#34;&gt;
-    &lt;div class=&#34;tag-link-tips&#34;&gt;站内地址&lt;/div&gt;
+&lt;div&gt;&lt;a class=&#34;tag-Link&#34; target=&#34;_blank&#34; href=&#34;/archives/proxy&#34;&gt;
     &lt;div class=&#34;tag-link-bottom&#34;&gt;
         &lt;div class=&#34;tag-link-left&#34; style=&#34;background-image: url(/img/512.png)&#34;&gt;
           &lt;i class=&#34;anzhiyufont anzhiyu-icon-link&#34; style=&#34;display: none&#34;&gt;&lt;/i&gt;
@@ -789,8 +787,7 @@ B --&amp;gt;|constructor| E[&#34;构造函数（Person）&#34;]
 &lt;p&gt;闭包是 JavaScript 中比较容易让人困惑的概念 —— 它能让函数 “记住自己成长的环境”，哪怕后来跑到别的地方工作，也能找回当初的变量。今天就抛开复杂术语，用更通俗的方式拆解闭包，从原理到实战一次讲明白！&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h2 id=&#34;前置知识&#34;&gt;&lt;a href=&#34;#前置知识&#34; class=&#34;headerlink&#34; title=&#34;前置知识&#34;&gt;&lt;/a&gt;前置知识&lt;/h2&gt;&lt;p&gt;如果对作用域链还不熟悉，建议先看下面这篇。理解函数如何查找变量后，再理解闭包会更顺畅～&lt;/p&gt;
-&lt;div calss=&#34;anzhiyu-tag-link&#34;&gt;&lt;a class=&#34;tag-Link&#34; target=&#34;_blank&#34; href=&#34;/2021/03/16/scope-chain&#34;&gt;
-    &lt;div class=&#34;tag-link-tips&#34;&gt;站内地址&lt;/div&gt;
+&lt;div&gt;&lt;a class=&#34;tag-Link&#34; target=&#34;_blank&#34; href=&#34;/archives/scope-chain&#34;&gt;
     &lt;div class=&#34;tag-link-bottom&#34;&gt;
         &lt;div class=&#34;tag-link-left&#34; style=&#34;background-image: url(/img/512.png)&#34;&gt;
           &lt;i class=&#34;anzhiyufont anzhiyu-icon-link&#34; style=&#34;display: none&#34;&gt;&lt;/i&gt;
