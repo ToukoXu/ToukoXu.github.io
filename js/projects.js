@@ -26,7 +26,7 @@
     },
     {
       label: '开发工具',
-      icon: 'https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/gif/text.gif',
+      icon: 'https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/gif/code.gif',
       items: [
         {
           title: '多语言格式化与文本对比工具',
@@ -39,6 +39,12 @@
           subtitle: '轻松在像素(px)和相对单位(rem)之间进行转换',
           link: 'px-rem',
           icon: 'https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/site/ruler.svg',
+        },
+        {
+          title: '时间戳转换工具',
+          subtitle: '轻松在时间戳和多种日期时间格式之间转换',
+          link: 'timestamp',
+          icon: 'https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/site/time.svg',
         },
       ],
     },

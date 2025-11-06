@@ -205,7 +205,7 @@
     const principal = parseFloat(principal3.value);
     const period = parseFloat(period3.value);
     const rate = parseFloat(rate3.value);
-    const unit = document.querySelector('input[name="periodUnit"]:checked').value || 'day';
+    const unit = document.querySelector('input[name="period-unit"]:checked').value || 'day';
 
     if (!principal || principal <= 0) {
       alert('本金必须大于零');

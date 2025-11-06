@@ -1,0 +1,115 @@
+.project-select-label {
+  font-size: 0.9rem;
+  color: var(--font-color);
+}
+
+.project-select-wrapper {
+  position: relative;
+  width: 100%;
+
+  select {
+    display: none;
+  }
+}
+
+.project-select {
+  position: relative;
+  user-select: none;
+  transition: all 0.3s;
+  cursor: pointer;
+  padding: 0 10px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  background: white;
+  color: var(--font-color);
+  outline: none;
+  height: 2.25rem;
+
+  &:focus,
+  &.open {
+    outline: none;
+    border-color: var(--anzhiyu-theme);
+    box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.2);
+  }
+}
+
+.project-select-trigger {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+
+  .project-select-value {
+    font-size: 0.9rem;
+    color: var(--font-color);
+  }
+
+  .project-select-placeholder {
+    opacity: 0.5;
+  }
+
+  .project-select-arrow {
+    transition: transform 0.3s ease;
+  }
+}
+
+.project-select.open .project-select-arrow {
+  transform: rotate(180deg);
+}
+
+.project-select-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ccc;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 100;
+  display: none;
+  padding: 1px;
+}
+
+.project-select.open .project-select-options {
+  display: block;
+}
+
+.project-select-option {
+  line-height: 1.5;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  border-bottom: 1px solid #f1f1f1;
+
+  &.selected {
+    color: var(--anzhiyu-theme);
+    background-color: rgba(74, 110, 224, 0.1);
+  }
+
+  &:hover {
+    background-color: #f0f0f0;
+  }
+
+  &:focus-visible {
+    outline: var(--anzhiyu-theme) auto 1px;
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.project-select-option-label {
+  display: block;
+}
+
+.project-select-option-description {
+  font-size: 0.8rem;
+  color: #a0aec0;
+  display: block;
+}

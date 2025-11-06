@@ -1,3 +1,6 @@
+@import './project-button.css';
+@import './project-select.css';
+
 :root {
   --project-info: #a0aec0;
   --project-primary: #4299e1;
@@ -59,7 +62,7 @@
     height: 300px;
     padding: 15px;
     border: 1px solid #e2e8f0;
-    border-radius: 8px;
+    border-radius: 6px;
     resize: vertical;
     font-size: 14px;
     line-height: 1.5;
@@ -74,66 +77,15 @@
   dd {
     color: var(--project-info);
     font-size: 0.9rem;
+    margin-left: 0;
   }
 
-  .project-btn-group {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-  }
-
-  .project-primary-btn {
-    background-color: var(--anzhiyu-theme);
-    color: #ffffff;
-
-    &:hover:not(:disabled) {
-      background-color: #354ed9;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(66, 90, 239, 0.3);
-    }
-  }
-
-  .project-secondary-btn {
-    background-color: #f2f3f5;
-    color: #6b7ff3;
-
-    &:hover:not(:disabled) {
-      background-color: #e5e6eb;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-  }
-
-  .project-primary-btn,
-  .project-secondary-btn {
-    border: none;
-    padding: 12px 24px;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    &:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
-    }
-
-    &.small {
-      padding: 6px 12px;
-      font-size: 0.85rem;
-    }
-
-    .project-icon {
-      margin-right: 8px;
-    }
+  code {
+    background: inherit;
+    filter: brightness(0.8);
+    border-radius: 3px;
+    font-family: courier, monospace;
+    padding: 0 3px;
   }
 
   .project-upload-area {
@@ -156,7 +108,7 @@
 
     .project-upload-text {
       font-size: 1.2rem;
-      color: #4a5568;
+      color: var(--font-color);
     }
 
     .project-upload-support {
@@ -206,7 +158,7 @@
   .project-checkbox {
     display: flex;
     font-size: 0.9rem;
-    color: #4a5568;
+    color: var(--font-color);
     align-items: center;
     cursor: pointer;
 
@@ -240,10 +192,12 @@
   }
 
   .project-input {
+    cursor: text;
     padding: 8px 12px;
     border: 1px solid #e2e8f0;
     border-radius: 6px;
     font-size: 0.9rem;
+    color: var(--font-color);
     transition: border-color 0.3s;
     height: 2.25rem;
     width: 100%;
@@ -279,20 +233,6 @@
     &.center {
       text-align: center;
     }
-  }
-
-  .project-select-label {
-    font-size: 0.9rem;
-    color: #4a5568;
-  }
-
-  .project-select {
-    border: 1px solid #e2e8f0;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    background: white;
-    color: #4a5568;
-    outline: none;
   }
 
   .project-date-range {
@@ -362,6 +302,55 @@
       }
     }
   }
+
+  .project-tooltip {
+    position: relative;
+    margin-left: 6px;
+    cursor: help;
+    font-family: 'toukofont';
+    font-size: 0.9rem;
+    line-height: 1;
+
+    &::before {
+      content: '\e603';
+    }
+
+    .project-tooltip-text {
+      visibility: hidden;
+      width: 300px;
+      background-color: #2d3748;
+      color: #fff;
+      text-align: left;
+      border-radius: 6px;
+      padding: 10px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -150px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 0.9rem;
+      font-weight: normal;
+      line-height: 1.4;
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: #2d3748 transparent transparent transparent;
+      }
+    }
+
+    &:hover .project-tooltip-text {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
 }
 
 @media (max-width: 768px) {
@@ -380,11 +369,6 @@
       padding: 20px;
     }
 
-    .project-btn-group {
-      flex-direction: column;
-      align-items: center;
-    }
-
     .project-tabs {
       .project-tab {
         padding: 14px 15px;
@@ -398,6 +382,13 @@
           flex-direction: column;
           align-items: flex-start;
         }
+      }
+    }
+
+    .project-tooltip {
+      .project-tooltip-text {
+        width: 250px;
+        margin-left: -125px;
       }
     }
   }

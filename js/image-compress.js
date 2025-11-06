@@ -187,7 +187,7 @@
   // 更新进度条
   function updateProgress() {
     const completed = images.filter(
-      (img) => img.status === 'completed' || img.status === 'error'
+      (img) => img.status === 'completed' || img.status === 'error',
     ).length;
     const total = images.length;
     const percentage = total > 0 ? (completed / total) * 100 : 0;
@@ -317,7 +317,7 @@
                 resolve();
               },
               outputType,
-              quality // 压缩质量
+              quality, // 压缩质量
             );
           } catch (error) {
             console.error('压缩错误:', error);
