@@ -1,0 +1,24 @@
+User-agent: *
+
+Allow: /
+Allow: /archives/
+Allow: /page/
+Allow: /tags/
+Allow: /about/
+Allow: /album/
+Allow: /categories/
+Allow: /comments/
+Allow: /copyright/
+Allow: /essay/
+Allow: /projects/
+
+Disallow: /js/
+Disallow: /css/
+Disallow: /img/
+Disallow: /json/
+Disallow: /music/
+
+Sitemap: /sitemap.xml
+Sitemap: /sitemap.xsl
+Sitemap: /page-sitemap.xml
+Sitemap: /post-sitemap.xml

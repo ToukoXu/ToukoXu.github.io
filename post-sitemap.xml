@@ -9,7 +9,7 @@
 
 
     <url>
-        <loc>http://toukoxu.github.io/archives/reflect/</loc>
+        <loc>http://toukoxu.github.io/archives/proxy/</loc>
         <lastmod>2024-08-15T12:46:25.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -17,7 +17,7 @@
     </url>
 
     <url>
-        <loc>http://toukoxu.github.io/archives/proxy/</loc>
+        <loc>http://toukoxu.github.io/archives/reflect/</loc>
         <lastmod>2024-08-15T12:46:25.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
