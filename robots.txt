@@ -17,3 +17,7 @@ Disallow: /css/
 Disallow: /img/
 Disallow: /json/
 Disallow: /music/
+
+Sitemap: https://toukoxu.github.io/sitemap.xml
+Sitemap: https://toukoxu.github.io/page-sitemap.xml
+Sitemap: https://toukoxu.github.io/post-sitemap.xml
