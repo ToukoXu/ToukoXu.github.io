@@ -17,5 +17,3 @@ Disallow: /css/
 Disallow: /img/
 Disallow: /json/
 Disallow: /music/
-
-Sitemap: 
