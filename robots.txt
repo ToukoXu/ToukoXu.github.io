@@ -18,7 +18,4 @@ Disallow: /img/
 Disallow: /json/
 Disallow: /music/
 
-Sitemap: /sitemap.xml
-Sitemap: /sitemap.xsl
-Sitemap: /page-sitemap.xml
-Sitemap: /post-sitemap.xml
+Sitemap: 
