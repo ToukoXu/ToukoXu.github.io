@@ -14,7 +14,7 @@
       if (!isNaN(pxValue)) {
         const remValue = pxValue / baseSize;
         remInput.value = Number(remValue.toFixed(4));
-        pxInput.style.color = '#000000';
+        pxInput.style.color = 'var(--anzhiyu-fontcolor)';
         remInput.style.color = 'var(--anzhiyu-theme)';
       }
     } else {
@@ -33,7 +33,7 @@
         const pxValue = remValue * baseSize;
         pxInput.value = Math.round(pxValue * 100) / 100;
         pxInput.style.color = 'var(--anzhiyu-theme)';
-        remInput.style.color = '#000000';
+        remInput.style.color = 'var(--anzhiyu-fontcolor)';
       }
     } else {
       pxInput.value = '';

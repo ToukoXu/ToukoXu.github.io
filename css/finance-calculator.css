@@ -8,7 +8,7 @@
   .fc-result {
     margin-top: 30px;
     padding: 20px;
-    background: #f8f9fa;
+    background: var(--global-bg);
     border-radius: 8px;
     text-align: center;
   }
@@ -22,7 +22,7 @@
 
   .fc-result-label {
     font-size: 1.1rem;
-    color: #4a5568;
+    color: var(--anzhiyu-fontcolor);
     margin-bottom: 5px;
   }
 

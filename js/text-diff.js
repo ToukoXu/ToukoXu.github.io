@@ -10,6 +10,7 @@
   const languageSelect = document.getElementById('td-language-select');
   const languageTip = document.getElementById('td-language-tip');
   const diffContainer = document.getElementById('td-diff-container');
+  const darkmodeBtn = document.getElementById('darkmode');
 
   // Monaco Editor 实例
   let diffEditor = null;
@@ -33,7 +34,7 @@
 
     // 创建差异对比编辑器
     diffEditor = monaco.editor.createDiffEditor(diffContainer, {
-      theme: 'vs-light',
+      theme: getTheme(),
       originalEditable: true,
       enableSplitViewResizing: true,
       renderSideBySide: true,
@@ -102,6 +103,11 @@
     monaco.editor.setModelLanguage(modifiedEditor.getModel(), lang);
   }
 
+  // 根据全局的主题选择对应的编辑器主题
+  function getTheme() {
+    return document.documentElement.getAttribute('data-theme') === 'dark' ? 'vs-dark' : 'vs-light';
+  }
+
   // 格式化文本
   formatBtn.addEventListener('click', function () {
     originalEditor.getAction('editor.action.formatDocument')?.run();
@@ -159,4 +165,12 @@ console.log(greet("User", "?"));
       }, delay);
     };
   }
+
+  // 切换全局主题后，修改编辑器主题
+  darkmodeBtn?.addEventListener('click', function async() {
+    setTimeout(() => {
+      const theme = getTheme();
+      monaco.editor.setTheme(theme);
+    }, 100);
+  });
 })();

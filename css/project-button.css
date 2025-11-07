@@ -11,9 +11,9 @@
   color: #ffffff;
 
   &:hover:not(:disabled) {
-    background-color: #354ed9;
+    background-color: var(--theme-deeper);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(66, 90, 239, 0.3);
+    box-shadow: 0 4px 12px var(--theme-lighter);
   }
 
   &.outline {
@@ -22,20 +22,20 @@
     color: var(--anzhiyu-theme);
 
     &:hover:not(:disabled) {
-      background-color: var(--anzhiyu-theme);
+      background-color: var(--btn-bg);
       color: #ffffff;
     }
   }
 }
 
 .project-secondary-btn {
-  background-color: #f2f3f5;
-  color: #6b7ff3;
+  background-color: var(--theme-lightest);
+  color: var(--theme-lighter);
 
   &:hover:not(:disabled) {
-    background-color: #e5e6eb;
+    background-color: var(--theme-lighter-1);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px var(--theme-lightest);
   }
 }
 

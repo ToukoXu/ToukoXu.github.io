@@ -7,7 +7,7 @@
 
   #td-diff-container {
     height: 600px;
-    border: 1px solid #e2e8f0;
+    border: var(--style-border);
     border-radius: 8px;
     overflow: hidden;
   }

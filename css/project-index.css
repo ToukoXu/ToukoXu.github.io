@@ -61,16 +61,22 @@
     width: 100%;
     height: 300px;
     padding: 15px;
-    border: 1px solid #e2e8f0;
+    border: var(--style-border);
     border-radius: 6px;
     resize: vertical;
     font-size: 14px;
     line-height: 1.5;
+    background: var(--global-bg);
+    color: var(--font-color);
 
     &:focus {
       outline: none;
       border-color: var(--anzhiyu-theme);
-      box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.2);
+      box-shadow: 0 0 4px var(--theme-lighter);
+    }
+
+    &::placeholder {
+      opacity: 0.5;
     }
   }
 
@@ -96,10 +102,10 @@
     margin-bottom: 25px;
     transition: all 0.3s ease;
     cursor: pointer;
+    background: var(--global-bg);
 
     &:hover {
       border-color: var(--anzhiyu-theme);
-      background-color: #f8faff;
     }
 
     .project-upload-icon {
@@ -113,7 +119,7 @@
 
     .project-upload-support {
       font-size: 0.9rem;
-      color: #718096;
+      color: var(--project-info);
       text-align: center;
     }
 
@@ -125,8 +131,9 @@
   .project-tabs {
     .project-tabs-header {
       display: flex;
-      background: #f0f4ff;
-      border-bottom: 1px solid #e2e8f0;
+      background: var(--tab-botton-bg);
+      color: var(--tab-botton-color);
+      border-bottom: 1px solid var(--tab-border-color);
 
       .project-tab {
         padding: 16px 30px;
@@ -138,9 +145,13 @@
         flex: 1;
 
         &.active {
-          background: #ffffff;
+          background: var(--tab-button-active-bg);
           color: var(--anzhiyu-theme);
           border-bottom: 3px solid var(--anzhiyu-theme);
+        }
+
+        &:hover:not(.active) {
+          background: var(--tab-button-hover-bg);
         }
       }
     }
@@ -194,23 +205,24 @@
   .project-input {
     cursor: text;
     padding: 8px 12px;
-    border: 1px solid #e2e8f0;
+    border: var(--style-border);
     border-radius: 6px;
     font-size: 0.9rem;
     color: var(--font-color);
     transition: border-color 0.3s;
     height: 2.25rem;
     width: 100%;
+    background: var(--global-bg);
+    color-scheme: var(--color-scheme);
 
     &:focus {
       outline: none;
       border-color: var(--anzhiyu-theme);
-      box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.2);
+      box-shadow: 0 0 4px var(--theme-lighter);
     }
 
     &:disabled {
-      background-color: #f1f2f6;
-      color: #a0aec0;
+      opacity: 0.5;
       cursor: not-allowed;
     }
 
@@ -247,7 +259,7 @@
 
   .project-radio-group {
     display: flex;
-    border: 1px solid #e2e8f0;
+    border: var(--style-border);
     border-radius: 8px;
     overflow: hidden;
 
@@ -259,7 +271,7 @@
         text-align: center;
         cursor: pointer;
         transition: all 0.3s;
-        border-right: 1px solid #e2e8f0;
+        border-right: var(--style-border);
       }
 
       &:last-child .project-radio-button {
@@ -292,7 +304,7 @@
 
       .project-form-label {
         font-weight: 600;
-        color: #2d3748;
+        color: var(--anzhiyu-fontcolor);
         display: flex;
         align-items: center;
 

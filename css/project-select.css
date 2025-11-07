@@ -18,10 +18,10 @@
   transition: all 0.3s;
   cursor: pointer;
   padding: 0 10px;
-  border: 1px solid #e2e8f0;
+  border: var(--style-border);
   border-radius: 6px;
   font-size: 0.9rem;
-  background: white;
+  background: var(--global-bg);
   color: var(--font-color);
   outline: none;
   height: 2.25rem;
@@ -30,7 +30,7 @@
   &.open {
     outline: none;
     border-color: var(--anzhiyu-theme);
-    box-shadow: 0 0 0 3px rgba(74, 108, 247, 0.2);
+    box-shadow: 0 0 4px var(--theme-lighter);
   }
 }
 
@@ -63,8 +63,8 @@
   top: 100%;
   left: 0;
   right: 0;
-  background: white;
-  border: 1px solid #ccc;
+  background: var(--global-bg);
+  border: var(--style-border);
   border-top: none;
   border-radius: 0 0 8px 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -84,7 +84,7 @@
   padding: 8px 16px;
   cursor: pointer;
   transition: background-color 0.3s;
-  border-bottom: 1px solid #f1f1f1;
+  border-bottom: var(--style-border);
 
   &.selected {
     color: var(--anzhiyu-theme);
@@ -92,7 +92,7 @@
   }
 
   &:hover {
-    background-color: #f0f0f0;
+    background-color: var(--tab-botton-bg);
   }
 
   &:focus-visible {

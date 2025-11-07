@@ -28,9 +28,9 @@
     .ts-result-group {
       margin-top: 30px;
       padding: 0 20px;
-      background: #f8f9fa;
+      background: var(--global-bg);
       border-radius: 8px;
-      border: 1px solid #e2e8f0;
+      border: var(--style-border);
 
       + .ts-result-group {
         margin-top: 20px;
@@ -41,7 +41,7 @@
       display: flex;
       align-items: center;
       padding: 10px 0;
-      border-bottom: 1px solid #e2e8f0;
+      border-bottom: var(--style-border);
 
       &:last-child {
         border-bottom: none;
@@ -50,7 +50,7 @@
 
     .ts-result-label {
       font-weight: 600;
-      color: #4a5568;
+      color: var(--anzhiyu-fontcolor);
       display: flex;
       align-items: center;
       width: 10rem;
@@ -58,7 +58,7 @@
 
     .ts-result-value {
       font-weight: 500;
-      color: #2d3748;
+      color: var(--fontcolor);
       flex: 1;
     }
   }

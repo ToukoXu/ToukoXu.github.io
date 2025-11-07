@@ -14,7 +14,7 @@
     color: var(--font-color);
   }
   .project-item {
-    border: 1px solid #e2e8f0;
+    border: var(--style-border);
     border-radius: 8px;
     padding: 20px;
     margin-bottom: 20px;
