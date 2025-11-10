@@ -2,7 +2,7 @@ User-agent: *
 
 Allow: /
 Allow: /archives/
-Allow: /page/
+Allow: /_posts/
 Allow: /tags/
 Allow: /about/
 Allow: /album/
@@ -21,3 +21,5 @@ Disallow: /music/
 Sitemap: https://toukoxu.github.io/sitemap.xml
 Sitemap: https://toukoxu.github.io/page-sitemap.xml
 Sitemap: https://toukoxu.github.io/post-sitemap.xml
+Sitemap: https://toukoxu.github.io/sitemap.xsl
+Sitemap: https://toukoxu.github.io/baidusitemap.xml
