@@ -10,8 +10,8 @@
     
     
     <url>
-        <loc>http://toukoxu.github.io/projects/timestamp.html</loc>
-        <lastmod>2025-11-07T15:12:28.739Z</lastmod>
+        <loc>http://toukoxu.github.io/projects/games/airplane-wars.html</loc>
+        <lastmod>2025-11-14T08:26:19.263Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
@@ -19,8 +19,17 @@
     
     
     <url>
-        <loc>http://toukoxu.github.io/projects/px-rem.html</loc>
-        <lastmod>2025-11-07T14:55:25.300Z</lastmod>
+        <loc>http://toukoxu.github.io/projects/games/</loc>
+        <lastmod>2025-11-14T08:19:47.325Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    
+    
+    <url>
+        <loc>http://toukoxu.github.io/projects/timestamp.html</loc>
+        <lastmod>2025-11-14T07:49:47.135Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
@@ -29,7 +38,16 @@
     
     <url>
         <loc>http://toukoxu.github.io/projects/text-diff.html</loc>
-        <lastmod>2025-11-07T01:28:13.859Z</lastmod>
+        <lastmod>2025-11-14T07:49:35.077Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    
+    
+    <url>
+        <loc>http://toukoxu.github.io/projects/px-rem.html</loc>
+        <lastmod>2025-11-14T07:49:22.650Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
@@ -38,7 +56,7 @@
     
     <url>
         <loc>http://toukoxu.github.io/projects/</loc>
-        <lastmod>2025-11-07T01:27:57.749Z</lastmod>
+        <lastmod>2025-11-14T07:48:48.339Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
@@ -47,16 +65,7 @@
     
     <url>
         <loc>http://toukoxu.github.io/projects/image-webp.html</loc>
-        <lastmod>2025-11-07T01:27:49.888Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    
-    
-    
-    <url>
-        <loc>http://toukoxu.github.io/projects/image-compress.html</loc>
-        <lastmod>2025-11-07T01:27:40.065Z</lastmod>
+        <lastmod>2025-11-14T07:48:20.374Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
@@ -65,7 +74,7 @@
     
     <url>
         <loc>http://toukoxu.github.io/projects/finance-calculator.html</loc>
-        <lastmod>2025-11-07T01:27:32.632Z</lastmod>
+        <lastmod>2025-11-14T07:47:56.253Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
@@ -74,7 +83,16 @@
     
     <url>
         <loc>http://toukoxu.github.io/projects/image-base64.html</loc>
-        <lastmod>2025-11-07T01:27:03.360Z</lastmod>
+        <lastmod>2025-11-14T07:47:52.614Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    
+    
+    <url>
+        <loc>http://toukoxu.github.io/projects/image-compress.html</loc>
+        <lastmod>2025-11-14T07:47:47.598Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>

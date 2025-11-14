@@ -18,6 +18,7 @@
 
 .project-container {
   margin: -32px -40px -40px -40px;
+  position: relative;
 
   @keyframes fadeIn {
     from {
