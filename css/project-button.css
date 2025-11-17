@@ -82,6 +82,10 @@
     border-radius: 50%;
   }
 
+  &.round {
+    border-radius: 50px;
+  }
+
   .project-icon {
     margin-right: 8px;
   }

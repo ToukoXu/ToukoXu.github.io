@@ -1,6 +1,18 @@
 (() => {
   const projects = [
     {
+      label: '益智类',
+      icon: 'https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/gif/bulb.gif',
+      items: [
+        {
+          title: '连连看',
+          subtitle: '图案配对的消除游戏',
+          link: 'link-link',
+          icon: 'https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/site/watermelon.svg',
+        },
+      ],
+    },
+    {
       label: '动作类',
       icon: 'https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/gif/rocket.gif',
       items: [
