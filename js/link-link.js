@@ -441,13 +441,13 @@
       if (isHighestDifficulty) {
         // 最高难度 - 提示再来一局
         gameOverTitle.textContent = '🎉恭喜你完成了最高难度！';
-        gameOverText.textContent = `得分：${gameState.score}，用时：${timeString}秒`;
+        gameOverText.textContent = `得分：${gameState.score}，用时：${timeString}`;
         gameOverConfirmBtn.textContent = '再来一局';
       } else {
         // 不是最高难度 - 提示挑战下一难度
         const nextDifficulty = difficultyOrder[currentIndex + 1];
         gameOverTitle.textContent = `🎉恭喜你完成了${getDifficultyName(gameState.currentDifficulty)}难度！`;
-        gameOverText.textContent = `得分：${gameState.score}，用时：${timeString}秒`;
+        gameOverText.textContent = `得分：${gameState.score}，用时：${timeString}`;
         gameOverConfirmBtn.textContent = `挑战${getDifficultyName(nextDifficulty)}难度`;
       }
 
