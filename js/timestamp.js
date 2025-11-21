@@ -248,7 +248,7 @@
   };
 
   // 复制功能
-  document.addEventListener('click', function (e) {
+  articleContainer.addEventListener('click', function (e) {
     const copyBtn = e.target.closest('.ts-copy-btn');
     if (copyBtn) {
       const targetId = copyBtn.getAttribute('data-target');

@@ -1,4 +1,8 @@
 (() => {
+  // 移除文章容器的 ID 以避免样式冲突
+  const articleContainer = document.getElementById('article-container');
+  articleContainer.id = '';
+
   // 游戏配置 - 根据难度动态设置
   const difficultySettings = {
     easy: {
@@ -42,7 +46,7 @@
 
   // DOM 元素
   const llContainer = document.getElementById('ll-container');
-  const difficultySelect = document.getElementById('ll-difficulty');
+  const difficultySelectBtns = document.querySelectorAll('#ll-difficulty .project-select-btn');
   const timerDisplay = document.getElementById('ll-timer');
   const scoreDisplay = document.getElementById('ll-score');
   const remainingDisplay = document.getElementById('ll-remaining');
@@ -59,14 +63,44 @@
   const resumeBtn = document.getElementById('ll-resume-btn');
 
   // 难度选择事件
-  difficultySelect.onchange = () => {
-    const difficulty = this.value;
+  difficultySelectBtns.forEach((btn) => {
+    btn.addEventListener('click', function () {
+      difficultySelectBtns.forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const difficulty = btn.getAttribute('data-difficulty');
+      config = { ...difficultySettings[difficulty] };
+      gameState.currentDifficulty = difficulty; // 更新当前难度
+
+      // 重新开始游戏
+      initGame();
+    });
+  });
+
+  // 手动设置难度函数
+  function setDifficulty(difficulty) {
+    // 验证难度是否有效
+    if (!difficultySettings[difficulty]) {
+      console.error('无效的难度设置:', difficulty);
+      return;
+    }
+
+    // 更新按钮激活状态
+    difficultySelectBtns.forEach((btn) => {
+      if (btn.getAttribute('data-difficulty') === difficulty) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+
+    // 更新配置和游戏状态
     config = { ...difficultySettings[difficulty] };
-    gameState.currentDifficulty = difficulty; // 更新当前难度
+    gameState.currentDifficulty = difficulty;
 
     // 重新开始游戏
     initGame();
-  };
+  }
 
   // 初始化游戏
   function initGame() {
@@ -80,7 +114,7 @@
       timer: null,
       isGameOver: false,
       removedCount: 0,
-      currentDifficulty: difficultySelect.value, // 使用当前选择的难度
+      currentDifficulty: gameState.currentDifficulty, // 使用当前选择的难度
       isPaused: false, // 重置暂停状态
     };
 
@@ -201,6 +235,7 @@
           gameOverTitle.textContent = '⏰时间到，游戏结束';
           gameOverText.textContent = `最终得分：${gameState.score}`;
           gameOverDialog.style.display = 'block';
+          gameOverConfirmBtn.textContent = '再来一局';
           llContainer.classList.add('project-mask');
         }
       }
@@ -711,12 +746,10 @@
       } else {
         // 不是最高难度 - 切换到下一难度
         const nextDifficulty = difficultyOrder[currentIndex + 1];
-        gameState.currentDifficulty = nextDifficulty;
-        config = { ...difficultySettings[nextDifficulty] };
-        difficultySelect.value = nextDifficulty;
-        difficultySelect.dispatchEvent(new Event('change'));
-        initGame();
+        setDifficulty(nextDifficulty);
       }
+    } else {
+      initGame();
     }
   });
 

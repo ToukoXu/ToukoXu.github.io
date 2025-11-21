@@ -3,40 +3,34 @@
     display: flex;
     justify-content: space-around;
     padding: 15px;
-    background-color: #f8f9fa;
-    border-bottom: 1px solid #dee2e6;
+    background: var(--reward-pop);
+    border-bottom: var(--style-border);
+    border-radius: 12px 12px 0 0;
 
     .ll-info-item {
       text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
 
       .ll-info-label {
         font-size: 0.9rem;
-        color: #6c757d;
+        color: var(--anzhiyu-gray);
       }
 
       .ll-info-value {
         font-size: 1.5rem;
         font-weight: bold;
-        color: #495057;
+        color: var(--font-color);
       }
     }
-  }
 
-  /* 难度选择器样式 */
-  .ll-difficulty-selector {
-    margin: 15px auto 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    width: 13.5rem;
-
-    label {
-      width: 5rem;
+    .project-btns-container {
+      margin: auto;
     }
 
-    .project-select-wrapper {
-      flex: 1;
+    .project-select-btn {
+      font-weight: bold;
     }
   }
 
@@ -51,7 +45,7 @@
       grid-template-columns: repeat(8, 1fr);
       grid-gap: 5px;
       margin-bottom: 20px;
-      background-color: #e9ecef;
+      background-color: var(--reward-pop);
       padding: 10px;
       border-radius: 10px;
       box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);

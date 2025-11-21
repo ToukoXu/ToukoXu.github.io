@@ -6,6 +6,49 @@
   flex-wrap: wrap;
 }
 
+.project-primary-btn,
+.project-secondary-btn,
+.project-select-btn {
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  &.medium {
+    padding: 8px 15px;
+  }
+
+  &.small {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+  }
+
+  &.circle {
+    border-radius: 50%;
+  }
+
+  &.round {
+    border-radius: 50px;
+  }
+
+  .project-icon {
+    margin-right: 8px;
+  }
+}
+
 .project-primary-btn {
   background-color: var(--anzhiyu-theme);
   color: #ffffff;
@@ -30,7 +73,7 @@
 
 .project-secondary-btn {
   background-color: var(--theme-lightest);
-  color: var(--theme-lighter);
+  color: var(--anzhiyu-theme);
 
   &:hover:not(:disabled) {
     background-color: var(--theme-lighter-1);
@@ -53,41 +96,27 @@
   }
 }
 
-.project-primary-btn,
-.project-secondary-btn {
-  border: none;
-  padding: 12px 24px;
-  border-radius: 8px;
+.project-btns-container {
+  display: flex;
+  gap: 10px;
+}
+
+.project-select-btn {
+  border-radius: 20px;
+  background-color: var(--theme-lightest);
+  padding: 8px 15px;
   font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  color: var(--anzhiyu-theme);
 
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
+  &.active {
+    background: var(--anzhiyu-theme);
+    color: white;
+    cursor: default;
   }
 
-  &.small {
-    padding: 6px 12px;
-    font-size: 0.85rem;
-  }
-
-  &.circle {
-    border-radius: 50%;
-  }
-
-  &.round {
-    border-radius: 50px;
-  }
-
-  .project-icon {
-    margin-right: 8px;
+  &:hover:not(.active) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
 }
 
@@ -95,5 +124,14 @@
   .project-btn-group {
     flex-direction: column;
     align-items: center;
+  }
+
+  .project-btns-container {
+    gap: 5px;
+  }
+
+  .project-select-btn {
+    font-size: 0.9rem;
+    padding: 6px 12px;
   }
 }

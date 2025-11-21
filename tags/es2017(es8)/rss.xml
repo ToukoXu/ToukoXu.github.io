@@ -8,16 +8,16 @@
         <pubDate>Sat, 13 Jul 2024 20:46:25 +0800</pubDate>
         <lastBuildDate>Sat, 13 Jul 2024 20:46:25 +0800</lastBuildDate>
         <category>JavaScript</category>
-        <category>性能优化</category>
         <category>ES2017(ES8)</category>
+        <category>性能优化</category>
         <category>ES6</category>
         <item>
             <guid isPermalink="true">http://toukoxu.github.io/archives/async+await/</guid>
             <title>Async / Await：用同步的方式写异步，真香！</title>
             <link>http://toukoxu.github.io/archives/async+await/</link>
             <category>JavaScript</category>
-            <category>性能优化</category>
             <category>ES2017(ES8)</category>
+            <category>性能优化</category>
             <pubDate>Sat, 13 Jul 2024 20:46:25 +0800</pubDate>
             <description><![CDATA[ &lt;blockquote&gt;
 &lt;p&gt;async/await 是 ES2017 引入的强大特性，使得处理异步操作变得更加简单和直观。使用 async 声明的函数总是返回一个 Promise，而 await 关键字则像是它的指挥棒，允许你暂停函数的执行，直到 Promise 被解决或拒绝。这种方式让异步代码看起来更像同步代码，从而提高了可读性和可维护性。尤其在处理链式异步操作和错误捕获时，async/await 显示出其独特的优势。&lt;/p&gt;

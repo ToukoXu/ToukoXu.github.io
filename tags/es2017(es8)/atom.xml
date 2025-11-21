@@ -5,8 +5,8 @@
     <link href="http://toukoxu.github.io" />
     <updated>2024-07-13T12:46:25.000Z</updated>
     <category term="JavaScript" />
-    <category term="性能优化" />
     <category term="ES2017(ES8)" />
+    <category term="性能优化" />
     <category term="ES6" />
     <entry>
         <id>http://toukoxu.github.io/archives/async+await/</id>
@@ -161,8 +161,8 @@ participant 生成器
 &lt;p&gt;其实 Async/Await 不算什么高深的技术，就是把 Generator、Promise 这些老东西包装得更好用了。但正是这种 “语法糖”，让我们写异步代码时能少掉很多头发～ 如果你也有过用 Async/Await 踩坑的经历，欢迎在评论区分享呀！&lt;/p&gt;
 </content>
         <category term="JavaScript" />
-        <category term="性能优化" />
         <category term="ES2017(ES8)" />
+        <category term="性能优化" />
         <updated>2024-07-13T12:46:25.000Z</updated>
     </entry>
 </feed>

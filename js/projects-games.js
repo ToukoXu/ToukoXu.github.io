@@ -10,6 +10,12 @@
           link: 'link-link',
           icon: 'https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/site/watermelon.svg',
         },
+        {
+          title: '数独',
+          subtitle: '经典的逻辑数字游戏',
+          link: 'sudoku',
+          icon: 'https://cdn.jsdelivr.net/gh/toukoxu/picstore@main/images/site/grid.svg',
+        },
       ],
     },
     {

@@ -22,6 +22,10 @@
     }
   }
 
+  .project-radio-group {
+    min-width: 280px;
+  }
+
   .ts-result {
     margin-top: 30px;
 

@@ -382,7 +382,7 @@
   border-radius: 12px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
   text-align: center;
-  z-index: 100;
+  z-index: 200;
   display: none;
   width: 85%;
   max-width: 350px;
@@ -402,6 +402,15 @@
     font-size: 0.95rem;
     line-height: 1.4;
     word-break: keep-all;
+  }
+
+  .project-btns-container {
+    justify-content: space-around;
+  }
+
+  > button,
+  .project-btns-container {
+    margin-top: 16px;
   }
 }
 
