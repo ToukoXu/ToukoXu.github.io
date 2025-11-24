@@ -65,14 +65,15 @@
 
   // 删除格子的元素
   function deleteCell() {
-    if (gameState.selectedIndex === null) return;
+    // 如果没有选中的格子或选中的格子是预设的，则不能删除
+    if (gameState.selectedIndex === null || gameState.board[gameState.selectedIndex].given) return;
+
+    // 清除之前的高亮，保留错误状态
+    clearHighlights(false, true);
 
     const selectedCell = document.querySelector(
       `.sudoku-cell[data-index="${gameState.selectedIndex}"]`,
     );
-
-    // 如果选中的格子是预设的，则不能删除
-    if (gameState.board[gameState.selectedIndex].given) return;
 
     // 清空主数字和候选数字
     gameState.board[gameState.selectedIndex].value = '';
@@ -208,11 +209,12 @@
       clearHighlights(false, true);
 
       // 设置游戏状态
-      if (!gameState.board[Number(cell.dataset.index)].given) {
-        // 非预设格子
-        gameState.selectedIndex = Number(cell.dataset.index);
-      } else {
+      if (gameState.board[Number(cell.dataset.index)].given) {
+        // 预设格子
         gameState.selectedIndex = null;
+        highlightSameValues(cell.dataset.value);
+      } else {
+        gameState.selectedIndex = Number(cell.dataset.index);
       }
 
       // 根据游戏状态更新UI
@@ -319,10 +321,10 @@
 
   // 处理数字点击
   function handleNumberClick(number, type) {
-    if (gameState.selectedIndex === null) {
+    // 如果没有选中的格子，或选中的是预设的格子，高亮相同数字的格子
+    if (gameState.selectedIndex === null || gameState.board[gameState.selectedIndex].given) {
       // 清除高亮，保留选中状态
       clearHighlights(true, true);
-      // 如果没有选中的格子，或选中的是预设的格子，高亮相同数字的格子
       highlightSameValues(number);
       return;
     }
@@ -610,8 +612,10 @@
 
     // 更新数字按钮的UI
     let impossibleValues =
-      gameState.selectedIndex !== null
-        ? getImpossibleValues(getRelatedIndices(gameState.selectedIndex))
+      gameState.selectedIndex !== null && !gameState.board[gameState.selectedIndex].given
+        ? getImpossibleValues(
+            getRelatedIndices(gameState.selectedIndex).filter((i) => i !== gameState.selectedIndex),
+          )
         : [];
     updateNumberBtnsUI(impossibleValues);
 
@@ -635,6 +639,7 @@
   function updateDeleteButtonsUI() {
     deleteBtn.disabled =
       gameState.selectedIndex === null ||
+      gameState.board[gameState.selectedIndex].given ||
       (!gameState.board[gameState.selectedIndex].value &&
         gameState.board[gameState.selectedIndex].candidates.length === 0);
   }
