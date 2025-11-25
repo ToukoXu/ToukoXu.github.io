@@ -10,7 +10,7 @@
   const uploadContainer = document.getElementById('upload-container');
   const base64Output = document.getElementById('base64-output');
   const copyBase64Btn = document.getElementById('copy-base64');
-  const imagePreview = document.getElementById('image-preview');
+  const previewImage = document.getElementById('preview-image');
   const base64Input = document.getElementById('base64-input');
   const convertToImageBtn = document.getElementById('convert-to-image');
   const convertedImage = document.getElementById('converted-image');
@@ -80,7 +80,11 @@
 
     reader.onload = function (e) {
       // 显示图片预览
-      imagePreview.src = e.target.result;
+      previewImage.innerHTML = '';
+      const image = document.createElement('img');
+      image.src = e.target.result;
+      image.alt = '图片预览';
+      previewImage.append(image);
 
       // 转换为Base64
       base64Output.value = e.target.result;
@@ -119,7 +123,11 @@
 
     try {
       // 尝试设置图片源
-      convertedImage.src = base64Data;
+      convertedImage.innerHTML = '';
+      const image = document.createElement('img');
+      image.src = base64Data;
+      image.alt = '转换后的图片';
+      convertedImage.append(image);
       downloadImageBtn.style.display = 'flex';
     } catch (e) {
       alert('Base64编码无效，请检查后重试！');
@@ -145,17 +153,18 @@
 
   // 下载图片
   downloadImageBtn.addEventListener('click', () => {
-    if (!convertedImage.src) {
+    const src = convertedImage.firstChild.src;
+    if (!src) {
       alert('没有可下载的图片！');
       return;
     }
 
     const link = document.createElement('a');
-    link.href = convertedImage.src;
+    link.href = src;
 
     // 尝试从Base64数据中检测文件类型
     let extension = 'png';
-    const matches = convertedImage.src.match(/^data:image\/([a-zA-Z+]+);base64,/);
+    const matches = src.match(/^data:image\/([a-zA-Z+]+);base64,/);
     if (matches && matches.length > 1) {
       extension = matches[1];
     }

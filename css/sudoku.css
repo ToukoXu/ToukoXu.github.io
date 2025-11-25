@@ -44,10 +44,6 @@
       margin-bottom: 4px;
     }
 
-    &:hover {
-      box-shadow: 0 4px 12px var(--theme-lighter);
-    }
-
     &.given {
       color: var(--font-color);
     }
@@ -160,10 +156,6 @@
     cursor: pointer;
     transition: all 0.3s ease;
 
-    &:hover {
-      color: var(--anzhiyu-theme);
-    }
-
     &.opacity {
       opacity: 0.3;
     }
@@ -196,5 +188,18 @@
 
   #sudoku-candidate-numbers > div {
     font-size: 0.8rem;
+  }
+}
+
+@media (any-hover: hover) {
+  #sudoku-board .sudoku-cell:hover {
+    box-shadow: 0 4px 12px var(--theme-lighter);
+  }
+  
+  #sudoku-main-numbers,
+  #sudoku-candidate-numbers {
+    > div:hover {
+      color: var(--anzhiyu-theme);
+    }
   }
 }

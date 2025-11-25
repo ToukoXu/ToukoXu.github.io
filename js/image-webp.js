@@ -244,13 +244,25 @@
           const canvas = document.createElement('canvas');
           const ctx = canvas.getContext('2d');
 
-          // 设置canvas尺寸
-          canvas.width = img.width;
-          canvas.height = img.height;
+          // 计算新尺寸（保持宽高比）
+          let width = img.width;
+          let height = img.height;
+          const maxDimension = 1200; // 最大尺寸限制
+
+          if (width > height && width > maxDimension) {
+            height = (height * maxDimension) / width;
+            width = maxDimension;
+          } else if (height > maxDimension) {
+            width = (width * maxDimension) / height;
+            height = maxDimension;
+          }
+
+          canvas.width = width;
+          canvas.height = height;
 
           try {
             // 绘制图片到canvas
-            ctx.drawImage(img, 0, 0);
+            ctx.drawImage(img, 0, 0, width, height);
 
             // 转换为WebP格式
             canvas.toBlob(
@@ -263,9 +275,19 @@
                   return;
                 }
 
-                image.webpBlob = blob;
-                image.webpObjectURL = URL.createObjectURL(blob);
-                image.webpSize = blob.size;
+                let webpBlob = blob;
+                let webpObjectURL = URL.createObjectURL(blob);
+                let webpSize = blob.size;
+                // 检查转换后是否比原始文件大，如果转换后更大，使用原始文件
+                if (blob.size >= image.originalSize) {
+                  webpBlob = e.target.result;
+                  webpObjectURL = image.objectURL;
+                  webpSize = image.originalSize;
+                }
+
+                image.webpBlob = webpBlob;
+                image.webpObjectURL = webpObjectURL;
+                image.webpSize = webpSize;
                 image.status = 'completed';
                 updateImageCard(image);
                 resolve();

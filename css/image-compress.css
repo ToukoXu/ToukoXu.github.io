@@ -1,5 +1,6 @@
 #ic-container {
   .ic-progress-container {
+    margin-top: 16px;
     margin-bottom: 30px;
   }
 
@@ -8,12 +9,6 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 15px;
-  }
-
-  .ic-progress-title {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: #2d3748;
   }
 
   .ic-progress-bar {
@@ -33,7 +28,7 @@
 
   .ic-images-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 20px;
 
     &:has(.ic-empty-state) {
@@ -48,10 +43,8 @@
     overflow: hidden;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     transition: transform 0.3s ease;
-  }
-
-  .ic-image-card:hover {
-    transform: translateY(-5px);
+    display: flex;
+    flex-direction: column;
   }
 
   .ic-image-preview {
@@ -59,6 +52,7 @@
     height: 150px;
     object-fit: cover;
     border-bottom: var(--style-border);
+    border-radius: 0;
   }
 
   .ic-image-info {
@@ -71,26 +65,29 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    line-height: 1.5;
   }
 
   .ic-image-details {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
-    color: #718096;
+    align-items: start;
+    margin-bottom: 10px;
+    line-height: 1;
+    gap: 8px;
     font-size: 0.85rem;
-    margin-bottom: 12px;
   }
 
+  .ic-image-size,
   .ic-image-status {
     display: flex;
-    align-items: center;
-    margin-bottom: 12px;
-    font-size: 0.9rem;
+    gap: 2px;
   }
 
-  .ic-status-icon {
-    margin-right: 8px;
-    font-size: 1.1rem;
+  .ic-image-size {
+    justify-content: space-between;
+    color: #718096;
   }
 
   .ic-status-waiting {
@@ -107,11 +104,6 @@
 
   .ic-status-error {
     color: var(--project-danger);
-  }
-
-  .ic-image-actions {
-    display: flex;
-    gap: 8px;
   }
 
   .ic-global-actions {
@@ -133,7 +125,7 @@
   }
 
   .ic-empty-icon {
-    font-size: 60px;
+    font-size: 50px;
     margin-bottom: 15px;
     opacity: 0.5;
   }
@@ -151,8 +143,42 @@
 
 @media (max-width: 768px) {
   #ic-container {
-    .ic-images-container {
-      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    .ic-progress-container {
+      margin-bottom: 16px;
+    }
+
+    .ic-global-actions {
+      margin-top: 20px;
+      padding-top: 16px;
+    }
+
+    .ic-empty-state {
+      padding: 20px 16px;
+
+      p {
+        font-size: 0.8rem;
+      }
+    }
+
+    .ic-empty-icon {
+      font-size: 40px;
+    }
+
+    .ic-image-info {
+      padding: 8px 10px 10px;
+    }
+
+    .ic-image-name {
+      font-size: 0.9rem;
+    }
+
+    .ic-image-details {
+      flex-direction: row;
+      align-items: center;
+    }
+
+    .project-btns-container {
+      justify-content: center;
     }
   }
 }

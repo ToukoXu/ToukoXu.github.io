@@ -12,6 +12,7 @@
   border: none;
   padding: 12px 24px;
   border-radius: 8px;
+  line-height: 1;
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
@@ -53,42 +54,21 @@
   background-color: var(--anzhiyu-theme);
   color: #ffffff;
 
-  &:hover:not(:disabled) {
-    background-color: var(--theme-deeper);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px var(--theme-lighter);
-  }
-
   &.outline {
     background-color: transparent;
     border: 2px solid var(--anzhiyu-theme);
     color: var(--anzhiyu-theme);
-
-    &:hover:not(:disabled) {
-      background-color: var(--btn-bg);
-      color: #ffffff;
-    }
   }
 }
 
 .project-secondary-btn {
   background-color: var(--theme-lightest);
   color: var(--anzhiyu-theme);
-
-  &:hover:not(:disabled) {
-    background-color: var(--theme-lighter-1);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px var(--theme-lightest);
-  }
 }
 
 .project-icon-btn {
   color: var(--font-color);
   cursor: pointer;
-
-  &:hover:not(:disabled) {
-    color: var(--anzhiyu-theme);
-  }
 
   &:disabled {
     cursor: not-allowed;
@@ -98,7 +78,15 @@
 
 .project-btns-container {
   display: flex;
-  gap: 10px;
+  gap: 15px;
+
+  &.center {
+    justify-content: center;
+  }
+
+  &.small {
+    gap: 10px;
+  }
 }
 
 .project-select-btn {
@@ -113,11 +101,6 @@
     color: white;
     cursor: default;
   }
-
-  &:hover:not(.active) {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
 }
 
 @media (max-width: 768px) {
@@ -127,11 +110,48 @@
   }
 
   .project-btns-container {
-    gap: 5px;
+    gap: 10px;
+
+    &.small {
+      gap: 5px;
+    }
+  }
+
+  .project-primary-btn,
+  .project-secondary-btn {
+    padding: 10px 12px;
   }
 
   .project-select-btn {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     padding: 6px 12px;
+  }
+}
+
+@media (any-hover: hover) {
+  .project-primary-btn:hover:not(:disabled) {
+    background-color: var(--theme-deeper);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--theme-lighter);
+  }
+
+  .project-primary-btn.outline:hover:not(:disabled) {
+    background-color: var(--btn-bg);
+    color: #ffffff;
+  }
+
+  .project-secondary-btn:hover:not(:disabled) {
+    background-color: var(--theme-lighter-1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--theme-lightest);
+  }
+
+  .project-icon-btn:hover:not(:disabled) {
+    color: var(--anzhiyu-theme);
+  }
+
+  .project-select-btn:hover:not(.active) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
 }

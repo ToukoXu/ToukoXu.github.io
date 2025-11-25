@@ -16,3 +16,9 @@
     margin: 0;
   }
 }
+
+@media (max-width: 768px) {
+  #td-container .td-options {
+    flex-direction: column;
+  }
+}

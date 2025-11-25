@@ -91,10 +91,6 @@
     background-color: rgba(74, 110, 224, 0.1);
   }
 
-  &:hover {
-    background-color: var(--tab-botton-bg);
-  }
-
   &:focus-visible {
     outline: var(--anzhiyu-theme) auto 1px;
   }
@@ -112,4 +108,10 @@
   font-size: 0.8rem;
   color: #a0aec0;
   display: block;
+}
+
+@media (any-hover: hover) {
+  .project-select-option:hover {
+    background-color: var(--tab-botton-bg);
+  }
 }

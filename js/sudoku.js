@@ -591,6 +591,15 @@
 
   // 根据游戏状态更新UI
   function updateUIByGameState() {
+    // 更新数字按钮的UI
+    let impossibleValues =
+      gameState.selectedIndex !== null && !gameState.board[gameState.selectedIndex].given
+        ? getImpossibleValues(
+            getRelatedIndices(gameState.selectedIndex).filter((i) => i !== gameState.selectedIndex),
+          )
+        : [];
+    updateNumberBtnsUI(impossibleValues);
+
     // 有选中的格子且不是预设的格子
     if (gameState.selectedIndex !== null) {
       // 更新选中状态
@@ -609,15 +618,6 @@
 
     // 更新格子的错误状态
     updateErrorUI();
-
-    // 更新数字按钮的UI
-    let impossibleValues =
-      gameState.selectedIndex !== null && !gameState.board[gameState.selectedIndex].given
-        ? getImpossibleValues(
-            getRelatedIndices(gameState.selectedIndex).filter((i) => i !== gameState.selectedIndex),
-          )
-        : [];
-    updateNumberBtnsUI(impossibleValues);
 
     // 更新撤销/重做按钮状态
     updateUndoRedoButtonsUI();

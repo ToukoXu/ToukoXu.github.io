@@ -55,7 +55,7 @@
   });
 
   // 处理图片文件
-  function handleImageFiles(files) {
+  async function handleImageFiles(files) {
     const validFiles = Array.from(files).filter((file) => file.type.match('image.*'));
 
     if (validFiles.length === 0) {
@@ -240,6 +240,7 @@
         image.compressedData = image.originalData;
         image.compressedSize = image.originalSize;
         image.status = 'completed';
+        updateImageCard(image);
         resolve();
         return;
       }
@@ -291,6 +292,7 @@
             // 转换为Blob
             canvas.toBlob(
               (blob) => {
+                debugger;
                 if (!blob) {
                   image.status = 'error';
                   image.error = '压缩失败';
@@ -323,6 +325,7 @@
             console.error('压缩错误:', error);
             image.status = 'error';
             image.error = error.message;
+            updateImageCard(image);
             resolve();
           }
         };

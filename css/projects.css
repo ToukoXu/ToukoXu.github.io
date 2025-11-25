@@ -28,3 +28,9 @@
     margin: 0;
   }
 }
+
+@media (max-width: 768px) {
+  #projects-container .project-item {
+    grid-template-columns: 1fr;
+  }
+}

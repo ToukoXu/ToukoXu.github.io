@@ -8,34 +8,22 @@
   }
   .game-info {
     position: absolute;
-    top: 10px;
-    left: 10px;
+    top: 0;
+    left: 0;
     color: white;
-    font-size: 18px;
+    font-size: 14px;
     z-index: 10;
-    background: rgba(0, 0, 0, 0.5);
     padding: 8px 15px;
     border-radius: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
   }
   .tracking-indicator {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
     color: #0f0;
-    background: rgba(0, 0, 0, 0.5);
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 14px;
   }
   .skill-indicator {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
     color: #f0f;
-    background: rgba(0, 0, 0, 0.5);
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 14px;
   }
   .start-screen {
     position: absolute;
@@ -53,14 +41,16 @@
     border-radius: 12px;
   }
   .start-screen h1 {
-    font-size: 48px;
-    margin-bottom: 30px;
+    font-size: 3rem;
+    margin-top: 0;
+    margin-bottom: 2rem;
     color: #0ff;
     text-shadow: 0 0 10px #0ff;
   }
   .start-screen p {
-    font-size: 20px;
-    margin-bottom: 20px;
+    font-size: 1rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
     text-align: center;
   }
   .aw-btn {
@@ -71,9 +61,81 @@
     color: white;
     border-radius: 30px;
     cursor: pointer;
-    margin-top: 20px;
+    margin-top: 1rem;
     transition: all 0.3s;
   }
+
+  #aw-mobile-controls {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 30%;
+    display: none;
+    padding: 0 1rem 1rem;
+    justify-content: space-between;
+    z-index: 15;
+
+    .joystick-area {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+
+      .joystick {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.7);
+        position: absolute;
+        transition: transform 0.1s;
+      }
+    }
+
+    #skillBtn {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 14px;
+      font-weight: bold;
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+      background: rgba(255, 0, 255, 0.3);
+      border-color: rgba(255, 0, 255, 0.7);
+    }
+  }
+  .aw-mobile-info {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  #aw-container {
+    .start-screen h1 {
+      font-size: 1.5rem;
+      margin-bottom: 0.8rem;
+    }
+    .start-screen p {
+      font-size: 0.8rem;
+      margin-bottom: 0.5rem;
+    }
+    .aw-btn {
+      padding: 8px 12px;
+      font-size: 0.8rem;
+      margin-top: 0.5rem;
+    }
+  }
+}
+@media (any-hover: hover) {
   .aw-btn:hover {
     transform: scale(1.05);
     box-shadow: 0 0 15px rgba(0, 255, 255, 0.7);

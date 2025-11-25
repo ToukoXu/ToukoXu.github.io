@@ -13,6 +13,10 @@
   const enemiesDefeatedElement = document.getElementById('enemiesDefeated');
   const skillChargeElement = document.getElementById('skillCharge');
   const trackingCountElement = document.getElementById('trackingCount');
+  const mobileControls = document.getElementById('aw-mobile-controls');
+  const joystickArea = document.getElementById('joystickArea');
+  const joystick = document.getElementById('joystick');
+  const skillBtn = document.getElementById('skillBtn');
 
   // 设置Canvas大小
   canvas.width = 800;
@@ -66,6 +70,40 @@
     KeyP: false,
   };
 
+  // 触摸控制状态
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let joystickX = 0;
+  let joystickY = 0;
+  let joystickActive = false;
+
+  // 检测设备类型
+  function isMobileDevice() {
+    return (
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+      window.innerWidth <= 768
+    );
+  }
+
+  // 根据设备类型调整界面
+  function adjustUIForDevice() {
+    const isMobile = isMobileDevice();
+    const pcInfo = document.querySelectorAll('.aw-pc-info');
+    const mobileInfo = document.querySelectorAll('.aw-mobile-info');
+
+    if (isMobile) {
+      mobileControls.style.display = 'flex';
+      pcInfo.forEach((dom) => (dom.style.display = 'none'));
+      mobileInfo.forEach((dom) => (dom.style.display = 'block'));
+    } else {
+      mobileControls.style.display = 'none';
+      pcInfo.forEach((dom) => (dom.style.display = 'block'));
+      mobileInfo.forEach((dom) => (dom.style.display = 'none'));
+    }
+  }
+
+  adjustUIForDevice();
+
   // 事件监听
   document.addEventListener('keydown', (e) => {
     if (keys.hasOwnProperty(e.code)) {
@@ -93,6 +131,84 @@
   });
 
   startBtn.addEventListener('click', startGame);
+
+  // 移动端触摸事件
+  if (isMobileDevice()) {
+    joystickArea.addEventListener('touchstart', handleTouchStart, { passive: false });
+    joystickArea.addEventListener('touchmove', handleTouchMove, { passive: false });
+    joystickArea.addEventListener('touchend', handleTouchEnd, { passive: false });
+    skillBtn.addEventListener('click', () => {
+      if (skillCharge > 0 && gameActive && !gamePaused) {
+        releaseSkill();
+      }
+    });
+  }
+
+  // 触摸控制处理函数
+  function handleTouchStart(e) {
+    e.preventDefault();
+    if (!gameActive || gamePaused) return;
+
+    const touch = e.touches[0];
+    const rect = joystickArea.getBoundingClientRect();
+    touchStartX = touch.clientX;
+    touchStartY = touch.clientY;
+    joystickActive = true;
+
+    // 设置摇杆初始位置
+    joystickX = rect.width / 2;
+    joystickY = rect.height / 2;
+    updateJoystickPosition(0, 0);
+  }
+
+  function handleTouchMove(e) {
+    e.preventDefault();
+    if (!joystickActive || !gameActive || gamePaused) return;
+
+    const touch = e.touches[0];
+    const rect = joystickArea.getBoundingClientRect();
+
+    // 计算触摸点相对于摇杆中心的位置
+    const deltaX = touch.clientX - touchStartX;
+    const deltaY = touch.clientY - touchStartY;
+
+    // 限制摇杆移动范围
+    const maxDistance = rect.width / 2 - joystick.offsetWidth / 2;
+    const distance = Math.min(Math.sqrt(deltaX * deltaX + deltaY * deltaY), maxDistance);
+
+    if (distance > 0) {
+      const angle = Math.atan2(deltaY, deltaX);
+      joystickX = Math.cos(angle) * distance;
+      joystickY = Math.sin(angle) * distance;
+
+      // 更新玩家移动
+      updatePlayerMovement(deltaX / maxDistance, deltaY / maxDistance);
+    }
+
+    updateJoystickPosition(joystickX, joystickY);
+  }
+
+  function handleTouchEnd(e) {
+    e.preventDefault();
+    joystickActive = false;
+    updateJoystickPosition(0, 0);
+    // 停止玩家移动
+    updatePlayerMovement(0, 0);
+  }
+
+  function updateJoystickPosition(x, y) {
+    joystick.style.transform = `translate(${x}px, ${y}px)`;
+  }
+
+  function updatePlayerMovement(x, y) {
+    // 根据摇杆输入更新玩家位置
+    player.x += x * player.speed;
+    player.y += y * player.speed;
+
+    // 限制玩家在Canvas范围内
+    player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
+    player.y = Math.max(0, Math.min(canvas.height - player.height, player.y));
+  }
 
   // 开始游戏
   function startGame() {
