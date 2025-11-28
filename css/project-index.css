@@ -25,6 +25,15 @@
   }
 }
 
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
 .project-container {
   margin: -32px -40px -32px -40px;
   position: relative;

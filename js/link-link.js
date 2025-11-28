@@ -251,6 +251,8 @@
     // 如果点击的是已消除的方块，忽略
     if (gameState.board[row][col].removed) return;
 
+    tile.classList.remove('hint-glow');
+
     // 如果没有选中的方块，选中当前方块
     if (!gameState.selectedTile) {
       gameState.selectedTile = { row, col };
@@ -438,9 +440,17 @@
       `.ll-tile[data-row="${second.row}"][data-col="${second.col}"]`,
     );
 
+    // 绘制连接线
+    drawConnectionLine(first, second, path);
+
     // 标记为已消除
     firstTile.classList.add('removed');
     secondTile.classList.add('removed');
+
+    // 创建粒子效果
+    createParticles(firstTile);
+    createParticles(secondTile);
+
     gameState.board[first.row][first.col].removed = true;
     gameState.board[second.row][second.col].removed = true;
     gameState.removedCount += 2;
@@ -455,6 +465,104 @@
         reshuffleBoard();
       }
     }, 100); // 延迟一小段时间，确保DOM更新完成
+  }
+
+  // 绘制连接线
+  function drawConnectionLine(first, second, path) {
+    // 清除之前的连接线
+    clearConnectionLines();
+
+    // 获取棋盘位置信息
+    const boardRect = gameBoard.getBoundingClientRect();
+
+    // 绘制连接路径
+    for (let i = 0; i < path.length - 1; i++) {
+      const startPoint = path[i];
+      const endPoint = path[i + 1];
+
+      // 获取两个点的屏幕坐标
+      const startTile = document.querySelector(
+        `.ll-tile[data-row="${startPoint.row}"][data-col="${startPoint.col}"]`,
+      );
+      const endTile = document.querySelector(
+        `.ll-tile[data-row="${endPoint.row}"][data-col="${endPoint.col}"]`,
+      );
+
+      if (!startTile || !endTile) continue;
+
+      const startRect = startTile.getBoundingClientRect();
+      const endRect = endTile.getBoundingClientRect();
+
+      // 计算中心点坐标（相对于棋盘）
+      const startX = startRect.left - boardRect.left + gameBoard.scrollLeft + startRect.width / 2;
+      const startY = startRect.top - boardRect.top + gameBoard.scrollTop + startRect.height / 2;
+      const endX = endRect.left - boardRect.left + gameBoard.scrollLeft + endRect.width / 2;
+      const endY = endRect.top - boardRect.top + gameBoard.scrollTop + endRect.height / 2;
+
+      // 创建连接线
+      const line = document.createElement('div');
+      line.className = 'connection-line drawing';
+
+      // 计算线的长度和角度
+      const distance = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
+      const angle = (Math.atan2(endY - startY, endX - startX) * 180) / Math.PI;
+
+      // 设置线的样式
+      line.style.width = `${distance}px`;
+      line.style.height = '4px';
+      line.style.left = `${startX}px`;
+      line.style.top = `${startY}px`;
+      line.style.transform = `rotate(${angle}deg)`;
+
+      // 添加到棋盘
+      gameBoard.appendChild(line);
+    }
+
+    setTimeout(() => {
+      clearConnectionLines();
+    }, 300);
+  }
+
+  // 清除所有连接线
+  function clearConnectionLines() {
+    const lines = document.querySelectorAll('.connection-line');
+    lines.forEach((line) => {
+      line.classList.add('fade-out');
+      setTimeout(() => {
+        if (line.parentNode) {
+          line.parentNode.removeChild(line);
+        }
+      }, 500);
+    });
+  }
+
+  // 创建粒子效果
+  function createParticles(tile) {
+    const rect = tile.getBoundingClientRect();
+    const boardRect = gameBoard.getBoundingClientRect();
+
+    for (let i = 0; i < 8; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      particle.style.left = `${rect.left - boardRect.left + gameBoard.scrollLeft + rect.width / 2}px`;
+      particle.style.top = `${rect.top - boardRect.top + gameBoard.scrollTop + rect.height / 2}px`;
+      particle.style.backgroundColor = tile.style.backgroundColor;
+
+      // 随机方向
+      const angle = Math.random() * Math.PI * 2;
+      const distance = 20 + Math.random() * 30;
+      particle.style.setProperty('--p-tx', `${Math.cos(angle) * distance}px`);
+      particle.style.setProperty('--p-ty', `${Math.sin(angle) * distance}px`);
+
+      gameBoard.appendChild(particle);
+
+      // 动画结束后移除粒子
+      setTimeout(() => {
+        if (particle.parentNode) {
+          particle.parentNode.removeChild(particle);
+        }
+      }, 1000);
+    }
   }
 
   // 检查游戏是否结束
