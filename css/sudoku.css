@@ -154,7 +154,6 @@
     font-size: 1.5rem;
     font-weight: bold;
     cursor: pointer;
-    transition: all 0.3s ease;
 
     &.opacity {
       opacity: 0.3;
